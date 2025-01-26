@@ -13,7 +13,7 @@
 .include ../DMakefile.inc
 
 SRCS= addhead.c addtail.c newlist.c remhead.c \
-        gethead.c strdup.c getsucc.c gettail.c \
+        gethead.c getsucc.c gettail.c \
         getpred.c remove.c strnicmp.c getcwd.c \
         findname.c stricmp.c enqueue.c strins.c \
         locatepath.c insert.c order.c

@@ -31,7 +31,6 @@
 #define __stkargs
 #include <suplib/lists.h>
 #include <suplib/memory.h>
-#include <suplib/stdlib.h>
 #include <suplib/string.h>
 #include <unistd.h>
 
