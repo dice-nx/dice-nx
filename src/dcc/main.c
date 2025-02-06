@@ -22,10 +22,10 @@
 #define DoPrelink_Dice  DoPrelink
 #endif
 
+#include <include/lib/version.h>
 #include "DCC_rev.h"
 
-static char *DCopyright =
-"Copyright (c) 1992,1993,1994 Obvious Implementations Corp., Redistribution & Use under DICE-LICENSE.TXT." VERSTAG;
+DCOPYRIGHT;
 
 
 Prototype   void    myexit(void);

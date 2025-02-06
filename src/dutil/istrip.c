@@ -22,7 +22,8 @@
 #include <include/lib/version.h>
 #endif
 
-IDENT("istrip",".3");
+#include "istrip_rev.h"
+
 DCOPYRIGHT;
 
 void StripFile(char *, char *);
@@ -33,7 +34,7 @@ main(int ac, char **av)
     int   i;
 
     if (ac == 1) {
-        puts(Ident);
+        puts(VSTRING);
         puts(DCopyright);
         puts("istrip destprefix wildcards");
         exit(1);

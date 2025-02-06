@@ -13,9 +13,9 @@
 
 #include "defs.h"
 #include "DCPP_rev.h"
+#include <include/lib/version.h>
 
-static char *DCopyright =
-"Copyright (c) 1992,1993,1994 Obvious Implementations Corp., Redistribution & Use under DICE-LICENSE.TXT." VERSTAG;
+DCOPYRIGHT;
 
 
 Prototype FILE *Fo;

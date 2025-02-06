@@ -13,6 +13,7 @@
  */
 
 #include "defs.h"
+#include "dobj_rev.h"
 
 #ifdef AMIGA
 #include <lib/version.h>
@@ -34,7 +35,6 @@ int32_t ScanObjectFile(FILE *fi, int32_t endPos);
 void UnAssembleObjectFile(FILE *fi);
 void ResetHashTables(void);
 
-IDENT("DOBJ",".3");
 DCOPYRIGHT;
 
 short DDebug;
@@ -147,8 +147,8 @@ main(int ac, char **av)
 void
 help(void)
 {
-    printf("%s\n%s\n", Ident, DCopyright);
-    puts("DISOBJ objfile(s) [-o outfile] [-d[#]]");
+    printf("%s\n%s\n", VSTRING, DCopyright);
+    puts("dobj objfile(s) [-o outfile] [-d[#]]");
     exit(1);
 }
 

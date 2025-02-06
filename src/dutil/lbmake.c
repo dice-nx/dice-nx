@@ -31,6 +31,8 @@
 #include <include/lib/version.h>
 #endif
 
+#include "lbmake_rev.h"
+
 #define arysize(ary)    (sizeof(ary)/sizeof((ary)[0]))
 
 #define KT_TYPE     0
@@ -117,10 +119,7 @@ short   DoNotExecute;
 
 int _DiceCacheEnable = 1;
 
-#ifdef _DCC
-IDENT("lbmake",".3");
 DCOPYRIGHT;
-#endif
 
 int
 main(int ac, char **av)
@@ -258,6 +257,8 @@ main(int ac, char **av)
 void
 help(int code)
 {
+    puts(VSTRING);
+    puts(DCopyright);
     puts("LBMAKE [-d LIBDEFFILENAME] [keywords types]");
     exit(code);
 }

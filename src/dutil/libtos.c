@@ -26,7 +26,8 @@
 #include <include/lib/version.h>
 #endif
 
-IDENT("libtos",".4");
+#include "libtos_rev.h"
+
 DCOPYRIGHT;
 
 short SymLens[64];
@@ -113,7 +114,7 @@ main(int ac, char **av)
 
     InitSyms();
     if (ac < 3) {
-        puts(Ident);
+        puts(VSTRING);
         puts(DCopyright);
         puts("libtos amiga.lib dlib:amigas.lib");
         exit(1);

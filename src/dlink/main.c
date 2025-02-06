@@ -86,9 +86,9 @@
 
 #include "defs.h"
 #include "DLink_rev.h"
+#include <include/lib/version.h>
 
-static char *DCopyright =
-"Copyright (c) 1992,1993,1994 Obvious Implementations Corp., Redistribution & Use under DICE-LICENSE.TXT." VERSTAG;
+DCOPYRIGHT;
 
 
 Prototype char *OutName;
@@ -741,7 +741,7 @@ main(int ac, char **av)
 void
 help()
 {
-    printf("%s\n%s\n", VSTRING VDISTRIBUTION, DCopyright);
+    printf("%s\n%s\n", VSTRING, DCopyright);
     puts("dlink [files/libs/@files] -o outname -r -s -v <other-options>");
     exit(5);
 }

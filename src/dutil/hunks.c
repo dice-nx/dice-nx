@@ -27,7 +27,8 @@
 #define __aligned
 #endif
 
-IDENT("hunks",".3");
+#include "hunks_rev.h"
+
 DCOPYRIGHT;
 
 typedef unsigned char ubyte;
@@ -50,7 +51,7 @@ main(int ac, char **av)
 #endif
 
     if (ac == 1) {
-        printf("%s\n%s\n", Ident, DCopyright);
+        printf("%s\n%s\n", VSTRING, DCopyright);
         puts("hunks [-all] executeable/object_module");
         exit(0);
     }
