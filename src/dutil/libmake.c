@@ -31,6 +31,10 @@
 #include <lib/misc.h>
 #include <lib/version.h>
 
+#include "libmake_rev.h"
+
+DCOPYRIGHT;
+
 #define EF_OOD      0x01
 #define EF_COMP     0x02
 #define EF_NOJOIN   0x04
@@ -317,6 +321,8 @@ char *av[];
 void
 help(n)
 {
+    fputs(VSTRING, stderr);
+    fputs(DCopyright, stderr);
     fprintf(stderr, "libmake [-n] files -o objdir/ -l library [-clean]\n");
     exit(n);
 }

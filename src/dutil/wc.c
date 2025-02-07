@@ -18,13 +18,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "wc_rev.h"
 #ifdef AMIGA
 #include <lib/version.h>
 #else
 #include <include/lib/version.h>
 #endif
 
-IDENT("wc",".2");
 DCOPYRIGHT;
 
 int32_t t_chars, t_words, t_lines;
@@ -38,7 +39,6 @@ char **av;
     int   i;
     int   maxlen = 10;
 
-    Ident;
     DCopyright;
 
 #ifndef unix

@@ -9,6 +9,8 @@
  *
  */
 
+#include "flush_rev.h"
+
 #ifdef AMIGA
 #include <exec/types.h>
 #include <exec/memory.h>
@@ -18,7 +20,6 @@
 #include <include/lib/version.h>
 #endif
 
-IDENT("flush",".3");
 DCOPYRIGHT;
 
 int
