@@ -36,7 +36,7 @@ char **av;
 
     if (ac == 1) {
         puts(VSTRING);
-        puts(DCOPYRIGHT);
+        puts(DCopyright);
         puts("DSEARCH srch-string files");
         puts("can use AmigaDOS wildcards for files");
         exit(1);
