@@ -1,0 +1,111 @@
+$VER: Release_Notes 3.01 (17.4.94)
+
+This is the Commercial version of DICE.
+
+                Online Help/Error Tracking/Editor Integration
+                ---------------------------------------------
+
+Dice provides very addictive features that integrate with your favorite text
+editor.  One use of online help and you'll be hooked.  To get hooked, all you
+need to do is hook these features into your editor.
+
+Most full featured Amiga editors are highly configurable.  Scripts are provided
+for many popular editors.  If your editor is not listed, don't panic!  You may
+be able to modify one of the suppiled scripts.  Other users of the same editor
+may already have written a compatible script.  Obvious Implementations will
+collect the best scripts, and include them in the next release of Dice.
+
+
+TurboText (Martin Taillefer)
+============================
+Dice comes pre-configured for use with Turbotext.
+
+CygnusEd Professional (ASDG)
+============================
+Dice comes pre-configured for use with Turbotext.
+
+Note that you can only bind 10 keys, so we have chosen the 10 most common
+operations to bind to the function keys.  You will need to install the arexx
+commands under the "special" menu, select "DOS/AREXX Interface" then
+"Load DOS/AREXX Commands...".  Select "DCC:S/RexxCommands"
+
+You can also bind individual keys by hand with the "Install DOS/AREXX Command...".
+Select function keys for the following commands:
+
+        DCC:Rexx/DICEHelp.ced ?         Bring up dicehelp with a requester
+        DCC:Rexx/DICEHelp.ced           Bring up dicehelp on the current word
+        DCC:Rexx/ErrorMove.ced First    Move to the First error message
+        DCC:Rexx/ErrorMove.ced Next     Move to the Next error message
+        DCC:Rexx/ErrorMove.ced Current  Move to the Current error message
+        DCC:Rexx/ErrorMove.ced Prev     Move to the Previous error message
+        DCC:Rexx/ErrorClear.ced         Clear out any error messages
+        DCC:Rexx/Vmake.ced Build        Build the current VMake project
+        DCC:Rexx/Vmake.ced Run          Build and run the current project
+        DCC:Rexx/Vmake.ced Debug        Build the project and run under the debugger
+        DCC:Rexx/Vmake.ced Front        Bring VMake to the front
+        DCC:Rexx/Vmake.ced Open         Bring VMake to the front
+        DCC:Rexx/Vmake.ced Compile      Compile the current file in the current project
+
+When you are happy with the installation, select "Save DOS/AREXX Commands...".
+
+DME (Matt Dillon)
+=================
+Dice comes pre-configured for use with DME.  Pressing the HELP key looks
+up the word under the cursor.
+
+AME (Andy Finkel)
+=================
+Dice comes pre-configured for use with AME with lots of examples.
+
+                        Speedy Compiles / Resident
+                        --------------------------
+
+If you have a lot of memory, you can speed compiles by making all the core
+DICE executables (dcc, dc1, dcpp, das and dlink) resident.  All DICE
+executables are residentable.
+
+To speed repeat compiles, try enabling dicecache.library.  Simply copy
+dicecache.library to your libs:.  The "dicecache" program controls the
+operation.  "dicecache ON ADD .h ADD .c ADD .lib" would cache files ending
+in .h, .c or .lib.  'dicecache ?' lists options.
+
+The Dice stdio function can be set to detect the presence of dicecache
+and use it automatically.  Any DICE compiled program can take advantage
+of dicecache by declaring the following global:
+
+int _DiceCacheEnable = 1;
+
+Note: programs compiled with _DiceCacheEnable set to 1 WILL WORK JUST FINE
+on systems for which dicecache.library is not installed.  This option
+incurs no additional program or startup overhead.
+
+Note: dicecache will not release memory if the system runs low!  This
+program is meant to be used on systems with a *lot* of memory!
+
+
+                              system13() call
+                             OpenConsole() call
+                        --------------------------
+
+Through much magic and hair pulling we have managed to implement a
+system()-like call which works under 1.3 AND 2.0 AND passes ^C AND works
+from workbench-run programs!  It's even relatively legal code
+(lib/extra/system13.c in the library source).  It *appears* to be stable
+but involves such huge amounts of obfuscated code that we would appreciate
+it if you all tested it a bit.
+
+Note that the first call to system13() involves a slight delay (a longer
+delay under 1.3 depending on whether c:Run, C:Execute, C:Endcli, and
+C:NewShell are all resident or not) for the first call.  Subsequent calls
+will utilize the already-open background shell to post commands and be
+relatively fast.
+
+We have also implemented a call called OpenConsole().  This routine is BOOL
+OpenConsole(char *) where you pass a DOS console string such as
+"con:0/0/320/200/fubar".  This routine is meant to be used by workbench-run
+programs which want a console window and will set stdin, stdout, and stderr
+to the console (presuming a successful open), as well as direct output from
+programs run with system13() to this console.
+
+The prototype for system13() is in <stdlib.h>.  The prototype for
+OpenConsole() is in <lib/misc.h>.
