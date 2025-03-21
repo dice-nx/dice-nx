@@ -12,7 +12,7 @@ OBJS= $(SRCS:"*.c":"$(OD)dxmake_*.o")
 EXE= $(OD)dxmake
 EXED= $(BIN)dxmake
 
-PROTOS= $(OD)dxmake-protos.h
+PROTOS= dxmake-protos.h
 
 all: $(PROTOS) $(EXE)
 

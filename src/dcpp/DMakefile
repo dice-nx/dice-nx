@@ -20,7 +20,7 @@ OBJS= $(SRCS:"*.c":"$(OD)dcpp_*.o")
 EXE= $(OD)dcpp
 EXED= $(BIN)dcpp
 
-PROTOS= $(OD)dcpp-protos.h
+PROTOS= dcpp-protos.h
 
 all: $(PROTOS) $(EXE)
 

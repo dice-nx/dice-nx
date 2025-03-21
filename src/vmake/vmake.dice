@@ -15,7 +15,7 @@ CFLAGS= -mRR -d0 -proto -I/vcommon/ -I$(OD) -Ht:VMake.m=VMake.h -r -mi
 CLI=
 
 #### AUTOMATICALLY GENERATED - DO NOT EDIT BELOW THIS LINE
-PROTOS= $(OD)prog-protos.h
+PROTOS= prog-protos.h
 EXE= $(EXEDIR)$(PROJECT)
 
 OBJS= $(SRCS:"*.c":"$(OD)*.o") $(SRCS:"*.a":"$(OD)*.o")

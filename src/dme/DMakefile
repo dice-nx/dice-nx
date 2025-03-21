@@ -15,7 +15,7 @@ DCC = dcc
 #CFLAGS= -r -ms -mi -I$(OD) -mRR -proto -H$(PRECOMP)=defs.h
 #CFLAGS= -r -ms -I$(OD) -H$(PRECOMP)=defs.h -mRR
 CFLAGS= -r -ms -I$(OD)
-PROTOS= $(OD)prog-protos.h
+PROTOS= prog-protos.h
 
 
 SRCS= command.c filereq.c globals.c main.c keyboard.c menu.c mods.c refs.c \

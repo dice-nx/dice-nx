@@ -17,7 +17,7 @@ OBJS= $(SRCS:"*.c":"$(OD)*.o") $(SRCS:"*.a":"$(OD)*.o")
 EXE= dmake
 
 #### AUTOMATICALLY GENERATED - DO NOT EDIT BELOW THIS LINE
-PROTOS= $(OD)$(PROJECT)-protos.h
+PROTOS= $(PROJECT)-protos.h
 EXE= $(EXEDIR)$(PROJECT)
 COMPFLAGS = $(CFLAGS) $(OD:"*":-I*) $(PRECOMP:"*.h":"-HT:%1.m=%1.h")
 PCOMPFILE = $(PRECOMP:"*.h":"T:*.m")

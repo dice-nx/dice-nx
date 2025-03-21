@@ -15,7 +15,7 @@ CFLAGS= -mRR -d1 -proto -I/vcommon -r -mi
 CLI= 
 
 #### AUTOMATICALLY GENERATED - DO NOT EDIT BELOW THIS LINE
-PROTOS= $(OD)$(PROJECT)-protos.h
+PROTOS= $(PROJECT)-protos.h
 EXE= $(EXEDIR)$(PROJECT)
 COMPFLAGS = $(CFLAGS) $(OD:"*":-I*) $(PRECOMP:"*.h":"-HT:%1.m=%1.h")
 PCOMPFILE = $(PRECOMP:"*.h":"T:*.m")

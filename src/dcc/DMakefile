@@ -19,7 +19,7 @@ OBJS= $(SRCS:"*.c":"$(OD)dcc_*.o")
 EXE= $(OD)dcc
 EXED= $(BIN)dcc
 
-PROTOS= $(OD)dcc-protos.h
+PROTOS= dcc-protos.h
 
 all: $(PROTOS) $(EXE)
 

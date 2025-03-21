@@ -5,7 +5,7 @@ OD = dtmp:compc/dcache/
 EXE = dicecache.library
 CFLAGS= -mRR -ms -s -I$(OD) -l0 -lc -lamiga20 -proto
 #CFLAGS= -ms -s -I$(OD) -l0 -lc -lamiga13 -proto -DDEBUG
-PROTOS= $(OD)dicecache-protos.h
+PROTOS= dicecache-protos.h
 CLIBDCH= dicecache_protos.h
 
 DCEXE= dicecache

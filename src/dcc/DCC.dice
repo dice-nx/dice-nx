@@ -15,7 +15,7 @@ CLI=
 
 #### AUTOMATICALLY GENERATED - DO NOT EDIT BELOW THIS LINE
 # $VER: Normal.DMakefile 3.2 (2.11.94)
-PROTOS= $(OD)$(PROJECT)-protos.h
+PROTOS= $(PROJECT)-protos.h
 EXE= $(EXEDIR)$(PROJECT)
 COMPFLAGS = -no-env $(CFLAGS) $(OD:"*":-I*) $(PRECOMP:"*.h":"-HT:%1.m=%1.h") $(VMAKEPORT:"*":"-R0 *")
 PCOMPFILE = $(PRECOMP:"*.h":"T:*.m")
