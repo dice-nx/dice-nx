@@ -208,13 +208,24 @@ main(int ac, char **av)
     if (RegOpt) {
         FILE *fi;
         char rs_tmp[L_tmpnam];
+        char *tempfile = tmpnam(rs_tmp);
+        char *symopt = (Symbols ? " -s -sym" : "");
 
-        snprintf(Buf, sizeof(Buf), "%sdcc -mRRX %s -a -o %s%s%s",
+        int buf_reqd = 18 + strlen(Prefix)
+            + strlen(HdrFile)
+            + strlen(tempfile)
+            + strlen(DccOptsBuf)
+            + strlen(symopt);
+        if(buf_reqd > sizeof(Buf)) {
+            puts("Internal buffer overflow");
+            exit(20);
+        }
+        sprintf(Buf, "%sdcc -mRRX %s -a -o %s%s%s",
             Prefix,
             HdrFile,
-            tmpnam(rs_tmp),
+            tempfile,
             DccOptsBuf,
-            (Symbols ? " -s -sym" : "")
+            symopt
         );
         puts(Buf);
 #ifdef unix

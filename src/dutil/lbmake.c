@@ -815,11 +815,23 @@ char *aux;
     if (strreplace(hfile, "/fd/", "/clib/") < 0)
         strreplace(hfile, ":fd/", ":clib/");
 
-    r = snprintf(buf, sizeof(buf),
+    int needed_buf = 11 + strlen(FDToLibName) + strlen (srcFile)
+        + strlen(hfile) + strlen(objFile) + strlen (FlagsBuf);
+    if (needed_buf > sizeof(buf)) {
+        puts("Internal buffer overflow");
+        exit(20);
+    }
+    r = sprintf(buf,
                  "%s %s -h %s -o %s %s",
                  FDToLibName, srcFile, hfile, objFile, FlagsBuf);
-    if (aux)
+    if (aux) {
+        needed_buf = 8 + strlen(buf) + strlen(aux);
+        if (needed_buf > sizeof(buf)) {
+            puts("Internal buffer overflow");
+            exit(20);
+        }
         sprintf(buf + r, " -auto %s", aux);
+    }
     puts(buf);
     fflush(stdout);     /* SAS/C */
 
@@ -838,7 +850,13 @@ char *objFile;
     int32_t r;
     char buf[1024];
 
-    snprintf(buf, sizeof(buf),
+    int needed_buf = 10 + strlen(CompilerName) + strlen(srcFile)
+        + strlen(objFile) + strlen(FlagsBuf);
+    if(needed_buf > sizeof(buf)) {
+        puts("Internal buffer overflow");
+        exit(20);
+    }
+    sprintf(buf,
              "%s %s -o %s %s -c", CompilerName, srcFile, objFile, FlagsBuf);
     puts(buf);
     fflush(stdout);     /* SAS/C */

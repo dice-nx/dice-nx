@@ -216,19 +216,16 @@ ParseOpts(short ac, char **av, short cppOnly)
             {
                 static char ABuf[256];
 
-#ifdef AMIGA
-                sprintf(ABuf, "%sdinclude:amiga%c%c",
-                    Prefix,
+                // check if this sprintf command is going to buffer overflow
+                if (strlen(DefIncludePath) + 8 > sizeof(ABuf)) {
+                    cerror(EFATAL_INTERNAL_BUFFER_OVERFLOW);
+                }
+                sprintf(ABuf, "%samiga%c%c",
+                    DefIncludePath,
                     ptr[-1],
                     ptr[1]
                 );
-#else
-                snprintf(ABuf, sizeof(ABuf), INSTDIR "%sinclude/amiga%c%c",
-                    Prefix,
-                    ptr[-1],
-                    ptr[1]
-                );
-#endif
+
                 if (DefAmigaDir)
                     RemInclude(DefAmigaDir);
                 DefAmigaDir = ABuf;
