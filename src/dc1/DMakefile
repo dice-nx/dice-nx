@@ -14,8 +14,7 @@
 
 SRCS= main.c asm1.c asm2.c asmaddr.c asmflt.c asubs.c block.c cexp.c \
     error.c exp.c gen.c genarith.c genass.c genbool.c genlogic.c genmisc.c \
-    lex.c pragma.c reg.c rules.c sem.c stmt.c subs.c sym.c toplevel.c types.c \
-    dlang.c
+    lex.c pragma.c reg.c rules.c sem.c stmt.c subs.c sym.c toplevel.c types.c
 
 OBJS= $(SRCS:"*.c":"$(OD)dc1_*.o")
 

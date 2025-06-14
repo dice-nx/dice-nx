@@ -465,7 +465,7 @@ CompVar(short t, Type *baseType, int32_t storFlags, int32_t regFlags, Var **pvar
     }
 #endif
     if (type->Id == TID_PROC) {
-        if (t != TokSemi && t != TokComma && CToDClass == NULL) {
+        if (t != TokSemi && t != TokComma) {
             /*
              * Procedure definition
              */
@@ -496,29 +496,6 @@ CompVar(short t, Type *baseType, int32_t storFlags, int32_t regFlags, Var **pvar
                 zerror(EERROR_MULTIPLY_DEFINED_PROC);
 
             t = CompProcedure(t, var);
-        } else if (t != TokSemi && t != TokComma && CToDClass) {
-            /*
-             * Convert procedure definitions to extern procedure
-             * declarations if -CTOD.  That is, with -CTOD we are trying
-             * to proceduce glue information for D (or some other language)
-             * so it can interface with C.
-             */
-            int count = 1;
-
-            if (t != TokLBrace)
-                zerror(EERROR_EXPECTED_OCBRACE_PROC);
-            while ((t = GetToken()) != 0) {
-                if (t == TokLBrace)
-                    ++count;   
-                if (t == TokRBrace) {   
-                    if (--count == 0)
-                        break;
-                }   
-            }
-            if (t == TokRBrace)
-                t = TokSemi;
-            if (!(var->Flags & TF_STATIC))
-                var->Flags |= TF_EXTERN;
         } else {
             /*
              * Procedure declaration

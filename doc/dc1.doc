@@ -155,18 +155,3 @@ dc1/dc1                                                             dc1/dc1
             memory when combined with -r residentable programs because the
             string constants will not be duplicated for each running
             instance of the program.
-
-       -CTOD dll_loadable_lib
-
-           Causes DICE to generate a class (.d) file for the D language
-           with API interfacing declarations for procedures, globals, and
-           structures.  You must specify the DLL loadable object that
-           DICE will then create an import for within its generated .d file.
-           You generally also need to supply a -I option to direct DICE
-           to the C includes, e.g. -I /usr/include, and a C source file
-           that #include's the headers you wish to generate prototypes for.
-
-           Note that D includes /usr/lib, /usr/local/lib, and /usr/X11R6/lib
-           in its default search path, so it is usually sufficient to simply
-           specify the blah.so file, or blah.r file.
-

@@ -21,7 +21,6 @@ Prototype void SemanticLevelUp(void);
 Prototype void SemanticAddTop(Symbol *, short, void *);
 Prototype void SemanticAddTopBlock(Symbol *, short, void *);
 Prototype void SemanticAdd(Symbol *, short, void *);
-Prototype void SemanticScanTopVars(int (*func)(Var *var, Type *type, const char *name, int flags));
 
 void
 SemanticLevelDown()
@@ -164,22 +163,3 @@ SemanticAdd(Symbol *sym, short lexid, void *data)
 
     sym->SemBase = (void *)sem;
 }
-
-void
-SemanticScanTopVars(int (*func)(Var *var, Type *type, const char *name, int flags))
-{
-    SemInfo *sem;
-
-    for (sem = MasterBase; sem; sem = sem->MasterNext) {
-        if (sem->LexId == TokVarId) {
-            Var *var = sem->Data;
-            char *name;
-
-            asprintf(&name, "%*.*s",
-                sem->Sym->Len, sem->Sym->Len, sem->Sym->Name);
-            func(var, var->Type, name, SSCAN_NAME|SSCAN_TOP);
-            free(name);
-        }
-    }
-}
-

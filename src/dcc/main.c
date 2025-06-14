@@ -135,7 +135,6 @@ short ForkOpt;
 short UnixCommonOpt;
 short InlineCompOpt;
 short RexxOpt;
-char  *CToDClass;
 
 int32_t ExitCode;
 
@@ -444,15 +443,6 @@ char *xav[];
                         ptr = av[++i];
                     AddName(&LList, ".lib", ptr, IS_LIBFILE);
                     DLinkPostFixOpt = 1;
-                    break;
-                case 'C':   /* -CTOD */
-                    if (strcmp(ptr, "TOD") == 0) {
-                        CToDClass = av[++i];    
-                        NoAsm = 1;
-                        NoLink= 1;
-                    } else {
-                        help(1);
-                    }
                     break;
                 case 'L':   /*  -Ldir   */
                     if (ptr[0] == '0' && ptr[1] == 0) {
@@ -970,8 +960,6 @@ char *out;
     char *unixcomopt = (UnixCommonOpt) ? " -mu" : qq;
     char *asmopt = (NoAsm) ? " -a" : qq;
     char *intopt = (IntOpt[0]) ? " -int" : qq;
-    char *ctodopt1 = (CToDClass) ? " -CTOD " : qq;
-    char *ctodopt2 = (CToDClass) ? CToDClass : qq;
 
     switch(RegCallOpt) {
     case 1:
@@ -1035,11 +1023,11 @@ char *out;
     );
     run_cmd(in, Buf);
     sprintf(Buf, 
-        "%s %s -o %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+        "%s %s -o %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
         DC1, cptmp, out, code, data, rc, res, verb,
         optsect, protoonly, prof, concode, absdata, piopt, ErrOptStr,
         mc68020, mc68881, ffp, genstack, genlink, forkopt, unixcomopt,
-        asmopt, intopt, IntOpt, ctodopt1, ctodopt2,
+        asmopt, intopt, IntOpt,
         DebugOpts
     );
     run_cmd(in, Buf);
@@ -1623,14 +1611,6 @@ int fc;
 {
     char *asmName;
     char *objName;
-    char *dhdName;
-
-    if (fc == 1 && OutFile && CToDClass)
-        dhdName = OutFile;
-    else if (CToDClass)
-        dhdName = MungeFile(nn->n_In, OutDir, ".d");
-    else
-        dhdName = MungeFile(XFilePart(nn->n_In), TmpDir, ".d");
 
     if (fc == 1 && OutFile && NoAsm)
         asmName = OutFile;
@@ -1650,10 +1630,7 @@ int fc;
         nn->n_IsType |= IS_TMP;
     }
 
-    if (CToDClass) {
-        if (OutOfDate(nn->n_In, dhdName))
-            DoCompile(nn->n_In, dhdName);
-    } else if (NoAsm) { /*  in -> asmName           */
+    if (NoAsm) { /*  in -> asmName           */
         if (OutOfDate(nn->n_In, asmName))
             DoCompile(nn->n_In, asmName);
     } else {            /*  in -> asmName -> objName*/

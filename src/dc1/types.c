@@ -183,7 +183,6 @@ Prototype Type *ActualPassType(Type *, Type *, int);
 Prototype Type *ActualArgType(Type *);
 Prototype void CheckPointerType(int32_t, int32_t, Type *, Type *);
 Prototype void GenerateRegSpecOutput(Var *);
-Prototype void ScanStructUnionTypes(void (*func)(Type *type, const char *name, int flags));
 Prototype void Undefined_Tag(Type *, Symbol *, int32_t);
 Prototype int *AllocInt(int n);
 
@@ -200,30 +199,6 @@ InitTypes(int enab)
      */
     for (i = 0; i < arysize(IntConstAry); ++i)
         IntConstAry[i] = i;
-
-    /*
-     * Adjust alignments and sizes when in -CTOD mode
-     */
-    if (CToDClass) {
-        PointerAlign = sizeof(void *);
-        IntAlign = sizeof(int);
-        LongAlign = sizeof(int);
-#ifdef SUPPORT_QUAD
-        QuadAlign = sizeof(int);
-#endif
-        FloatAlign = sizeof(int);
-        DoubleAlign = sizeof(int);
-        LongDoubleAlign = sizeof(int);
-        PointerSize = sizeof(void *);
-        IntSize = sizeof(int);
-        LongSize = sizeof(long);        /* Rune ifc to machine native */
-#ifdef SUPPORT_QUAD
-        QuadSize = sizeof(quad_t);      /* Rune ifc to machine native */
-#endif
-        FloatSize = sizeof(float);
-        DoubleSize = sizeof(double);
-        LongDoubleSize = sizeof(long double);
-    }
 
     DefaultProcType.Args = -1;
     if (enab == 1 && Refs++ == 0) {
@@ -880,26 +855,6 @@ Var *var;
         for (i = 0; i < var->Type->Args; ++i)
             printf("(%s)", TypeToProtoStr(var->Type->Vars[i]->Type, 0));
         puts("");
-    }
-}
-
-void
-ScanStructUnionTypes(void (*func)(Type *type, const char *name, int flags))
-{
-    SUSym *su;
-    short i;
-
-    for (i = 0; i < HSIZE; ++i) {
-        for (su = SUHash[i]; su; su = su->Next) {
-            char *name;
-
-            if (su->Sym == NULL)
-                continue;
-
-            asprintf(&name, "%*.*s", su->Sym->Len, su->Sym->Len, su->Sym->Name);
-            func(su->Type, name, SSCAN_TOP|SSCAN_NAME);
-            free(name);
-        }
     }
 }
 

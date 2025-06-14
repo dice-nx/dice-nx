@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for the NDKs for prior versions of AmigaOS. Only 3.2 is supported at
   this time.
+- The `-CTOD` option for generating "D Language" bindings. It's not even clear
+  what "D Language" is, but it is not relevant for Amiga DICE-nx.
 
 
 ## [1.15] - 2023-10-17
