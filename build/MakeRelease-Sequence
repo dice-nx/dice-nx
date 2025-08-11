@@ -1,0 +1,15 @@
+; Build a release archive of DICE-nx
+
+if exists T:dice-nx-dist
+    delete T:dice-nx-dist FORCE ALL
+endif
+makedir T:dice-nx-dist
+makedir T:dice-nx-dist/DICE-nx
+copy ENV:sys/def_drawer.info T:dice-nx-dist/DICE-nx.info
+dupdate DCC: T:dice-nx-dist/DICE-nx FORCE DISTFILE .DistFile
+cd T:dice-nx-dist
+if exists DCC:DICE-nx.lha
+    delete DCC:DICE-nx.lha
+endif
+lha -r a DCC:DICE-nx.lha DICE-nx DICE-nx.info
+cd DCC:

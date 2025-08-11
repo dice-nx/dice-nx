@@ -6,8 +6,9 @@ bin2-bootstrap/
 bin2/
 dlib2/
 bin/
-dlib/
+dlib/*.lib
 .depend
+export-to-amiga.lha
 
 # Amiga header files - not to be checked in
 include/amiga*
