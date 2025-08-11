@@ -1,0 +1,283 @@
+; DICE-nx Installer script
+
+; Set some constants
+(set ##dcc_assign "DCC:")
+(set ##welcome_guide "Welcome to DICE-nx.guide")
+(set ##choice_copy_install 0)
+(set ##choice_install_here 1)
+(set ##choice_ndk3.2 2)
+(set ##choice_uninstall 3)
+
+; Procedures
+
+(procedure P_deactivate_dcc
+    (
+        (makeassign "DCC")
+        (set #dcc_exists 0)
+        (set #dcc_path)
+        (set @default-dest)
+    )
+)
+
+(procedure P_activate_dcc ###dcc_location
+    (
+        (makeassign "DCC" ###dcc_location)
+        (set #dcc_exists 1)
+        (set #dcc_path ###dcc_location)
+        (set @default-dest ###dcc_location)
+    )
+)
+
+(procedure P_install_ndk
+    (
+        (set #ndkpath
+            (askdir
+                (prompt "Please select the location of the Amiga NDK 3.2")
+                (help @askdir-help)
+                (default "RAM:")
+                (disk)
+            )
+        )
+        (set #ndk_include_path (tackon #ndkpath "Include_H"))
+        (set #ndk_lib_path (tackon (tackon #ndkpath "lib") "amiga.lib"))
+        
+        ; Check if crucial files exist
+        (if (= 2 (exists #ndk_include_path))
+            (
+                (if (= 1 (exists #ndk_lib_path))
+                    (
+                        (makedir (tackon (tackon #dcc_path "include") "amiga32"))
+
+                        (copyfiles
+                            (prompt "Copying include files")
+                            (help @copyfiles-help)
+                            (source #ndk_include_path)
+                            (dest (tackon (tackon #dcc_path "include") "amiga32"))
+                            (all)
+                        )
+
+                        (copyfiles
+                            (prompt "Copying large-model amiga.lib")
+                            (help @copyfiles-help)
+                            (source #ndk_lib_path)
+                            (dest (tackon #dcc_path "dlib"))
+                            (newname "amiga32l.lib")
+                            (all)
+                        )
+
+                        (working "Generating small-model amiga.lib")
+                        (run
+                            (cat "\"" (tackon (tackon #dcc_path "bin") "libtos") "\"")
+                            (cat "\"" (tackon (tackon #dcc_path "dlib") "amiga32l.lib") "\"")
+                            (cat "\"" (tackon (tackon #dcc_path "dlib") "amiga32s.lib") "\"")
+
+                            (prompt "Generating small-model amiga.lib")
+                            (help @run-help)
+                        )
+                        (working "Finishing")
+                    )
+                    (message (cat
+                        "Expected to find a file called "
+                        #ndk_lib_path
+                        " but it was not found or it is not a file."
+                        " Please check you have the correct path to the NDK."
+                    ))
+                    (set #choose_again 1)
+                )
+            )
+            (message (cat
+                "Expected to find a directory called "
+                #ndk_include_path
+                " but it was not found or it is not a directory."
+                " Please check you have the correct path to the NDK."
+            ))
+            (set #choose_again 1)
+        )
+    )
+)
+
+(procedure P_postinstall_offer_install_ndk
+    (
+        (set #ok_to_go (askbool
+            (prompt (cat
+                "DICE-nx requires files from the AmigaOS NDK 3.2. "
+                "DICE-nx will not work without installing these files. "
+                "\n\n"
+                "Would you like to install these files now? "
+                "Note that you must have AmigaOS NDK 3.2 to hand."
+            ))
+            (help "Select Yes to proceed, or No to go back and select a different option.")
+            (default 1)
+        ))
+        (if #ok_to_go
+            (
+                (P_install_ndk)
+            )
+            (
+                (message (cat
+                    "The AmigaOS NDK files have not been installed. "
+                    "DICE-nx will not work properly without them. "
+                    "You can re-run the installer later and choose the option to install the NDK, "
+                    "if you change your mind."
+                ))
+            )
+        )
+    )
+)
+
+(procedure P_copy_install
+    (
+        (set #ok_to_go (askbool
+            (prompt (cat
+                "This option will copy DICE-nx to a location of your choice."
+                "The startup sequence will be modified to support running DICE-nx from this location. "
+                "Once this has been done, you can delete the original files at " #source_location "."
+                "\n\n"
+                "Is this what you want to do?"
+            ))
+            (help "Select Yes to proceed, or No to go back and select a different option.")
+            (default 1)
+        ))
+        (if #ok_to_go
+            (
+                (set #install_location (askdir
+                    (prompt "Choose where to install DICE-nx. A new directory will be created for DICE-nx in the location you choose.")
+                    (help @askdir-help)
+                    (default @default-dest)
+                    (disk)
+                ))
+                (set #dir_name "DICE-nx")
+                (set #dir_name (askstring
+                    (prompt (cat
+                        "A new directory with the name below will be created in " #install_location
+                        ". You can accept the default suggested name, or alter it if you prefer something different."
+                    ))
+                    (help @askstring-help)
+                    (default #dir_name)
+                ))
+                (set #install_location (tackon #install_location #dir_name))
+                (message "Installation to " #install_location " is ready and will begin when you click \"Proceed\" below. Installation may take a few minutes.")
+                (copyfiles
+                    (prompt (cat "Copying DICE-nx files to " #install_location))
+                    (help @copyfiles_help)
+                    (source "")
+                    (dest #install_location)
+                    (pattern "~(.#?|bin1|bin1-bootstrap|bin2|dlib1|dlib2)")
+                    (infos)
+                )
+                (P_activate_dcc #install_location)
+                (startup "DICE-nx"
+                    (prompt "Modify startup sequence")
+                    (help "Sets up DICE-nx so that it is available on every boot.")
+                    (command (cat "Assign DCC: " #dcc_path "\nExecute DCC:Dice-Startup \"-3.2 -//\""))
+                )
+                (P_postinstall_offer_install_ndk)
+            )
+            (set #choose_again 1)
+        )
+    )
+)
+
+(procedure P_install_here
+    (
+        (set #ok_to_go (askbool
+            (prompt (cat
+                "This option will configure DICE-nx to run from "
+                #source_location
+                ". The startup sequence will be modified to support running DICE-nx from this location. "
+                "This is the fastest install operation as no files need to be copied. Choose this "
+                "option if you have unpacked the DICE-nx distribution to the final place you want to "
+                "run it from.\n\n"
+                "Is this what you want to do?"
+            ))
+            (help "Select Yes to proceed, or No to go back and select a different option.")
+            (default 1)
+        ))
+        (if #ok_to_go
+            (
+                (P_activate_dcc #source_location)
+                (startup "DICE-nx"
+                    (prompt "Modify startup sequence")
+                    (help "Sets up DICE-nx so that it is available on every boot.")
+                    (command (cat "Assign DCC: " #dcc_path "\nExecute DCC:Dice-Startup \"-3.2 -//\""))
+                )
+                (P_postinstall_offer_install_ndk)
+            )
+            (set #choose_again 1)
+        )
+    )
+)
+
+(procedure P_uninstall
+    (
+        (message "uninstall")
+    )
+)
+
+
+; Main script starts here
+
+
+; Do some discovery
+
+; Is there already a DICE or DICE-nx installation?
+(set #source_location (expandpath ""))
+(set #dcc_exists (exists ##dcc_assign (noreq)))
+(if (<> #dcc_exists 0)
+    (
+        ; There's something at DCC:
+        (set #dcc_path (expandpath ##dcc_assign))
+        (set @default-dest #dcc_path)
+        ; Try to figure out the version
+        ; DICE-nx will have a "Welcome to DICE-nx.guide" file
+        (if (<> 0 (tackon #dcc_path ##welcome_guide))
+            (
+                ; It's DICE-nx. The Welcome guide will respond to the "version" command.
+                (set #dicenx_version (getversion (tackon #dcc_path ##welcome_guide)))
+                (set #dcc_points_at "DICE-nx")
+            )
+            (
+                ; It's not DICE-nx. Guess if it's an original DICE.
+                if (= 1 (tackon #dcc_path "bin/dcc")
+                    (set #dcc_points_at "Original DICE")
+                    (set #dcc_points_at "something I don't recognise")
+                )
+            )
+        )
+    )
+    (set #dcc_points_at "nothing")
+)
+
+; End of discovery
+
+(welcome
+    "Welcome to the DICE-nx Installation and Configuration Tool.\n"
+    "Using this tool, you can get DICE-nx ready to run on your computer and make changes to its configuration."
+)
+
+(set #choose_again 1)
+(while #choose_again (
+    (set #choose_again 0)
+    (set #operation (askchoice
+        (prompt "What would you like to do?")
+        (help
+            "Install DICE-nx to run from (location)\n"
+            "Make the necessary changes so that DICE-nx can be run from its present location\n\n"
+            "Install DICE-nx to a location of your choice\n"
+            "Copy all the DICE-nx files to a location of your choice and configure your system to run it from there"
+        )
+        (choices
+            ("Install DICE-nx to a location of your choice")
+            (cat "Install DICE-nx to run from " #source_location)
+            (cat "Add AmigaOS NDK 3.2 files to DICE-nx at " #dcc_path)
+            (cat "Uninstall DICE-nx at " #dcc_path)
+        )
+    ))
+    
+    (select #operation
+        (P_copy_install)
+        (P_install_here)
+        (P_install_ndk)
+        (P_uninstall)
+    )
+))

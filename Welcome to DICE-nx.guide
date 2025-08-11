@@ -1,0 +1,276 @@
+@DATABASE Welcome
+; $VER: DICE-nx 3.20
+
+@NODE MAIN Welcome to DICE-NX
+
+@{b}Welcome to DICE-NX@{ub}
+
+This is DICE-nx - a C compiler for Commodore Amiga computers and embedded 68k
+systems. DICE-nx includes all the tools needed to build Amiga executables -
+the C compiler itself, as well as an assembler, linker and numerous other
+support tools. It also has several Amiga-specific features, such as automatic
+opening of the common Amiga OS libraries, easy support for ARexx, and more.
+DICE can also target embedded systems using 68000 processors.
+
+DICE-nx is a fork of DICE, which was originally a commercial product written
+by Matt Dillon in the 1990s. In the late 1990s, commercial development of DICE
+ceased and its source code was released under a "non-commercial use only"
+license. In 2023, Matt re-licensed it under the standard 3-clause BSD license,
+meaning for the first time ever DICE was available under a true open-source
+license.
+
+DICE-nx aims to re-start development of DICE, and focusing on its original aim
+of providing a fully-featured C compiler for Amiga computers. At this time,
+the original 68000-based Amiga series is seeing increased support from
+retro-computing enthusiasts, including the restarting of AmigaOS development
+with the release of AmigaOS 3.2. DICE-nx aims to provide for this audience,
+fully supporting AmigaOS 3.2 and native development on real Amiga hardware,
+and a secondary aim of supporting those who want to cross-compile for the
+Amiga from cheap and powerful Linux systems.
+
+@{b}Where to go from here@{ub}
+
+@{"  Status                 " link "STATUS"} - read about the current status of DICE-nx,
+                             including its limitations.
+@{"  Installation           " link "INSTALLATION"} - how to install DICE-nx.
+@{"  Quick Start            " link "QUICKSTART"} - a quick introduction to running
+                             DICE-nx and compiling a program.
+@{"  License and Copyright  " link "LICENSE"}
+
+Further documentation can be found in the "doc" directory. Note that this
+documentation is somewhat disorganised and outdated. A new manual for DICE-nx
+is in development.
+
+@{b}Important note@{ub}
+
+DICE-nx is currently maintained by Richard Downer, who can be emailed at
+dice@richard.downer.tech. DICE-nx is not endorsed by nor associated with Matt
+Dillon or the original DICE project. Matt's name appears extensively
+throughout this project due to his past involvement, but he is not involved in
+DICE-nx development or support. Therefore, please direct any questions or
+discussions to the above email address or the GitHub repository for DICE-nx at
+https://github.com/dice-nx/dice-nx.
+
+@ENDNODE
+
+@NODE STATUS Current status of DICE-NX
+
+@{b}Current status of DICE-NX@{ub}
+
+This page summarises the current development status of the DICE-nx project -
+what things are working, what is not working, and what is planned.
+
+The good news is that DICE-nx appears to be working well, and able to generate
+working Amiga binaries that can operate on AmigaOS 3.2 on real Amiga hardware.
+This is after a prolonged period of time where DICE would only as a
+cross-compiler hosted on UNIX-like systems and where Amiga native
+functionality suffered. Once DICE-nx could be persuaded to build Amiga native
+binaries again, lots of well-established DICE features came back to life and
+worked as expected.
+
+That said, there is still significant work to be done before a DICE-nx reaches
+the quality of the original 1990s DICE on real Amigas.
+
+@{b}AmigaOS NDK compatibility@{ub}
+
+I made the decision to support only the AmigaOS 3.2 NDK. This is because I
+consider AmigaOS 3.2 support to be essential for the Amiga community in 2024.
+If the compiler supports 3.2, then it is still possible to build Amiga
+binaries that target 3.0, 2.0 and 1.3, and maybe even earlier. If you do want
+to target earlier AmigaOS versions, then you must obviously take care to not
+use any features that are not supported by the target AmigaOS version -
+however that has always been the case for developing on the Amiga.
+
+Support for the earlier Commodore NDKs is desirable however, and I would like
+to support them in the future.
+
+I currently do not plan to support the 3.5 and 3.9 series of AmigaOS releases.
+There is currently no legal way to obtain these AmigaOS releases, which makes
+it difficult to develop and test DICE-nx on them. I am interested in hearing
+from people who would like to see this support added to DICE-nx - if there is
+sufficient interest - and a way for me to do this legally - I would consider
+it.
+
+
+@{b}amiga.lib@{ub}
+
+DICE could use the amiga.lib from the Amiga NDK for the large-model,
+stack-argument variant `amigaXXl.lib`, and with the use of the `libtos` tool,
+it could derive a small-model, stack-argument variant `amigaXXs.lib`. But for
+the register-argument variants and profiling-enabled variants (variants with
+`r` and `p` in their suffix), DICE built its own version of amiga.lib.
+
+DICE-nx does not currently have a buildable amiga.lib of its own. Therefore,
+enabling register-argument builds with `-mr`, `-mR` or `-mRR`, and/or enabling
+profiled builds with `-prof`, will not currently work.
+
+The lack of register-argument builds can be ameliorated by enabling inline OS
+calls by using the `-mi` build option and including the OS headers in the
+`pragmas` directory. For example:
+
+#include <pragmas/dos_pragmas.h>
+
+This restriction does not apply if you are not linking with the Amiga OS
+library - for example, when building ROMable code.
+
+The long-term solution here is obviously to fix the build of the DICE-nx
+version of amiga.lib. However it is significantly outdated compared to the
+AmigaOS 3.2 NDK version of amiga.lib, which has added many functions over the
+various releases of AmigaOS. Efforts need to be made to make the DICE-nx
+amiga.lib compatibile with the NDK 3.2 version of amiga.lib.
+
+
+@{b}Documentation@{ub}
+
+The DICE documentation contains lots of very good detail, but is not organised
+very well and contains much outdated information. It needs an overhaul to make
+it accurate, usable, easy to navigate, and in a format that meets expectations
+in 2024.
+
+
+@{b}Modernisation@{ub}
+
+DICE was written in the era where ANSI C had been recently standardised, but
+most existing code (and coder's habits) of the time was in K&R-style C. K&R
+syntax is used by default in the DICE source code. An effort to make it fully
+ANSI C (now retconned as "C90") compliant is worthwhile.
+
+Future releases of DICE-nx could even add compliance with C99, C11 or C17.
+
+
+@{b}Bugs@{ub}
+
+There are bugs, of course, as in any complex piece of software. These will be
+tracked using GitHub issues rather than being documented here.
+
+
+@ENDNODE
+
+@NODE INSTALLATION Installing DICE-NX
+
+There is no Installer script for DICE-NX - it runs from this unpacked archive
+with only a small addition to the system startup sequence. So your first step
+is to unpack the archive wherever you would like to keep it.
+
+Next, edit the S:User-Startup file, and add these lines:
+
+Assign DCC: <location of the unpacked archive>
+Execute DCC:Dice-Startup "-3.2 -//"
+
+Reboot so that these steps take effect (or, just run them now in a Shell
+window).
+
+You will now need to install the AmigaOS NDK (Native Developer Kit) 3.2.
+(Presently, 3.2 is the only version that DICE-NX supports.) NDK 3.2 is part of
+the AmigaOS 3.2 release - it can be found on the AmigaOS 3.2 CD, or on the
+Hyperion website downloads section if you have registered a purchase of
+AmigaOS 3.2.
+
+Unpack the NDK 3.2 archive to a temporary location (this is not necessary if
+installing from the CD). Then double-click the "Install NDK 3.2" icon in @{u}this@{uu}
+directory and follow the instructions.
+
+DICE will now be able to run and build Amiga executables.
+
+@ENDNODE
+
+@NODE QUICKSTART Quick Start
+
+There are several sample projects in the "Examples" directory. We'll start by
+compiling the "Hello World" example.
+
+Change to the directory:
+
+cd DCC:Examples/Hello
+
+and invoke dcc, the DICE-nx frontend, to compile the source file into an
+executable:
+
+dcc hello.c
+
+When dcc is only given a single source file, by default it will create an
+executable named after the source - in this case, an executable called
+"hello". We can run it:
+
+hello
+
+And it will quite simply print "hello world" back to us.
+
+A slightly more complex example can be found in "SimpleWin". Change to this
+directory:
+
+cd DCC:Examples/SimpleWin
+
+And build it:
+
+dcc simplewin.c
+
+Then run it:
+
+simplewin
+
+This example program will open up a new Intuition screen and window, and wait
+for you to click the close gadget of the window.
+
+If your project has more than one source file, you will want to explicitly
+name the executable that you want to build:
+
+dcc file1.c file2.c -o myproject
+
+As your project size increases, you may want to split the compilation and link
+phases:
+
+dcc -c file1.c
+dcc -c file2.c
+dcc file1.o file2.o -o myproject
+
+At this point you'll probably want to use a "make" tool to manage your project
+and build it. DICE-nx comes with a tool called "dxmake" that can be used for
+this purpose.
+
+@ENDNODE
+
+@NODE LICENSE License and Copyright
+
+DICE-nx is an Open Source project, licensed under the terms of the "BSD
+3-Clause License", which is reproduced at the end of this page.
+
+DICE-nx is a fork of the DICE project, a commercial product by Matt Dillon and
+Obvious Implementations Corporation that was later re-licensed to the BSD
+3-Clause License. The DICE-nx project acknowledges that the bulk of the code
+in this project was developed by Matt and his team and we thank him for his
+extensive work, but under the License terms it should be made clear that Matt
+Dillon has no involvement in and has not endorsed the DICE-nx project.
+
+@{b}License text@{ub}
+
+Copyright 2023- Richard Downer and Open Source contributors
+Copyright 1995-2023 Matt Dillon / DragonFly BSD Project
+Copyright 1992, 1993, 1994 Obvious Implementations Corporation
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors
+   may be used to endorse or promote products derived from this software
+   without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+@ENDNODE
