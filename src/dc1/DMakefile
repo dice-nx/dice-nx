@@ -12,11 +12,18 @@
 .include ../DMakefile.inc
 .endif
 
+.ifdef CROSS_COMPILE
+ASM_SRCS=
+.else
+ASM_SRCS=hash.a
+.endif
+
 SRCS= main.c asm1.c asm2.c asmaddr.c asmflt.c asubs.c block.c cexp.c \
     error.c exp.c gen.c genarith.c genass.c genbool.c genlogic.c genmisc.c \
-    lex.c pragma.c reg.c rules.c sem.c stmt.c subs.c sym.c toplevel.c types.c
+    lex.c pragma.c reg.c rules.c sem.c stmt.c subs.c sym.c toplevel.c types.c \
+    $(ASM_SRCS)
 
-OBJS= $(SRCS:"*.c":"$(OD)dc1_*.o")
+OBJS= $(SRCS:"*.c":"$(OD)dc1_*.o") $(SRCS:"*.a":"$(OD)dc1_*.o")
 
 EXE= $(OD)dc1
 EXED= $(BIN)dc1

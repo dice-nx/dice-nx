@@ -12,10 +12,16 @@
 .include ../DMakefile.inc
 .endif
 
-SRCS= main.c cexp.c cpp.c define.c direct.c include.c \
-        precomp.c subs.c sym.c
+.ifdef CROSS_COMPILE
+ASM_SRCS=
+.else
+ASM_SRCS=asubs.a
+.endif
 
-OBJS= $(SRCS:"*.c":"$(OD)dcpp_*.o")
+SRCS= main.c cexp.c cpp.c define.c direct.c include.c \
+        precomp.c subs.c sym.c $(ASM_SRCS)
+
+OBJS= $(SRCS:"*.c":"$(OD)dcpp_*.o") $(SRCS:"*.a":"$(OD)dcpp_*.o")
 
 EXE= $(OD)dcpp
 EXED= $(BIN)dcpp

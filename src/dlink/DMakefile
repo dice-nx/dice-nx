@@ -12,9 +12,15 @@
 .include ../DMakefile.inc
 .endif
 
-SRCS= final.c jump.c main.c module.c reloc.c subs.c sym.c
+.ifdef CROSS_COMPILE
+ASM_SRCS=
+.else
+ASM_SRCS=hash.a
+.endif
 
-OBJS= $(SRCS:"*.c":"$(OD)dlink_*.o")
+SRCS= final.c jump.c main.c module.c reloc.c subs.c sym.c $(ASM_SRCS)
+
+OBJS= $(SRCS:"*.c":"$(OD)dlink_*.o") $(SRCS:"*.a":"$(OD)dlink_*.o")
 
 EXE= $(OD)dlink
 EXED= $(BIN)dlink
