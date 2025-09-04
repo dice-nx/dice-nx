@@ -149,16 +149,16 @@ __dice_rexx_exit()
     }
 }
 
-int32_t
+long
 PlaceRexxCommandDirect(port, remoteName, arg, pres, pec)
 MsgPort *port;
 char *remoteName;
 char *arg;
 char **pres;
-int32_t *pec;
+long *pec;
 {
     char *rpn = RexxPortName;
-    int32_t r;
+    long r;
 
     RexxPortName = remoteName;
     r = PlaceRexxCommand(port, arg, pres, pec);
@@ -166,15 +166,15 @@ int32_t *pec;
     return(r);
 }
 
-int32_t
+long
 PlaceRexxCommand(port, arg, pres, pec)
 MsgPort *port;
 char *arg;
 char **pres;
-int32_t *pec;
+long *pec;
 {
     RexxIPNode rip;
-    int32_t rc = -2;
+    long rc = -2;
 
     if (port == NULL) {
         if (MasterPortValid == 0)
