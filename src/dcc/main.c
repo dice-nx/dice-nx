@@ -719,7 +719,9 @@ char *xav[];
                             if ((ErrorFi = fopen(ptr, "a")) != NULL) {
                                 ErrFile = ptr;
                                 ErrFileIsTmp = 1;
+#ifdef FIXME_GITHUB_ISSUE_12  /* disabled as a workaround for https://github.com/dice-nx/dice-nx/issues/12 */
                                 sprintf(ErrOptStr," -EE %s", ptr);
+#endif
                             } else {
                                 printf("unable to append to %s\n", ptr);
                             }
