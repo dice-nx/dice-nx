@@ -11,7 +11,9 @@
  */
 
 #include "defs.h"
-#ifndef unix
+
+/* Rexx support requires that we are compiling for an Amiga */
+#ifdef AMIGA
 #include <lib/rexx.h>
 #endif
 
@@ -702,14 +704,13 @@ char *xav[];
                     }
                     break;
                 case 'R':
-#ifndef unix
                     /* substitution variables */
 
                     if (*ptr >= '0' && *ptr <= '9')
                         RexxReplace[*ptr - '0'] = (ptr[1]) ? ptr + 1 : av[++i];
 
                     /* rexx system up?  */
-
+#ifdef AMIGA
                     if (RexxSysBase) {
                         RexxOpt = 1;
                         if (ErrFile == NULL) {
@@ -724,8 +725,10 @@ char *xav[];
                             }
                         }
                     } else {
-                        eprintf("DCC: Warning: could open rexxsyslib.library!\n");
+                        eprintf("DCC: Warning: could not open rexxsyslib.library!\n");
                     }
+#else
+                    eprintf("DCC: Warning: ARexx disabled as this is not an Amiga!\n");
 #endif
                     break;
                 case 's':
@@ -1461,7 +1464,6 @@ top:
     }
     if (r)
         printf("Exit code %d\n", r);
-#ifndef unix
     if (RexxOpt)
     {
         if (r)
@@ -1473,7 +1475,6 @@ top:
             FlushStoredErrors(cfile);
         }
     }
-#endif
     if (ExitCode < r)
         ExitCode = r;
     if (ExitCode > 5)
@@ -2060,9 +2061,8 @@ mergestr(const char *s1, const char *s2)
     return(ptr);
 }
 
-
-#ifndef unix
-
+/* Rexx support requires that we are compiling for an Amiga */
+#ifdef AMIGA
 void
 FlushStoredErrors(cfile)
 char *cfile;
@@ -2373,8 +2373,7 @@ char *file;
     }
     return(s1);
 }
-
-#endif
+#endif /* AMIGA - Rexx support */
 
 /*
  *  Exit with a code, the -unixrc option causes unix style
