@@ -237,7 +237,7 @@ void set_busy(void)
       taglist[2].ti_Data = TRUE;
 
       /* Put up the busy pointer, with pointer-delay */
-      SetWindowPointer( global.window, taglist);
+      SetWindowPointerA( global.window, (CONST struct TagItem *)(&taglist[0]));
    }
    else
 #endif
@@ -275,7 +275,7 @@ void set_idle(void)
       taglist[0].ti_Data = TRUE;
 
       /* Put up the busy pointer, with pointer-delay */
-      SetWindowPointer( global.window, taglist);
+      SetWindowPointerA( global.window, (CONST struct TagItem *)(&taglist[0]));
    }
    else
 #endif

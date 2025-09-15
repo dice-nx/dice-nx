@@ -7,11 +7,11 @@ EXTRAS= DCC:Config/VOpts.Config
 PDEFAULT= vopts.h
 EXEDIR= 
 OD= DTMP:VOPTS/
-PRECOMP= VOpts.h
+PRECOMP=
 TYPE= Normal
 RUN= CLI
 CLIARGS= 
-CFLAGS= -mRR -d0 -proto -I/vcommon -r -mi 
+CFLAGS= -d0 -proto -I/vcommon -r -mi 
 CLI= 
 
 #### AUTOMATICALLY GENERATED - DO NOT EDIT BELOW THIS LINE

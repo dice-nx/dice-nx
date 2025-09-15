@@ -6,14 +6,15 @@
 #include <workbench/startup.h>
 #include <workbench/workbench.h>
 #include <workbench/icon.h>
-#include <proto/exec.h>
-#include <proto/graphics.h>
-#include <proto/intuition.h>
-#include <proto/gadtools.h>
-#include <proto/dos.h>
-#include <proto/wb.h>
-#include <proto/icon.h>
-#include <proto/asl.h>
+#include <pragmas/exec_lib.h>
+#include <pragmas/graphics_lib.h>
+#include <pragmas/intuition_lib.h>
+#include <pragmas/gadtools_lib.h>
+#include <pragmas/dos_lib.h>
+#include <pragmas/wb_lib.h>
+#include <pragmas/icon_lib.h>
+#include <pragmas/asl_lib.h>
+#include <dos/dosextens.h>
 #include <libraries/gadtools.h>
 #include <intuition/intuitionbase.h>
 #include <exec/memory.h>
@@ -38,6 +39,7 @@ struct XItem {
    struct IntuiText itext;
 };
 
+extern struct DosLibrary     *DOSBase;
 extern struct Library        *GadToolsBase;
 extern struct Library        *AslBase;
 extern struct ExecBase       *SysBase;
