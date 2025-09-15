@@ -385,8 +385,10 @@ void    ListExecBase(DBugDisp *dp) {
         SprintfDLIST(&dp->ds_List, DTYPE_EXECBASE, "ex_CacheControl      = %08X ; Private to CacheControl calls", s->ex_CacheControl);
         SprintfDLIST(&dp->ds_List, DTYPE_EXECBASE, "ex_TaskID            = %08X ; Next available task ID", s->ex_TaskID);
 
+#if 0
         SprintfDLIST(&dp->ds_List, DTYPE_EXECBASE, "ex_PuddleSize        = %08X", s->ex_PuddleSize);
         SprintfDLIST(&dp->ds_List, DTYPE_EXECBASE, "ex_PoolThreshold     = %08X", s->ex_PoolThreshold);
+#endif
 #if 0
         struct  MinList ex_PublicPool;
 #endif

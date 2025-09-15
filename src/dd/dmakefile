@@ -1,6 +1,6 @@
 PRE=    t:ddefs.m
 
-CCFLG=  -mRR -proto -H$(PRE)=defs.h -2.0 -d1 -s
+CCFLG=  -proto -3.2 -d1 -s
 #CCFLG= -proto -R -H$(PRE)=defs.h -2.0 -d1 -s
 
 OD=
@@ -10,7 +10,7 @@ XLIBS =
 
 DBUG=   dd
 
-DBUGC=  umain.c lists.c dbug.c cexp.c commands.c loadseg.c\
+DBUGC=  umain.c lists.c dbug.c cexp.c commands.c loadseg.c \
         breakpoints.c hex.c mixed.c dism.c registers.c watchpoints.c \
         menu.c rexxfunc.c
 
@@ -44,7 +44,7 @@ $(DBUGCO):      $(DBUGC)
         dcc -c $(CCFLG) %(right) -o %(left)
 
 $(DBUGAO):      $(DBUGA)
-        a68k -iV:include/ -o%(left) %(right)
+        DH1:Devpac/GenAm -I:Devpac/Include/ -l -o%(left) %(right)
 
 $(HELLOCO):     $(HELLOC)
         dcc -c -R -d1 $(CCFLG) %(right) -o %(left)

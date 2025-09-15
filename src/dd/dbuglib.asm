@@ -5,6 +5,7 @@
 
 ;                incdir  "include:"
 
+		include "exec/exec_lib.i"
                 include "exec/types.i"
                 include "exec/tasks.i"
                 include "exec/execbase.i"
@@ -26,7 +27,6 @@
 sBase           equ     4
 
 EXEC            MACRO
-                xref    _LVO\1
                 move.l  a6,-(sp)
                 move.l  sBase,a6
                 jsr     _LVO\1(a6)
@@ -34,7 +34,6 @@ EXEC            MACRO
                 ENDM
 
 DOS             MACRO
-                xref    _LVO\1
                 move.l  a6,-(sp)
                 move.l  dBase,a6
                 jsr     _LVO\1(a6)
