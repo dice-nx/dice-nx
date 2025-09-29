@@ -9,9 +9,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include "uprev_rev.h"
-#include <include/lib/version.h>
-
-DCOPYRIGHT;
 
 #define MAX_FNAME 256
 
@@ -30,7 +27,7 @@ int main(int argc, char **argv)
 
    if ((argc > 3) || (argc < 2))
    {
-      printf("%s\n%s\n\nUsage: %s <Project> [<Version>]\n", VSTRING, DCopyright, argv[0]);
+      printf("Usage: %s <Project> [<Version>]\n", argv[0]);
       return(5);
    }
 

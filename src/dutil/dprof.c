@@ -16,21 +16,15 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#include "dprof_rev.h"
-
 #ifdef AMIGA
 #include <lib/profile.h>
 #include <lib/version.h>
 #include <lib/muldiv.h>
-#include <lib/version.h>
 #else
 #include <include/lib/profile.h>
 #include <include/lib/version.h>
 #include <include/lib/muldiv.h>
-#include <include/lib/version.h>
 #endif
-
-DCOPYRIGHT;
 
 ProfSym **ProfAry;
 ProfSym *ProfList;
@@ -49,6 +43,9 @@ uint32_t TimeBase;
 short MaxSymLen;
 short CallTreeOpt;
 char    FileName[256];
+
+IDENT("dprof", ".1");
+DCOPYRIGHT;
 
 main(ac, av)
 char *av[];
@@ -138,7 +135,7 @@ char *av[];
         }
     }
 
-    printf("\n%s\t\t%s\n\n", VSTRING, FileName);
+    printf("\n%s\t\t%s\n\n", Ident, FileName);
 
     DumpProfInfo();
     return(0);
@@ -147,7 +144,7 @@ char *av[];
 void
 help(code)
 {
-    printf("%s\n%s\n", VSTRING, DCopyright);
+    printf("%s\n%s\n", Ident, DCopyright);
     exit(code);
 }
 

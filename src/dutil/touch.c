@@ -15,13 +15,13 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include "touch_rev.h"
 #ifdef AMIGA
 #include <lib/version.h>
 #else
 #include <include/lib/version.h>
 #endif
 
+IDENT("touch",".2");
 DCOPYRIGHT;
 
 main(ac, av)
@@ -31,7 +31,7 @@ char *av[];
     int i;
 
     if (ac == 1) {
-        puts(VSTRING);
+        puts(Ident);
         puts(DCopyright);
         printf("touch files/dirs (wildcards ok)\n");
         return(0);

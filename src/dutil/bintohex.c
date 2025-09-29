@@ -21,8 +21,7 @@
 
 #include <include/lib/version.h>
 
-#include "bintohex_rev.h"
-
+IDENT("bintohex",".2");
 DCOPYRIGHT;
 
 #ifdef IBM
@@ -56,7 +55,7 @@ main(int ac, char **av)
 
     _fmode = 0x8000;
     if (ac == 1 || ( ac == 2  &&  *av[1]=='?' ) ) {
-        puts(VSTRING);
+        puts(Ident);
         puts(DCopyright);
         puts("bintohex <infile> -o [outfile] -s[1,2,3] [-i] [-O offset]");
         puts("; Convert <infile> to Motorola or Intel Hex format");

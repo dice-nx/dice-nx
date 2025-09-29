@@ -54,11 +54,10 @@
 **/
 
 #include "defs.h"
-
-#include <include/lib/version.h>
 #include "DAS_rev.h"
 
-DCOPYRIGHT;
+static char *DCopyright =
+"Copyright (c) 1992,1993,1994,1999 Obvious Implementations Corp., Redistribution & Use under DICE-LICENSE.TXT." VERSTAG;
 
 
 Prototype FileNode *CurFile;

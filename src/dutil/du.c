@@ -17,11 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <setjmp.h>
-
-#include "du_rev.h"
 #include <lib/version.h>
-
-DCOPYRIGHT;
 
 #define push_jmp(jbuf,jptr) ((jptr = JmpBase), (JmpBase = jbuf), setjmp(jbuf))
 #define forget_jmp(jptr)    { JmpBase = jptr; }
@@ -42,6 +38,11 @@ long GetBlockSize(char *);
 
 int mybrk(void);
 void ScanDir(Accum *, char *, int);
+
+#ifdef _DCC
+IDENT("du",".03");
+DCOPYRIGHT;
+#endif
 
 long BlockSize;
 jmp_buf *JmpBase;

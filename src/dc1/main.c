@@ -45,9 +45,9 @@
 
 #include "defs.h"
 #include "DC1_rev.h"
-#include <include/lib/version.h>
 
-DCOPYRIGHT;
+static char *DCopyright =
+"Copyright (c) 1992,1993 Obvious Implementations Corp., Redistribution and use under DICE-LICENSE.TXT." VERSTAG;
 
 Prototype short MC68020Opt;
 Prototype short MC68881Opt;
@@ -214,7 +214,7 @@ char **av;
 void
 help()
 {
-    printf("%s\n%s\n", VSTRING, DCopyright);
+    printf("%s\n%s\n", VSTRING VDISTRIBUTION, DCopyright);
     exit(5);
 }
 

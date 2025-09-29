@@ -11,9 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cat_rev.h"
 #include <lib/version.h>
 
+IDENT("cat",".2");
 DCOPYRIGHT;
 
 int _DiceCacheEnable = 1;
@@ -25,7 +25,8 @@ char **av;
     int   i;
     char buf[256];
 
-    DCopyright;         /* references so GNU-C does not complain */
+    Ident;              /* references so GNU-C does not complain */
+    DCopyright;
 
 #ifdef AMIGA
     expand_args(ac, av, &ac, &av);

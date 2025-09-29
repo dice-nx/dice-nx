@@ -13,16 +13,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include "join_rev.h"
 #ifdef AMIGA
 #include <libc.h>
-#include <lib/version.h>
 #else
 #include <unistd.h>
-#include <include/lib/version.h>
 #endif
-
-DCOPYRIGHT;
 
 char Buf[65536];
 
@@ -45,8 +40,6 @@ main(int ac, char **av)
         }
     }
     if (outFile == NULL) {
-        fputs(VSTRING, stderr);
-        fputs(DCopyright, stderr);
         fprintf(stderr, "No AS option specified\n");
         exit(20);
     }

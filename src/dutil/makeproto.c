@@ -25,10 +25,6 @@
 #include <include/lib/version.h>
 #endif
 
-#include "makeproto_rev.h"
-
-DCOPYRIGHT;
-
 typedef struct List List;
 typedef struct Node Node;
 
@@ -37,6 +33,13 @@ void help(int);
 void xprintf(const char *, ...);
 void DumpNodeList(void);
 int EndsWithSlash(const char *);
+
+#ifdef AMIGA
+#ifdef _DCC
+IDENT("makeproto",".4");
+DCOPYRIGHT;
+#endif
+#endif
 
 char    *Field = "Prototype";
 char    *OutFile;
@@ -86,8 +89,6 @@ main(int ac, char **av)
 void
 help(int code)
 {
-    fputs(VSTRING, stderr);
-    fputs(DCopyright, stderr);
     fputs("MAKEPROTO - Scans for 'Prototype' lines in source files\n", stderr);
     fputs("makeproto [-o outfile] file1 file2... fileN\n", stderr);
     exit(code);

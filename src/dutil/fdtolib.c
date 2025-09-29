@@ -39,10 +39,6 @@
 #include <suplib/all.h>
 #endif
 
-#include "fdtolib_rev.h"
-
-DCOPYRIGHT;
-
 #ifndef L_tmpnam
 #define L_tmpnam    64
 #endif
@@ -50,6 +46,9 @@ DCOPYRIGHT;
 #define RF_SCRATCH  0x0303
 #define RB_BP       (8+6)
 #define RF_BP       (1 << RB_BP)
+
+IDENT("fdtolib", ".5");
+DCOPYRIGHT;
 
 typedef unsigned short uword;
 typedef struct List     List;
@@ -285,7 +284,7 @@ main(int ac, char **av)
 void
 help(int code)
 {
-    puts(VSTRING);
+    puts(Ident);
     puts(DCopyright);
     puts("FDTOLIB files/wildcard [-h hdrfile] -o libname [-mr] [-mD]");
     puts("  -mr :   generate registered library from header & fd file");

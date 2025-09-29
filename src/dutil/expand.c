@@ -13,10 +13,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "expand_rev.h"
 #include <lib/version.h>
 
+#ifdef _DCC
+IDENT("expand",".2");
 DCOPYRIGHT;
+#endif
 
 
 main(ac, av)
@@ -28,8 +30,6 @@ char *av[];
 
     switch(ac) {
     case 1:
-        puts(VSTRING);
-        puts(DCopyright);
         puts("Expand \"fmtstring\" wildcards...");
         puts("Expand %s #?");
         exit(1);

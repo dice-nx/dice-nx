@@ -22,10 +22,6 @@
 #include <unistd.h>
 #endif
 
-#include "romable_rev.h"
-
-DCOPYRIGHT;
-
 #define D(x)    ;       /* Debugging Disabled */
 /* #define D(x)    x;      // Debugging Enabled */
 
@@ -78,8 +74,6 @@ main(int ac, char **av)
 
 
     if (ac == 1 || ( ac == 2  &&  *av[1]=='?' )  ) {
-        puts(VSTRING);
-        puts(DCopyright);
         puts("Romable input.exe -o out_even [-o out_odd] -C 0xADDR -D[C] 0xADDR -pi");
         puts(";Convert Amiga executable files into binary files");
         exit(1);

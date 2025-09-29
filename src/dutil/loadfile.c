@@ -17,19 +17,19 @@
 #include <exec/memory.h>
 #include <dos/dos.h>
 #include <clib/exec_protos.h>
-
-#include "loadfile_rev.h"
 #ifdef AMIGA
 #include <lib/version.h>
 #else
 #include <include/lib/version.h>
 #endif
 
-DCOPYRIGHT;
-
-
 #define GUARD   100     /* Padding on either side of allocation */
 #define FILL    0xaa    /* Character used to fill guard area */
+
+#ifdef _DCC
+IDENT("loadfile",".2");
+DCOPYRIGHT;
+#endif
 
 void    onbreak((*fptr)());
 void    exit(int);
@@ -52,7 +52,6 @@ int     err;
 
         if (argc != 2 || ( argc == 2  &&  *argv[1]=='?' ) )
         {
-            printf("%s\n%s\n", VSTRING, DCopyright);
             printf("loadfile <filename>\n");
             printf(";Load binary file into memory, wait for CTRL-C\n");
             exit(5);

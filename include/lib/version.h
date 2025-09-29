@@ -8,26 +8,20 @@
 #ifndef _LIB_VERSION_H
 #define _LIB_VERSION_H
 
-#define MAJOR_VERSION 3
-#define MINOR_VERSION 20
-#define PATCH_VERSION 0
+#define DICE_VERSION "3"
 
 #ifndef __COMMODORE_DATE__
 #define __COMMODORE_DATE__ __DATE__
 #endif
 
+#define DCOPYRIGHT static char *DCopyright = "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License."
+
+
+#define IDENT(file,subv)   static char *Ident = "$VER: " file " " DICE_VERSION subv "Open Source  (" __COMMODORE_DATE__ ")\n\r"
+#define VDISTRIBUTION " Open Source"
+
 #define _STRING(label)          #label
 #define _STRING_EVAL(label)     _STRING(label)
-
-#define DICE_NX_ID "DICE-NX " _STRING_EVAL(MAJOR_VERSION) "." _STRING_EVAL(MINOR_VERSION) "." _STRING_EVAL(PATCH_VERSION)
-
-#define DCOPYRIGHT static char *DCopyright = \
-    "DICE-NX project - https://dice-nx.dev\n" \
-    "Copyright 1992-2023 Obvious Implementations Corp.\n" \
-    "Copyright 2023- DICE-NX project contributors.\n" \
-    "Redistribution & Use under BSD-3-Clause License." \
-    VERSTAG " from " DICE_NX_ID
-
 #define INSTDIR                 _STRING_EVAL(_INSTDIR)
 
 #ifdef AMIGA

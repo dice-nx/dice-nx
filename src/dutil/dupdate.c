@@ -20,16 +20,12 @@
 #include <clib/dos_protos.h>
 #include <clib/exec_protos.h>
 #include <clib/alib_protos.h>
+#include <lib/version.h>
 
-#include <stdint.h>
+#include <stdint.h>s
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "dupdate_rev.h"
-#include <lib/version.h>
-
-DCOPYRIGHT;
 
 typedef struct MinList  MLIST;
 typedef struct List     LIST;
@@ -44,6 +40,11 @@ char    Force;
 char    Quiet;
 char    NoDel;
 char    Broke;
+
+#ifdef _DCC
+IDENT("dupdate",".3");
+DCOPYRIGHT;
+#endif
 
 typedef struct {
     NODE    Node;       /*  link node       */
@@ -84,7 +85,7 @@ char *av[];
     onbreak(brk);
     NewList((LIST *)&ScanList);
     if (ac < 3) {
-        printf("%s\n%s\n\n%s\n", VSTRING, DCopyright, "DUPDATE dist-dir dest-dir");
+        puts("DUPDATE dist-dir dest-dir");
         exit(1);
     }
     {

@@ -16,14 +16,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "loadabs_rev.h"
 #ifdef AMIGA
 #include <lib/version.h>
 #else
 #include <include/lib/version.h>
 #endif
-
-DCOPYRIGHT;
 
 #define HUNK_BSS        0x3EB
 #define HUNK_CODE       0x3E9
@@ -32,6 +29,9 @@ DCOPYRIGHT;
 #define HUNK_SYMBOLS    0x3F0
 #define HUNK_END        0x3F2
 #define HUNK_HEAD       0x3F3
+
+IDENT("loadabs",".3");
+DCOPYRIGHT;
 
 int32_t NumHunks;
 int32_t FirstHunk;
@@ -67,7 +67,7 @@ char *av[];
     int32_t scanPc;
 
     if (ac == 1) {
-        puts(VSTRING);
+        puts(Ident);
         puts(DCopyright);
         puts("LoadAbs exefile -o outfile -A begaddr -d[#]");
         exit(1);

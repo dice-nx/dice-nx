@@ -46,8 +46,7 @@
 #include <sys/dir.h>
 #include <time.h>
 
-#include "fdtopragma_rev.h"
-
+IDENT("FDTOPRAGMA", ".9");
 DCOPYRIGHT;
 
 typedef unsigned char  ubyte;
@@ -196,7 +195,7 @@ exiterr(const char *ctl, ...)
 void
 help(short code)
 {
-    puts(VSTRING);
+    puts(Ident);
     puts(DCopyright);
     puts("FDTOPRAGMA fdfile [-o outfile]");
     puts("FDTOPRAGMA fddir/ [-o outdir/]");

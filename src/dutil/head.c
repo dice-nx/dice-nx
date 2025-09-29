@@ -14,14 +14,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "head_rev.h"
 #ifdef AMIGA
 #include <lib/version.h>
 #else
 #include <include/lib/version.h>
 #endif
 
+IDENT("head",".3");
 DCOPYRIGHT;
 
 void head(FILE *);
