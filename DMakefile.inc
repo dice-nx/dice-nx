@@ -23,7 +23,7 @@ SUPLIB = -L /tmp/dtmp/obj1-bootstrap/suplib -lamiga
 .else
 
 CC=dcc
-CFLAGS= -3.2 -// -I$(TOPDIR)
+CFLAGS= -// -I$(TOPDIR)
 SUPLIB =
 
 .endif
