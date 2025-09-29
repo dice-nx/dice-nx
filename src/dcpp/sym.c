@@ -11,7 +11,7 @@
 
 #include "defs.h"
 
-Prototype int hash(char *, short);
+Prototype int hash(ubyte *, short);
 Prototype Sym *FindSymbol(char *, short);
 Prototype int UndefSymbol(char *, short);
 Prototype void DefineOptSymbol(char *);
@@ -31,7 +31,7 @@ int32_t SymGroup;
 #ifdef NO_ASM
 
 int
-hash(char *ptr, short len)
+hash(ubyte *ptr, short len)
 {
     int32_t hv = 0x1234FCD1;
 

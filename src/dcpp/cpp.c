@@ -126,7 +126,7 @@ int32_t xbytes;
                 }
             }
 #else
-            len = HandleTriGraphs(base) - (int)base;
+            len = (int)HandleTriGraphs(base) - (int)base;
 #endif
         }
     } else {             /*  else macro  */
