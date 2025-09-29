@@ -40,6 +40,12 @@ typedef struct FileInfoBlock FIB;
 typedef struct Process       PROC;
 
 
+/* The following is required for the console.device library interface #pragmas
+ * to work, certainly for NDK3.2 but possibly for other versions too. It
+ * doesn't seem quite right that we have to do this... The actual definition of
+ * this variable is in keyboard.c. */
+extern struct Library *ConsoleDevice;
+
 /*
  *  Create DME's text icon.
  */
