@@ -31,13 +31,13 @@
 # SUCH DAMAGE.
 #
 PREFIX ?= /usr/local
-PROG= dxmake
+PROG= dmake
 PROTOS= dmake-protos.h
 SRCS= buffer.c cmdlist.c convert.c depend.c main.c parse.c run.c subs.c var.c lists.c cond.c
 HFILES= defs.h dmake_str.h lists.h tokens.h dmake-protos.h
 BINDIR= $(PREFIX)/bin/
 MANDIR= $(PREFIX)/man/man
-TARFILES= $(SRCS) Makefile Makefile.portable dxmake.1 $(HFILES)
+TARFILES= $(SRCS) Makefile Makefile.portable dmake.1 $(HFILES)
 CFLAGS= -Wall -Wstrict-prototypes
 REV= 2.12
 PORTTAR= /home/dillon/htdocs/FreeBSDPorts/$(PROG)-$(REV).tar.gz

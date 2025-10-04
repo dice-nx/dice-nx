@@ -36,7 +36,7 @@ OBJS= buffer.o cmdlist.o convert.o depend.o main.o parse.o run.o subs.o var.o li
 PREFIX = /usr/local
 
 EXED= $(PREFIX)/bin
-EXE= dxmake
+EXE= dmake
 CC= gcc
 
 CFLAGS= -Wall -Wno-unused-result -Wstrict-prototypes -O2 -g

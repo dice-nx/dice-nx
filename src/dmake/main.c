@@ -1,32 +1,41 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Copyright (c) 2003-2011,2023 The DragonFly Project.  All rights reserved.
+ *
+ * This code is derived from software contributed to The DragonFly Project
+ * by Matthew Dillon <dillon@backplane.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of The DragonFly Project nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific, prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
-
-/*
- *  MAIN.C
- */
-
 #include "defs.h"
-#ifdef AMIGA
-#include <intuition/intuition.h>
-#include <graphics/gfx.h>
-#include <clib/intuition_protos.h>
-#include <workbench/icon.h>
-#include <workbench/startup.h>
-#include <clib/wb_protos.h>
-#include <clib/icon_protos.h>
-#include <lib/misc.h>
-#endif
-#include "dmake_rev.h"
 
 void help(int);
 void InitStuff(void);
 const char *SkipAss(const char *);
-#ifdef AMIGA
-struct IntuiText *ITextOf(char *);
-#endif
 
 Prototype List  DoList;
 Prototype short DDebug;
@@ -34,6 +43,7 @@ Prototype short NoRunOpt;
 Prototype short ExitCode;
 Prototype short DoAll;
 Prototype short SomeWork;
+Prototype short NParallel;
 
 List    DoList;
 short   DDebug;
@@ -41,102 +51,22 @@ short   NoRunOpt;
 short   QuietOpt;
 short   DoAll;
 short   SomeWork;
-#ifdef AMIGA
-short   XSaveLockValid;
-BPTR    XSaveLock;
-char     version[] = VERSTAG "\0 Copyright 1994, O.I.C.\n";
-#endif
 char    *XFileName = "DMakefile";
 short   FileSpecified = 0;
 short   ExitCode;
+short   NParallel = 1;
 
 void
 myexit(void)
 {
-if (SomeWork)
-   printf("DMAKE Done.\n");
-else {
-       if (QuietOpt == 0)printf("All Targets up to date.\n");
-}
-#ifdef AMIGA
-    if (XSaveLockValid) {
-        CurrentDir(XSaveLock);
-        XSaveLockValid = 0;
-    }
-#endif
-}
-
-#ifdef AMIGA
-
-wbmain(wbs)
-struct WBStartup *wbs;
-{
-    struct DiskObject *dob;
-    short i;
-    short j;
-    short abortIt = 0;
-
-    /*
-     *  Search for options, set current directory to last valid
-     *  disk object
-     */
-
-    InitStuff();
-
-    for (i = 0; i < wbs->sm_NumArgs; ++i) {
-        BPTR saveLock = CurrentDir((BPTR)wbs->sm_ArgList[i].wa_Lock);
-
-        if (i == wbs->sm_NumArgs - 1 && FileSpecified == 0)
-            XFileName = strdup(wbs->sm_ArgList[i].wa_Name);
-
-        if (dob = GetDiskObject(wbs->sm_ArgList[i].wa_Name)) {
-            for (j = 0; dob->do_ToolTypes[j]; ++j) {
-                char *ptr = dob->do_ToolTypes[j];
-
-                if (strnicmp(ptr, "FILE=", 5) == 0) {
-                    XFileName = strdup(SkipAss(ptr));
-                    FileSpecified = 1;
-                } else if (strnicmp(ptr, "DRYRUN=", 7) == 0) {
-                    NoRunOpt = strtol(SkipAss(ptr), NULL, 0);
-                } else if (strnicmp(ptr, "TARGET=", 7) == 0) {
-                    CreateDepRef(&DoList, SkipAss(ptr));
-                } else if (strnicmp(ptr, "QUIET=", 6) == 0) {
-                    QuietOpt = strtol(SkipAss(ptr), NULL, 0);
-                } else if (strnicmp(ptr, "DEBUG=", 6) == 0) {
-                    DDebug = strtol(SkipAss(ptr), NULL, 0);
-                } else if (strnicmp(ptr, "CONSOLE=", 8) == 0) {
-                    OpenConsole(SkipAss(ptr)); /*  lib/misc.h  */
-                } else {
-                    char buf[64];
-
-                    sprintf(buf, "Bad ToolType: %s", ptr);
-                    switch(AutoRequest(NULL, ITextOf(ptr), ITextOf("Ignore"), ITextOf("Abort"), 0, 0, 300, 40)) {
-                    case 1:
-                        break;
-                    case 0:
-                        abortIt = 1;
-                        break;
-                    }
-                }
-                if (abortIt)
-                    break;
-            }
-            FreeDiskObject(dob);
+    if (QuietOpt == 0) {
+        if (SomeWork) {
+            printf("DMAKE Done.\n");
+        } else {
+            printf("All Targets up to date.\n");
         }
-        CurrentDir(saveLock);
-        if (abortIt)
-            break;
     }
-#ifdef AMIGA
-    XSaveLock = CurrentDir((BPTR)wbs->sm_ArgList[wbs->sm_NumArgs-1].wa_Lock);
-    XSaveLockValid = 1;
-#endif
-
-    if (abortIt == 0)
-        main(1, NULL);
 }
-
-#endif
 
 int
 main(int ac, char **av)
@@ -152,6 +82,7 @@ main(int ac, char **av)
     /*printf("ARGS= %d\n", ac);*/
     for (i = 1; i < ac; ++i) {
         char *ptr = av[i];
+        char *p2;
 
         /*printf("ARG[%d]= %d:%s\n", i, strlen(av[i]), av[i]);*/
 
@@ -171,12 +102,14 @@ main(int ac, char **av)
             break;
 
         case 'D':
-            (*ptr) ? ptr : av[++i];
+            ptr = (*ptr) ? ptr : av[++i];
+            if ((p2 = strchr(ptr, '=')) != NULL)
+                *p2++ = 0;
             var = MakeVar(ptr, '$');
-            ptr = av[++i];
-            (*ptr) ? ptr : av[++i];
-            ExpandVariable(ptr,&tmpList);
-            AppendCmdList(&tmpList, &var->var_CmdList);
+            if (p2) {
+                ExpandVariable((ubyte *)p2, &tmpList);
+                AppendCmdList(&tmpList, &var->var_CmdList);
+            }
             break;
 
         case 'd':
@@ -187,13 +120,14 @@ main(int ac, char **av)
         case 'q':
             QuietOpt = 1;
             break;
+        case 'j':
+            NParallel = (*ptr) ? atoi(ptr) : 2;
+            break;
         case 'h':
         default:
             help(1);
         }
     }
-    if (QuietOpt == 0)
-        puts(VERS " (" DATE ")");
 
     if (i > ac)
         error(FATAL, "Expected argument to command line option");
@@ -203,18 +137,22 @@ main(int ac, char **av)
      *  the resolve the first one
      */
 
+    (void)MakeVar("TOPDIR", '$');
+
     {
         DepRef *node;
 
         ParseFile(XFileName);
 
         if (GetHead(&DoList) == NULL) {
+            CreateDepRef(&DoList, "all");
+#if 0
             if ((node = GetHead(&DepList)) != NULL)
                 CreateDepRef(&DoList, ((DepNode *)node)->dn_Node.ln_Name);
+#endif
         }
 
         while ((node = RemHead(&DoList)) != NULL) {
-            time_t t;
             if ((node->rn_Dep->dn_Node.ln_Type != NT_RESOLVED) &&
                (GetHead(&node->rn_Dep->dn_DepCmdList) == NULL))
             {
@@ -222,10 +160,8 @@ main(int ac, char **av)
                 break;
             }
 
-            if ((r = ExecuteDependency(node, &t)) < 0)
-            {
+            if ((r = ExecuteDependency(NULL, node, ED_WAIT)) < 0)
                 break;
-            }
         }
     }
     if (r < 0 && ExitCode < 20)
@@ -254,8 +190,8 @@ void
 help(code)
 int code;
 {
-    puts("DMAKE V2.1 (c)Copyright 1991 Matthew Dillon, All Rights Reserved");
-    puts("DMAKE [-f file] [-n] [-Dvariable] [-d] [-a] [-q] [-h]");
+    puts("DMAKE V2.12 (c)Copyright 1991-2003 Matthew Dillon, All Rights Reserved");
+    puts("DMAKE [-f file] [-n] [-Dvariable] [-d] [-a] [-q] [-h] [-j n]");
     exit(code);
 }
 
@@ -271,24 +207,4 @@ const char *ptr;
     }
     return(ptr);
 }
-
-#ifdef AMIGA
-struct IntuiText *
-ITextOf(ptr)
-char *ptr;
-{
-    static struct IntuiText ITAry[8];
-    static short ITIdx;
-    struct IntuiText *it = ITAry + ITIdx;
-
-    ITIdx = (ITIdx + 1) & 7;
-    it->FrontPen = 1;
-    it->BackPen  = 0;
-    it->DrawMode = JAM2;
-    it->LeftEdge = 2;
-    it->TopEdge = 6;
-    it->IText = (unsigned char *)ptr;
-    return(it);
-}
-#endif
 

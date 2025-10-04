@@ -10,5 +10,6 @@ typedef uword token_t;
 #define TokCloseParen   7
 #define TokNewLine      8
 #define TokPercent      9
+#define TokQuestion     10
 
 

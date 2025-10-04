@@ -9,10 +9,10 @@ SRCS= buffer.c cmdlist.c cond.c convert.c depend.c lists.c main.c parse.c run.c 
 
 OBJS= $(SRCS:"*.c":"$(OD)dxmake_*.o")
 
-EXE= $(OD)dxmake
-EXED= $(BIN)dxmake
+EXE= $(OD)dmake
+EXED= $(BIN)dmake
 
-PROTOS= dxmake-protos.h
+PROTOS= dmake-protos.h
 
 all: $(PROTOS) $(EXE)
 

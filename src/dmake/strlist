@@ -40,7 +40,7 @@ main.c..
 176 puts("DMake V2.1 " __DATE__);
 179 error(FATAL, "Expected argument to command line option");
 201 error(FATAL, "Unable to find %s", node->rn_Node.ln_Name);
-237 puts("DMAKE V2.1 (c)Copyright 1991 Matthew Dillon, All Rights Reserved");
+237 puts("DMAKE V2.1");
 238 puts("DMAKE [-f file] [-n]");
 
 run.c..

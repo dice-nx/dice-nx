@@ -1,27 +1,43 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  PARSE.C
+ * Copyright (c) 2003-2011,2023 The DragonFly Project.  All rights reserved.
  *
- *  Parse the next token or tokens
+ * This code is derived from software contributed to The DragonFly Project
+ * by Matthew Dillon <dillon@backplane.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of The DragonFly Project nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific, prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
-
 #include "defs.h"
-#include <stdarg.h>
-#ifndef AMIGA
-#include <suplib/string.h>
-#endif
 
 Prototype void InitParser(void);
 Prototype void ParseFile(char *);
-Prototype token_t ParseAssignment(char *, token_t);
+Prototype token_t ParseAssignment(char *, token_t, int, char);
 Prototype token_t ParseDependency(char *, token_t);
-Prototype token_t GetElement(void);
-Prototype token_t XGetElement(void);
+Prototype token_t GetElement(int ifTrue, int *expansion);
 Prototype void    ParseVariable(List *, short);
 Prototype char   *ParseVariableBuf(List *, ubyte *, short);
 Prototype char   *ExpandVariable(ubyte *, List *);
@@ -41,6 +57,11 @@ char AltBuf2[256];
 long LineNo = 1;
 char *FileName = "";
 FILE *Fi;
+List CCList;
+
+#ifdef unix
+static const char *ccmd(int cno, const char *cmd, const char *arg1);
+#endif
 
 void
 InitParser()
@@ -48,6 +69,7 @@ InitParser()
     short i;
     for (i = 0; SChars[i]; ++i)
         SpecialChar[(ubyte)SChars[i]] = 1;
+    NewList(&CCList);
 }
 
 /*
@@ -67,34 +89,307 @@ char *fileName;
 {
     FILE *fi;
     token_t t;
+    IfNode *ifBase = NULL;
+    int ifTrue = 1;
+    int expansion;
+    List topdirList;
 
-    if ((fi = fopen(fileName, "r")) == NULL)
-        error(FATAL, "Unable to open %s", fileName);
+    NewList(&topdirList);
+
+    /*
+     * Open the file
+     */
+    {
+        Var *var = FindVar("TOPDIR", '$');
+        char *tfileName;
+        int len;
+        List list;
+
+        NewList(&list);
+        CopyCmdList(&var->var_CmdList, &list);
+        CopyCmdList(&var->var_CmdList, &topdirList);
+        len = CmdListSize(&list);
+        tfileName = malloc(len + strlen(fileName) + 1);
+        CopyCmdListBuf(&list, tfileName);
+        strcpy(tfileName + len, fileName);
+
+        if ((fi = fopen(tfileName, "r")) == NULL)
+            error(FATAL, "Unable to open %s", tfileName);
+        free(tfileName);
+    }
     FileName = strdup(fileName);
     Fi = fi;
+    LineNo = 1;
 
-    for (t = GetElement(); t; ) {
+    /*
+     * Adjust TOPDIR based on include path
+     */
+    {
+        const char *p;
+
+        if ((p = strrchr(fileName, '/')) != NULL) {
+                Var *var = FindVar("TOPDIR", '$');
+                AppendVar(var, fileName, p - fileName + 1);
+        }
+    }
+
+    /*
+     * Parse the file
+     */
+    for (t = GetElement(ifTrue, &expansion); t; ) {
         switch(t) {
         case TokNewLine:
-            t = GetElement();
+            t = GetElement(ifTrue, &expansion);
             break;
         case TokSym:
             strcpy(AltBuf2, SymBuf);
 
+            if (expansion == 0 && SymBuf[0] == '.' && 
+                SymBuf[1] != '.' && SymBuf[1] != '/'
+            ) {
+                if (ifTrue && strcmp(SymBuf, ".export") == 0) {
+                    char *data;
+                    Var *var;
+
+                    while ((t = GetElement(ifTrue, &expansion)) != TokNewLine) {
+                        int maxl;
+
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .export!");
+
+                        if ((var = FindVar(SymBuf, '$')) == NULL) {
+                            error(
+                                FATAL, 
+                                "export %s failed, variable not found", 
+                                SymBuf
+                            );
+                        }
+                        {
+#if USE_PUTENV
+                            char *assBuf;
+#endif
+                            static List CmdList = { 
+                                (Node *)&CmdList.lh_Tail,
+                                NULL, 
+                                (Node *)&CmdList.lh_Head
+                            };
+                            CopyCmdList(&var->var_CmdList, &CmdList);
+                            maxl = CmdListSize(&CmdList) + 1;
+                            data = malloc(maxl);
+                            CopyCmdListBuf(&CmdList, data);
+#if USE_PUTENV
+                            assBuf = malloc(strlen(SymBuf) + strlen(data) + 2);
+                            sprintf(assBuf, "%s=%s", SymBuf, data);
+                            putenv(assBuf);
+                            free(assBuf);
+#elif defined(_DCC)
+                            setenv(SymBuf, data);
+#else
+                            setenv(SymBuf, data, 1);
+#endif
+                            free(data);
+                        }
+                    }
+                } else if (ifTrue && strcmp(SymBuf, ".include") == 0) {
+                    FILE *saveFi = Fi;
+                    char *saveFileName = FileName;
+                    int saveLine = LineNo;
+                    char *path;
+
+                    t = GetElement(ifTrue, &expansion);
+                    if (t != TokSym)
+                        error(FATAL, "Expected a symbol for .include!");
+                    path = strdup(SymBuf);
+                    ParseFile(path);
+                    free(path);
+
+                    LineNo = saveLine;
+                    Fi = saveFi;
+                    FileName = saveFileName;
+
+                    t = GetElement(ifTrue, &expansion);
+                    if (t != TokNewLine)
+                        error(FATAL, "Expected newline after .include filename");
+                } else if (strcmp(SymBuf, ".else") == 0) {
+                    if (ifBase == NULL)
+                        error(FATAL, ".else without .if*");
+                    ifTrue = elseIf(&ifBase);
+                } else if (strcmp(SymBuf, ".ifuser") == 0) {
+#ifndef unix
+                    error(FATAL, ".ifuser directive not available on non-UNIX-like ports of dmake");
+#else
+                    if (ifTrue) {
+                        struct passwd *pw;
+
+                        t = GetElement(ifTrue, &expansion);
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .ifuser!");
+                        if ((pw = getpwuid(getuid())) == NULL)
+                            error(FATAL, "getpwuid(getuid()) failed");
+                        if (strcmp(SymBuf, pw->pw_name) == 0)
+                            ifTrue = pushIf(&ifBase, 1);
+                        else
+                            ifTrue = pushIf(&ifBase, 0);
+                    } else {
+                        ifTrue = pushIf(&ifBase, 0);
+                    }
+#endif
+                } else if (strcmp(SymBuf, ".ifdef") == 0) {
+                    if (ifTrue) {
+                        t = GetElement(ifTrue, &expansion);
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .ifdef!");
+                        if (FindVar(SymBuf, '$')) {
+                            ifTrue = pushIf(&ifBase, 1);
+                        } else {
+                            ifTrue = pushIf(&ifBase, 0);
+                        }
+                    } else {
+                        ifTrue = pushIf(&ifBase, 0);
+                    }
+                } else if (strcmp(SymBuf, ".ifhost") == 0) {
+#ifndef unix
+                    error(FATAL, ".ifhost directive not available on non-UNIX-like ports of dmake");
+#else
+                    if (ifTrue) {
+                        t = GetElement(ifTrue, &expansion);
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .ifhost!");
+                        if (strcasecmp(SymBuf, ccmd(1, "hostname", NULL)) == 0) {
+                            ifTrue = pushIf(&ifBase, 1);
+                        } else {
+                            ifTrue = pushIf(&ifBase, 0);
+                        }
+                    } else {
+                        ifTrue = pushIf(&ifBase, 0);
+                    }
+#endif
+                } else if (strcmp(SymBuf, ".ifos") == 0) {
+                    if (ifTrue) {
+                        t = GetElement(ifTrue, &expansion);
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .ifos!");
+#ifdef unix
+                        const char *osName = ccmd(2, "uname", "-s");
+#else
+                        const char *osName = "AmigaOS";
+#endif
+                        if (strcasecmp(SymBuf, osName) == 0) {
+                            ifTrue = pushIf(&ifBase, 1);
+                        } else {
+                            ifTrue = pushIf(&ifBase, 0);
+                        }
+                    } else {
+                        ifTrue = pushIf(&ifBase, 0);
+                    }
+                } else if (strcmp(SymBuf, ".ifarch") == 0) {
+                    if (ifTrue) {
+                        t = GetElement(ifTrue, &expansion);
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .ifarch!");
+#ifdef unix
+                        const char *arch = ccmd(2, "uname", "-m");
+#else
+                        const char *arch = "m68k";
+#endif
+                        if (strcasecmp(SymBuf, arch) == 0) {
+                            ifTrue = pushIf(&ifBase, 1);
+                        } else {
+                            ifTrue = pushIf(&ifBase, 0);
+                        }
+                    } else {
+                        ifTrue = pushIf(&ifBase, 0);
+                    }
+                } else if (strcmp(SymBuf, ".iffile") == 0) {
+                    if (ifTrue) {
+                        struct stat st;
+
+                        t = GetElement(ifTrue, &expansion);
+                        if (t != TokSym)
+                            error(FATAL, "Expected a symbol for .iffile!");
+                        if (stat(SymBuf, &st) == 0) {
+                            ifTrue = pushIf(&ifBase, 1);
+                        } else {
+                            ifTrue = pushIf(&ifBase, 0);
+                        }
+                    } else {
+                        ifTrue = pushIf(&ifBase, 0);
+                    }
+                } else if (strcmp(SymBuf, ".endif") == 0) {
+                    if (ifBase == NULL)
+                        error(FATAL, ".endif without .if");
+                    ifTrue = popIf(&ifBase);
+                } else if (ifTrue) {
+                    error(FATAL, "unknown '.' directive");
+                }
+
+                /*
+                 * End of special directive handling
+                 */
+                while (t && t != TokNewLine)
+                    t = GetElement(ifTrue, &expansion);
+                continue;
+            }
+
+            /*
+             * Ignore .if'd out code
+             */
+            if (ifTrue == 0) {
+                while (t && t != TokNewLine)
+                    t = GetElement(ifTrue, &expansion);
+                continue;
+            }
+
             /*
              *  check for '=' -- assignment
              */
-
-            t = GetElement();
-            if (t == TokEq)
-                t = ParseAssignment(AltBuf2, t);
-            else
+            t = GetElement(ifTrue, &expansion);
+            if (t == TokQuestion) {
+                t = GetElement(ifTrue, &expansion);
+                if (t == TokEq)
+                    t = ParseAssignment(AltBuf2, t, 1, '$');
+                else
+                    error(FATAL, "Expected '?=' got '?'");
+            } else if (t == TokEq) {
+                t = ParseAssignment(AltBuf2, t, 0, '$');
+            } else {
                 t = ParseDependency(AltBuf2, t);
+            }
+            break;
+        case TokColon:
+            /*
+             * Ignore .if'd out code
+             */
+            if (ifTrue == 0) {
+                while (t && t != TokNewLine)
+                    t = GetElement(ifTrue, &expansion);
+                continue;
+            }
+            t = ParseDependency(NULL, t);
             break;
         default:
+            /*
+             * Ignore .if'd out code
+             */
+            if (ifTrue == 0) {
+                while (t && t != TokNewLine)
+                    t = GetElement(ifTrue, &expansion);
+                continue;
+            }
             error(FATAL, "Expected a symbol!");
             break;
         }
+    }
+    if (ifBase != NULL)
+        error(FATAL, "Dangling .if's at EOF");
+
+    /*
+     * Restore TOPDIR
+     */
+    {
+        Var *var = FindVar("TOPDIR", '$');
+        FreeCmdList(&var->var_CmdList);
+        AppendCmdList(&topdirList, &var->var_CmdList);
     }
 }
 
@@ -105,25 +400,20 @@ char *fileName;
  */
 
 token_t
-ParseAssignment(char *varName, token_t t)
+ParseAssignment(char *varName, token_t t, int cond, char type)
 {
-    Var *var = MakeVar(varName, '$');
+    Var *var;
+    int newVar = 0;
     long len;
     short done;
     short eol = 1;
     List tmpList;
 
-    NewList(&tmpList);
-
-#ifdef NOTDEF
-    {
-        short c;
-        while ((c = fgetc(Fi)) == ' ' || c == '\t')
-            ;
-        if (c != EOF)
-            ungetc(c, Fi);
+    if (cond == 0 || FindVar(varName, type) == NULL) {
+        newVar = 1;
     }
-#endif
+
+    NewList(&tmpList);
 
     while (fgets(AltBuf, sizeof(AltBuf), Fi)) {
         len = strlen(AltBuf);
@@ -155,17 +445,12 @@ ParseAssignment(char *varName, token_t t)
 
             for (i = 0; i < len && (AltBuf[i] == ' ' || AltBuf[i] == '\t'); ++i)
                 ;
-            /*
-             * allow one whitespace in
-             */
-            if (i && ((AltBuf[i-1] == '\t') || (AltBuf[i] == ' ')))
-                --i;
-            for (; i < len; ++i)
+            if(i && ((AltBuf[i-1] == '\t') || (AltBuf[i] == ' ')))--i;
+            for (     ; i < len; ++i)
                 PutCmdListChar(&tmpList, AltBuf[i]);
 
         }
-        if (done > 0)
-            break;
+        if (done > 0)break;
     }
 
     /*
@@ -175,11 +460,14 @@ ParseAssignment(char *varName, token_t t)
     {
         char *buf = malloc(CmdListSize(&tmpList) + 1);
         CopyCmdListBuf(&tmpList, buf);
-        ExpandVariable(buf, &tmpList);
-        AppendCmdList(&tmpList, &var->var_CmdList);
+        if (newVar) {
+            ExpandVariable((ubyte *)buf, &tmpList);
+            var = MakeVar(varName, type);
+            AppendCmdList(&tmpList, &var->var_CmdList);
+        }
         free(buf);
     }
-    return(GetElement());
+    return(GetElement(1, NULL));
 }
 
 /*
@@ -194,31 +482,36 @@ ParseDependency(char *firstSym, token_t t)
     List    lhsList;
     List    rhsList;
     List    *cmdList = malloc(sizeof(List));
-    long    nlhs = 0;
-    long    nrhs = 0;
+    int    nlhs = 0;
+    int    nrhs = 0;
     short   ncol = 0;
 
     NewList(cmdList);
     NewList(&lhsList);
     NewList(&rhsList);
 
-    ++nlhs;
-    for (CreateDepRef(&lhsList, firstSym); t != TokColon; t = GetElement()) {
+    if (firstSym) {
+        ++nlhs;
+        CreateDepRef(&lhsList, firstSym);
+    }
+
+    while (t != TokColon) {
         expect(t, TokSym);
         CreateDepRef(&lhsList, SymBuf);
         ++nlhs;
+        t = GetElement(1, NULL);
     }
-    t = GetElement();
+    t = GetElement(1, NULL);
     if (t == TokColon) {
         ++ncol;
-        t = GetElement();
+        t = GetElement(1, NULL);
     }
 
     while (t != TokNewLine) {
         expect(t, TokSym);
         CreateDepRef(&rhsList, SymBuf);
         ++nrhs;
-        t = GetElement();
+        t = GetElement(1, NULL);
     }
 
     /*
@@ -233,10 +526,16 @@ ParseDependency(char *firstSym, token_t t)
         while ((c = getc(Fi)) != EOF) {
             if (c == '\n') {
                 ++LineNo;
-                if (blankLine)break;
+                if (blankLine)
+                    break;
                 PutCmdListChar(cmdList, '\n');
                 blankLine = 1;
+                ws = 0;
                 continue;
+            }
+            if (c == '.' && blankLine && ws == 0) {
+                ungetc(c, Fi);
+                break;
             }
 
             switch(c) {
@@ -273,7 +572,6 @@ ParseDependency(char *firstSym, token_t t)
             blankLine = 0;
         }
     }
-    dbprintf(("parse: %d : %d\n", nlhs, nrhs));
 
     /*
      *  formats allowed:
@@ -323,17 +621,8 @@ ParseDependency(char *firstSym, token_t t)
  *  GetElement()    - return a token after variable/replace parsing
  */
 
-#ifdef NOTDEF
 token_t
-GetElement(void)
-{
-    token_t t = XGetElement();
-    return(t);
-}
-#endif
-
-token_t
-GetElement(void)
+GetElement(int ifTrue, int *expansion)
 {
     static List CmdList = { (Node *)&CmdList.lh_Tail, NULL, (Node *)&CmdList.lh_Head };
     token_t t;
@@ -341,8 +630,12 @@ GetElement(void)
 
 top:
     if (PopCmdListSym(&CmdList, SymBuf, sizeof(SymBuf)) == 0) {
+        if (expansion)
+            *expansion = 1;
         return(TokSym);
     }
+    if (expansion)
+        *expansion = 0;
 
     t = GetToken();
 swi:
@@ -350,7 +643,7 @@ swi:
     case TokDollar:
     case TokPercent:
         c = fgetc(Fi);
-        if (c == '(') {
+        if (c == '(' && ifTrue) {
             ParseVariable(&CmdList, (t == TokPercent) ? '%' : '$');
 
             /*
@@ -375,6 +668,7 @@ swi:
             goto top;
         }
         ungetc(c, Fi);
+        /* fall through */
     default:
         break;
     }
@@ -408,8 +702,6 @@ ParseVariable(List *cmdList, short c0)
     var = FindVar(AltBuf, c0);
     if (var == NULL)
         error(FATAL, "Variable %s does not exist", AltBuf);
-
-    dbprintf(("ParseVariable: (%c:%c) %s\n", c0, c, AltBuf));
 
     /*
      *  now, handle modifiers
@@ -491,7 +783,6 @@ ParseVariableBuf(List *cmdList, ubyte *buf, short c0)
     char *symBuf = AllocPathBuffer();
     char *altBuf = AllocPathBuffer();
 
-    dbprintf(("ParseVariableBuf: (%c) %s\n", c0, buf));
     /*
      *  variable name
      */
@@ -512,7 +803,7 @@ ParseVariableBuf(List *cmdList, ubyte *buf, short c0)
         CopyCmdList(&var->var_CmdList, cmdList);
         FreePathBuffer(symBuf);
         FreePathBuffer(altBuf);
-        return(buf);
+        return((char *)buf);
     }
     if (c != ':')
         error(FATAL, "Bad variable specification after name");
@@ -548,7 +839,7 @@ ParseVariableBuf(List *cmdList, ubyte *buf, short c0)
         CopyCmdListConvert(&var->var_CmdList, cmdList, altBuf, symBuf);
         FreePathBuffer(symBuf);
         FreePathBuffer(altBuf);
-        return(buf);
+        return((char *)buf);
     }
 
     if (c != ':')
@@ -574,12 +865,10 @@ ParseVariableBuf(List *cmdList, ubyte *buf, short c0)
     if (c != ')')
         error(FATAL, "Bad variable replacement spec: %c", c);
 
-    dbprintf(("CopyConvert to %s %s (%s) %08lx\n", altBuf, symBuf, var->var_Node.ln_Name, GetHead(&var->var_CmdList)));
-
     CopyCmdListConvert(&var->var_CmdList, cmdList, altBuf, symBuf);
     FreePathBuffer(symBuf);
     FreePathBuffer(altBuf);
-    return(buf);
+    return((char *)buf);
 }
 
 char *
@@ -636,11 +925,11 @@ List *list;
     if (keepInList == 0) {
         if (tmpListValid) {
             buf = malloc(CmdListSize(list) + 1);
-            CopyCmdListBuf(list, buf);
+            CopyCmdListBuf(list, (char *)buf);
         }
     }
     --Levels;
-    return(buf);
+    return((char *)buf);
 }
 
 
@@ -733,7 +1022,7 @@ List *list;
  *  GetToken()  - return a single token
  */
 
-#ifdef NOTDEF
+/*
 token_t
 GetToken()
 {
@@ -744,7 +1033,7 @@ GetToken()
     printf("token %d\n", t);
     return(t);
 }
-#endif
+*/
 
 token_t
 GetToken()
@@ -760,6 +1049,8 @@ GetToken()
             return(TokColon);
         case '=':
             return(TokEq);
+        case '?':
+            return(TokQuestion);
         case '\n':
             ++LineNo;
             return(TokNewLine);
@@ -839,7 +1130,7 @@ error(short type, const char *ctl, ...)
     static char ExitAry[] = { 1, 0, 0 };
     va_list va;
 
-    printf("%s: %s Line %d: ", FileName, TypeString[type], (int)LineNo);
+    printf("%s: %s Line %ld: ", FileName, TypeString[type], LineNo);
     va_start(va, ctl);
     vprintf(ctl, va);
     va_end(va);
@@ -848,3 +1139,78 @@ error(short type, const char *ctl, ...)
         exit(20);
 }
 
+#ifdef unix
+
+/*
+ * ccmd() - execute a UNIX command and cache the result.
+ */
+
+typedef struct CCNode {
+    Node        cc_Node;
+    int         cc_CNumber;
+    char        *cc_Cmd;
+    char        *cc_Arg1;
+    char        *cc_Result;
+} CCNode;
+
+static const char *
+ccmd(int cno, const char *cmd, const char *arg1)
+{
+    CCNode *ccn;
+    int pfd[2];
+    int status;
+    pid_t pid;
+    char buf[256];
+    int i;
+    int n;
+
+    for (ccn = GetHead(&CCList); ccn; ccn = GetSucc(&ccn->cc_Node)) {
+        if (cno == ccn->cc_CNumber)
+            return(ccn->cc_Result);
+    }
+
+    if (pipe(pfd) < 0) {
+        perror("pipe");
+        exit(30);
+    }
+    if ((pid = fork()) == 0) {
+        dup2(pfd[1], 1);
+        close(pfd[0]);
+        close(pfd[1]);
+        execlp(cmd, cmd, arg1, NULL);
+        _exit(30);
+    }
+    if (pid < 0) {
+        perror("fork");
+        exit(30);
+    }
+    close(pfd[1]);
+    i = 0;
+    while (i < sizeof(buf) - 1) {
+        n = read(pfd[0], buf + i, sizeof(buf) - 1 - i);
+        if (n <= 0)
+            break;
+        i += n;
+    }
+    close(pfd[0]);
+    while (waitpid(pid, &status, 0) != pid)
+        ;
+    if (WEXITSTATUS(status)) {
+        fprintf(stderr, "Unable to execute command %s %s\n", 
+            cmd,
+            (arg1 ? arg1 : "")
+        );
+        exit(30);
+    }
+    if (i && buf[i-1] == '\n')
+        --i;
+    buf[i] = 0;
+    ccn = malloc(sizeof(CCNode));
+    ccn->cc_Cmd = strdup(cmd);
+    ccn->cc_Result = strdup(buf);
+    ccn->cc_CNumber = cno;
+    AddTail(&CCList, &ccn->cc_Node);
+    return(ccn->cc_Result);
+}
+
+#endif

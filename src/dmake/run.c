@@ -1,13 +1,36 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Copyright (c) 2003-2011,2023 The DragonFly Project.  All rights reserved.
+ *
+ * This code is derived from software contributed to The DragonFly Project
+ * by Matthew Dillon <dillon@backplane.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of The DragonFly Project nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific, prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
-
-/*
- *  RUN.C
- */
-
 #include "defs.h"
 #ifdef AMIGA
 #include <dos/dosextens.h>
@@ -38,7 +61,7 @@ ICExit(void)
 #ifdef AMIGA
     if (SaveLock) {
         UnLock(CurrentDir(SaveLock));
-        SaveLock = NULL;
+        SaveLock = 0;
     }
 #endif
 }
@@ -196,7 +219,7 @@ Execute_Command(char *cmd, short ignore)
             static char OldCmd[128];
             char dt[4];
             struct TagItem *tags[] = {
-                NP_CopyVars, TRUE,
+                (struct TagItem *)NP_CopyVars, (void*)TRUE,
                 TAG_END, NULL};
 
             if (cli) {
@@ -207,11 +230,7 @@ Execute_Command(char *cmd, short ignore)
                 stack = 8192;
             }
 
-            /*
-             *  note: Running2_04() means V37 or greater
-             */
-
-            if (useSystem || (Running2_04() && GetVar(cmd, dt, 2, LV_ALIAS | GVF_LOCAL_ONLY) >= 0))
+            if (useSystem || (SysBase->lib_Version >= 37 && GetVar(cmd, dt, 2, LV_ALIAS | GVF_LOCAL_ONLY) >= 0))
                 goto dosys;
 
             if ((seg = FindSegment(cmd, 0L, 0)) || (seg = FindSegment(cmd, 0L, 1))) {
@@ -256,20 +275,14 @@ dosys:
         int err;
 
         if ((err = vfork()) == 0) {
-            execlp("/bin/sh", "/bin/sh", "-c", cmd, 0);
+            execlp("/bin/sh", "/bin/sh", "-c", cmd, NULL);
             exit(30);
         } else {
-#ifdef NOTDEF
-            union wait uwait;
+            int uwait;
 
             while (wait(&uwait) != err || WIFEXITED(uwait) == 0)
                 ;
-            err = uwait.w_retcode;
-#endif
-            int status;
-            while (wait(&status) != err || WIFEXITED(status) == 0)
-                ;
-            err = WEXITSTATUS(status);
+            err = WEXITSTATUS(uwait);
         }
         if (err)
             printf("Exit code %d %s\n", err, (ignore) ? "(Ignored)":"");

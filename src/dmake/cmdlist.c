@@ -1,20 +1,44 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  CMDLIST.c
+ * Copyright (c) 2003-2011,2023 The DragonFly Project.  All rights reserved.
  *
+ * This code is derived from software contributed to The DragonFly Project
+ * by Matthew Dillon <dillon@backplane.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of The DragonFly Project nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific, prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
-
 #include "defs.h"
 
 Prototype void InitCmdList(void);
 Prototype void PutCmdListChar(List *, char);
+Prototype void InsCmdListChar(List *, char);
 Prototype void PutCmdListSym(List *, char *, short *);
 Prototype void CopyCmdList(List *, List *);
+Prototype void FreeCmdList(List *);
 Prototype void AppendCmdList(List *, List *);
 Prototype int  PopCmdListSym(List *, char *, long);
 Prototype int  PopCmdListChar(List *);
@@ -26,8 +50,8 @@ Prototype void CopyCmdListConvert(List *, List *, char *, char *);
 Prototype long ExecuteCmdList(DepNode *, List *);
 
 List CmdFreeList;
-__aligned char CmdTmp1[256];
-__aligned char CmdTmp2[256];
+char CmdTmp1[256];
+char CmdTmp2[256];
 
 void
 InitCmdList()
@@ -52,6 +76,28 @@ PutCmdListChar(List *list, char c)
         AddTail(list, &node->cn_Node);
     }
     node->cn_Node.ln_Name[node->cn_Idx++] = c;
+}
+
+void
+InsCmdListChar(List *list, char c)
+{
+    CmdNode *node;
+
+    if ((node = GetHead(list)) == NULL || (node->cn_Idx == node->cn_Max)) {
+        if ((node = RemHead(&CmdFreeList)) == NULL) {
+            node = malloc(sizeof(CmdNode) + 64);
+            node->cn_Node.ln_Name = (char *)(node + 1);
+            node->cn_Max = 64;
+        }
+        node->cn_Node.ln_Type = 0;
+        node->cn_Idx = 0;
+        node->cn_RIndex = 0;
+        AddHead(list, &node->cn_Node);
+    }
+    if (node->cn_Idx)
+        bcopy(node->cn_Node.ln_Name, node->cn_Node.ln_Name + 1, node->cn_Idx);
+    node->cn_Node.ln_Name[0] = c;
+    ++node->cn_Idx;
 }
 
 void
@@ -86,8 +132,6 @@ List *toList;
     for (from = GetHead(fromList); from; from = GetSucc(&from->cn_Node)) {
         CmdNode *copy = NULL;
 
-        dbprintf(("COPYFROM %*.*s\n", from->cn_Idx, from->cn_Idx, from->cn_Node.ln_Name));
-
         for (n = 0; n < from->cn_Idx; ) {
             if ((copy = RemHead(&CmdFreeList)) == NULL) {
                 copy = malloc(sizeof(CmdNode) + 64);
@@ -98,13 +142,22 @@ List *toList;
             copy->cn_Node.ln_Type = 0;
             copy->cn_Idx = i;
             copy->cn_RIndex = 0;
-            movmem(from->cn_Node.ln_Name + n, copy->cn_Node.ln_Name, i);
+            bcopy(from->cn_Node.ln_Name + n, copy->cn_Node.ln_Name, i);
             AddTail(toList, &copy->cn_Node);
             n += i;
         }
         if (copy)
             copy->cn_Node.ln_Type = from->cn_Node.ln_Type;
     }
+}
+
+void
+FreeCmdList(List *list)
+{
+    CmdNode *node;
+
+    while ((node = RemHead(list)) != NULL)
+        AddTail(&CmdFreeList, &node->cn_Node);
 }
 
 void
@@ -168,7 +221,7 @@ char *buf;
     CmdNode *node;
 
     while ((node = RemHead(list)) != NULL) {
-        movmem(node->cn_Node.ln_Name + node->cn_RIndex, buf, node->cn_Idx - node->cn_RIndex);
+        bcopy(node->cn_Node.ln_Name + node->cn_RIndex, buf, node->cn_Idx - node->cn_RIndex);
         buf += node->cn_Idx;
         AddTail(&CmdFreeList, &node->cn_Node);
     }
@@ -236,9 +289,8 @@ char *dstMat;
     List tmpList;
     short space = 0;
 
-    dbprintf(("fromlist %08lx copyconvert '%s' -> '%s'\n", GetHead(fromList), srcMat, dstMat));
-    srcMat = ExpandVariable(srcMat, NULL);
-    dstMat = ExpandVariable(dstMat, NULL);
+    srcMat = ExpandVariable((ubyte *)srcMat, NULL);
+    dstMat = ExpandVariable((ubyte *)dstMat, NULL);
 
     NewList(&tmpList);
     CopyCmdList(fromList, &tmpList);
@@ -313,7 +365,7 @@ List *list;
                     error(FATAL, "bad variable spec in command list for %s", dep->dn_Node.ln_Name);
                 spec[c0++] = c;
                 spec[c0] = 0;
-                ExpandVariable(spec, &tmpDst);
+                ExpandVariable((ubyte *)spec, &tmpDst);
                 FreePathBuffer(spec);
                 continue;
             }

@@ -1,22 +1,43 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Copyright (c) 2003-2011,2023 The DragonFly Project.  All rights reserved.
+ *
+ * This code is derived from software contributed to The DragonFly Project
+ * by Matthew Dillon <dillon@backplane.com>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of The DragonFly Project nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific, prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+ * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
-
-/*
- *  VAR.C
- */
-
 #include "defs.h"
-#ifdef AMIGA
-#include <dos/dos.h>
-#endif
 
 Prototype void InitVar(void);
 Prototype Var *MakeVar(char *, char);
 Prototype Var *FindVar(char *, char);
 Prototype void AppendVar(Var *, char *, long);
+Prototype void InsertVar(Var *, char *, long);
 
 List VarList;
 
@@ -43,7 +64,7 @@ MakeVar(char *name, char type)
         }
     }
     var = malloc(sizeof(Var) + strlen(name) + 1);
-    clrmem(var, sizeof(Var));
+    bzero(var, sizeof(Var));
 
     var->var_Node.ln_Name = (char *)(var + 1);
     var->var_Node.ln_Type = type;
@@ -69,57 +90,15 @@ FindVar(char *name, char type)
      */
 
     if (var == NULL || var->var_Node.ln_Type == '0') {
-#ifdef AMIGA
-        if (Running2_04()) {
-            char *ptr;
-            long len;
+        char *ptr;
 
-            if (GetVar(name, (char *)&ptr, 2, 0) >= 0) {
-                len = IoErr();
-                ptr = malloc(len + 1);
-                if (GetVar(name, ptr, len + 1, 0) >= 0) {
-                    var = MakeVar(name, '0');
-                    AppendVar(var, ptr, strlen(ptr));
-                }
-                free(ptr);
-            }
-        } else {
-            BPTR lock;
-            long fh;
-            long size;
-
-            if (lock = Lock("ENV:", SHARED_LOCK)) {
-                if (fh = Open(name, 1005)) {
-                    Seek(fh, 0L, 1);
-                    if ((size = Seek(fh, 0L, -1)) >= 0) {
-                        char *ptr = malloc(size + 1);
-
-                        Read(fh, ptr, size);
-                        ptr[size] = 0;
-
-                        var = MakeVar(name, '0');
-                        AppendVar(var, ptr, strlen(ptr));
-                        free(ptr);
-                    }
-                    Close(fh);
-                }
-                UnLock(lock);
-            }
+        if ((ptr = getenv(name)) != NULL) {
+            var = MakeVar(name, '0');
+            AppendVar(var, ptr, strlen(ptr));
         }
-#else
-        {
-            char *ptr;
-
-            if ((ptr = getenv(name)) != NULL) {
-                var = MakeVar(name, '0');
-                AppendVar(var, ptr, strlen(ptr));
-            }
-        }
-#endif
     }
     return(var);
 }
-
 
 void
 AppendVar(var, buf, len)
@@ -129,5 +108,16 @@ long len;
 {
     while (len--)
         PutCmdListChar(&var->var_CmdList, *buf++);
+}
+
+void
+InsertVar(var, buf, len)
+Var *var;
+char *buf;
+long len;
+{
+    buf += len;
+    while (len--)
+        InsCmdListChar(&var->var_CmdList, *--buf);
 }
 

@@ -17,8 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `<stdint.h>` header file to allow for the fixed-bit-width types in C99.
 - *lbmake* now supports a new `-d filename` option which uses the given filename
   instead of the default `lib.def`.
-- *dxmake* is back in the DICE-nx distribution, after it was removed from the
-  pre-BSD-relicensing source tree.
+- The older version of *dmake* is replaced with the newer, BSD-licensed *dxmake*
+  which was forked out of DICE. This has been renamed back to *dmake*, so
+  existing Amiga workloads now have the tool they are used to but updated with
+  newer features.
 - Support for `HUNK_RELOC8D` and `HUNK_RELOC32D` hunk types. This is required to
   be compatible with the `amiga.lib` supplied with the Amiga 3.2 NDK.
 - Icons for parts of DICE-nx that the user might reasonably browse with

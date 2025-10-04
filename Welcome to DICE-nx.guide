@@ -225,7 +225,7 @@ dcc -c file2.c
 dcc file1.o file2.o -o myproject
 
 At this point you'll probably want to use a "make" tool to manage your project
-and build it. DICE-nx comes with a tool called "dxmake" that can be used for
+and build it. DICE-nx comes with a tool called "dmake" that can be used for
 this purpose.
 
 @ENDNODE

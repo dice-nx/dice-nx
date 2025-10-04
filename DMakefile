@@ -5,41 +5,41 @@ OUTDIRS= ulib ubin dlib obj
 ISUBDIRS= config include dlib lib bin
 
 # all:    $(OUTDIRS)
-#         ( cd suplib; dxmake; dxmake install )
-#         ( cd src; dxmake )
-#         ( cd lib; dxmake all )
-#         ( cd include; dxmake )
-#         ( cd config; dxmake )
+#         ( cd suplib; dmake; dmake install )
+#         ( cd src; dmake )
+#         ( cd lib; dmake all )
+#         ( cd include; dmake )
+#         ( cd config; dmake )
 all:
         cd $(TOPDIR)src
-        dxmake
+        dmake
         cd
         cd $(TOPDIR)lib
-        dxmake -f DMakefile.amiga
+        dmake -f DMakefile.amiga
 
 bin-core:
         cd $(TOPDIR)src
-        dxmake bin-core
+        dmake bin-core
         cd $(TOPDIR)
 
 bin-all:
         cd $(TOPDIR)src
-        dxmake bin-all
+        dmake bin-all
         cd $(TOPDIR)
 
 install-bin-core:
         cd $(TOPDIR)src
-        dxmake install-bin-core
+        dmake install-bin-core
         cd $(TOPDIR)
 
 install-bin-all:
         cd $(TOPDIR)src
-        dxmake install-bin-all
+        dmake install-bin-all
         cd $(TOPDIR)
 
 lib-core:
         cd $(TOPDIR)lib
-        dxmake -f DMakefile.amiga core
+        dmake -f DMakefile.amiga core
 
 $(OUTDIRS) : $(OUTDIRS)
         $(MKDIR) %(left)
@@ -60,10 +60,10 @@ install:
        $(CHMOD) 755 $(INSTDIR)/lib
        $(CHMOD) 755 $(INSTDIR)/bin
        cd src
-       dxmake install
-#        ( cd lib; dxmake install )
-#        ( cd include; dxmake install )
-#        ( cd config; dxmake install )
+       dmake install
+#        ( cd lib; dmake install )
+#        ( cd include; dmake install )
+#        ( cd config; dmake install )
 
 
 dummy:
@@ -75,9 +75,9 @@ dummy:
 #        $(MKDIR) %(left)
 
 clean:
-        ( cd suplib; dxmake clean )
-        ( cd src; dxmake clean )
-        ( cd lib; dxmake clean )
+        ( cd suplib; dmake clean )
+        ( cd src; dmake clean )
+        ( cd lib; dmake clean )
         $(RM) -f dlib/*.o dlib/*.lib
         $(RM) -rf $(OUTDIRS)
 

@@ -15,6 +15,9 @@ as of the next released version.
 
 ### Changed
 
+- Rename it back to dmake again. (Matt renamed it to dxmake due to a conflict in
+  a BSD ports repo, but that's not relevant for the Amiga and it's more
+  important IMO to stay consistent with previous Amiga releases of DICE.)
 - Tabs to spaces. I realise this may upset some people, but DICE source code is
   consistent that the indentation is 4 spaces - but that every 8 spaces gets
   collapsed into a single tab. This style of identation is uncommon these days

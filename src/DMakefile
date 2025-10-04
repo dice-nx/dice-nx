@@ -11,87 +11,87 @@ UP = ../
 
 DCC:
         cd dcc
-        dxmake
+        dmake
         cd $(UP)
 
 DCPP:
         cd dcpp
-        dxmake
+        dmake
         cd $(UP)
 
 DC1:
         cd dc1
-        dxmake
+        dmake
         cd $(UP)
 
 DAS:
         cd das
-        dxmake
+        dmake
         cd $(UP)
 
 DLINK:
         cd dlink
-        dxmake
+        dmake
         cd $(UP)
 
 DXMAKE:
-        cd dxmake
-        dxmake
+        cd dmake
+        dmake
         cd $(UP)
 
 DOBJ:
         cd dobj
-        dxmake
+        dmake
         cd $(UP)
 
 DUTIL:
         cd dutil
-        dxmake
+        dmake
         cd $(UP)
 
 DUTILCORE:
         cd dutil
-        dxmake core
+        dmake core
         cd $(UP)
 
 DME:
         cd dme
-        dxmake
+        dmake
         cd $(UP)
 
 install-bin-core:
         cd dcc
-        dxmake install
+        dmake install
         cd $(UP)dcpp
-        dxmake install
+        dmake install
         cd $(UP)dc1
-        dxmake install
+        dmake install
         cd $(UP)das
-        dxmake install
+        dmake install
         cd $(UP)dlink
-        dxmake install
-        cd $(UP)dxmake
-        dxmake install
+        dmake install
+        cd $(UP)dmake
+        dmake install
         cd $(UP)dobj
-        dxmake install
+        dmake install
         cd $(UP)dutil
-        dxmake install-core
+        dmake install-core
         cd $(UP)
 
 install-bin-all: install-bin-core
         cd dutil
-        dxmake install
+        dmake install
         cd $(UP)dme
-        dxmake install
+        dmake install
         cd $(UP)
 
 clean:
-        (cd dcc; dxmake clean)
-        (cd dcpp; dxmake clean)
-        (cd dc1; dxmake clean)
-        (cd das; dxmake clean)
-        (cd dlink; dxmake clean)
-        (cd dxmake; dxmake clean)
-        (cd dobj; dxmake clean)
-        (cd dutil; dxmake clean)
+        (cd dcc; dmake clean)
+        (cd dcpp; dmake clean)
+        (cd dc1; dmake clean)
+        (cd das; dmake clean)
+        (cd dlink; dmake clean)
+        (cd dmake; dmake clean)
+        (cd dobj; dmake clean)
+        (cd dutil; dmake clean)
 
