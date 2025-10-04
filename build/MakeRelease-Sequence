@@ -5,7 +5,7 @@ if exists T:dice-nx-dist
 endif
 makedir T:dice-nx-dist
 makedir T:dice-nx-dist/DICE-nx
-copy ENV:sys/def_drawer.info T:dice-nx-dist/DICE-nx.info
+copy DCC:build/drawer-icon-for-release.info T:dice-nx-dist/DICE-nx.info
 dupdate DCC: T:dice-nx-dist/DICE-nx FORCE DISTFILE .DistFile
 cd T:dice-nx-dist
 if exists DCC:DICE-nx.lha
