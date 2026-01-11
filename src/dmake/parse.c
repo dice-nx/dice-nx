@@ -640,6 +640,20 @@ top:
     t = GetToken();
 swi:
     switch(t) {
+    case TokSym:
+        {
+            WORD pos = strlen(SymBuf) - 1;
+
+            if (SymBuf[pos] == '$') {
+                SymBuf[pos] = 0;
+
+                while (--pos >= 0)
+                    InsCmdListChar(&CmdList, SymBuf[pos]);
+
+                t = TokDollar;
+                goto swi;
+            }
+        }
     case TokDollar:
     case TokPercent:
         c = fgetc(Fi);
