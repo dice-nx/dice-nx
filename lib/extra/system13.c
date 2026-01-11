@@ -290,7 +290,7 @@ char *buf;
             }
             pkt = (DosPacket *)msg->mn_Node.ln_Name;
 
-            if (TermFlag == 0 && pkt->dp_Port->mp_SigTask != (Task *)PktPort.mp_Node.ln_Name) {
+            if (RemShellTask == 0 && pkt->dp_Port->mp_SigTask != (Task *)PktPort.mp_Node.ln_Name) {
                 if ((pkt->dp_Port->mp_Flags & PF_ACTION) == PA_SIGNAL && ((Task *)pkt->dp_Port->mp_SigTask)->tc_Node.ln_Type == NT_PROCESS)
                     RemShellTask = pkt->dp_Port->mp_SigTask;
             }
@@ -558,9 +558,9 @@ CLI *dcli;
                 LockList **llast = (LockList **)&dcli->cli_CommandDir;
 
                 if (lock = DupLock(lls->PathLock)) {
-                    if (ll = ((LockList *)AllocMem(sizeof(LockList) + 4, MEMF_PUBLIC|MEMF_CLEAR) + 1)) {
+                    if (ll = (LockList *)((ULONG *)AllocMem(sizeof(LockList) + 4, MEMF_PUBLIC|MEMF_CLEAR) + 1)) {
                         ((long *)ll)[-1] = sizeof(LockList) + 4;
-                        ll->NextPath = (BPTR)llast;
+                        ll->NextPath = (BPTR)*llast;
                         ll->PathLock = lock;
                         *llast = (LockList *)MKBADDR(ll);
                         llast = (LockList **)&ll->NextPath;
