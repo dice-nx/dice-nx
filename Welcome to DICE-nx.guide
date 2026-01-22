@@ -19,14 +19,12 @@ license. In 2023, Matt re-licensed it under the standard 3-clause BSD license,
 meaning for the first time ever DICE was available under a true open-source
 license.
 
-DICE-nx aims to re-start development of DICE, and focusing on its original aim
+DICE-nx re-starts development of DICE, and focusing on its original aim
 of providing a fully-featured C compiler for Amiga computers. At this time,
 the original 68000-based Amiga series is seeing increased support from
 retro-computing enthusiasts, including the restarting of AmigaOS development
 with the release of AmigaOS 3.2. DICE-nx aims to provide for this audience,
-fully supporting AmigaOS 3.2 and native development on real Amiga hardware,
-and a secondary aim of supporting those who want to cross-compile for the
-Amiga from cheap and powerful Linux systems.
+fully supporting AmigaOS 3.2 and native development on real Amiga hardware.
 
 @{b}Where to go from here@{ub}
 
@@ -44,7 +42,7 @@ is in development.
 @{b}Important note@{ub}
 
 DICE-nx is currently maintained by Richard Downer, who can be emailed at
-dice@richard.downer.tech. DICE-nx is not endorsed by nor associated with Matt
+dice-nx@richard.downer.tech. DICE-nx is not endorsed by nor associated with Matt
 Dillon or the original DICE project. Matt's name appears extensively
 throughout this project due to his past involvement, but he is not involved in
 DICE-nx development or support. Therefore, please direct any questions or
@@ -71,21 +69,31 @@ worked as expected.
 That said, there is still significant work to be done before a DICE-nx reaches
 the quality of the original 1990s DICE on real Amigas.
 
-@{b}AmigaOS NDK compatibility@{ub}
 
-I made the decision to support only the AmigaOS 3.2 NDK. This is because I
-consider AmigaOS 3.2 support to be essential for the Amiga community in 2024.
-If the compiler supports 3.2, then it is still possible to build Amiga
-binaries that target 3.0, 2.0 and 1.3, and maybe even earlier. If you do want
-to target earlier AmigaOS versions, then you must obviously take care to not
-use any features that are not supported by the target AmigaOS version -
-however that has always been the case for developing on the Amiga.
+@{b}AmigaOS and NDK version support@{ub}
 
-Support for the earlier Commodore NDKs is desirable however, and I would like
-to support them in the future.
+DICE-nx is currently developed exclusively on AmigaOS 3.2, and using the
+AmigaOS NDK 3.2R4. I recommend using these versions when using DICE-nx.
 
-I currently do not plan to support the 3.5 and 3.9 series of AmigaOS releases.
-There is currently no legal way to obtain these AmigaOS releases, which makes
+Other AmigaOS versions will likely work just as well, but I have not tested
+them. You can use AmigaOS 3.1 and earlier, but it is possible that you will hit
+some bugs. These can be reported on the project's bug tracker at
+https://github.com/dice-nx/dice-nx/issues
+
+Regarding the NDK, NDK3.2R4 is strongly recommended. It is freely available on
+Aminet at https://aminet.net/package/dev/misc/NDK3.2 and its installation into
+DICE-nx is incorporated into the DICE-nx Installer script. NDK3.2 can be used
+to develop software for earlier AmigaOS releases, as long as you take care to
+avoid 3.2-specific features.
+
+Again, earlier NDK versions will likely work. But they may expose bugs in
+DICE-nx, and they are not supported by the Installer. You will need to install
+the NDK files manually.
+
+Future versions of DICE-nx will include better support for AmigaOS versions 3.1
+and earlier, as well as any new AmigaOS versions in the Hyperion development
+line. At present there is no plans to officially support AmigaOS 3.5 or 3.9, as
+there is currently no legal way to obtain these AmigaOS releases, which makes
 it difficult to develop and test DICE-nx on them. I am interested in hearing
 from people who would like to see this support added to DICE-nx - if there is
 sufficient interest - and a way for me to do this legally - I would consider
@@ -94,21 +102,22 @@ it.
 
 @{b}amiga.lib@{ub}
 
-DICE could use the amiga.lib from the Amiga NDK for the large-model,
-stack-argument variant `amigaXXl.lib`, and with the use of the `libtos` tool,
-it could derive a small-model, stack-argument variant `amigaXXs.lib`. But for
-the register-argument variants and profiling-enabled variants (variants with
-`r` and `p` in their suffix), DICE built its own version of amiga.lib.
+DICE-nx uses the amiga.lib from the Amiga NDK 3.2 for the large-model,
+stack-argument variant `amiga32l.lib`, during installation it will automatically
+invoke the `libtos` tool to derive the small-model, stack-argument variant
+`amiga32s.lib`. But for the register-argument variants and profiling-enabled
+variants (variants with `r` and `p` in their suffix), DICE traditionally built
+its own version of amiga.lib. The Installer does not currently do this.
 
-DICE-nx does not currently have a buildable amiga.lib of its own. Therefore,
-enabling register-argument builds with `-mr`, `-mR` or `-mRR`, and/or enabling
-profiled builds with `-prof`, will not currently work.
+Because of this, a DICE-nx installation using the Installer script and NDK3.2
+cannot build projects when enabling register-argument builds with `-mr`, `-mR`
+or `-mRR`, and/or enabling profiled builds with `-prof`.
 
 The lack of register-argument builds can be ameliorated by enabling inline OS
 calls by using the `-mi` build option and including the OS headers in the
-`pragmas` directory. For example:
+`proto` directory. For example:
 
-#include <pragmas/dos_pragmas.h>
+#include <proto/dos.h>
 
 This restriction does not apply if you are not linking with the Amiga OS
 library - for example, when building ROMable code.
@@ -148,29 +157,22 @@ tracked using GitHub issues rather than being documented here.
 
 @NODE INSTALLATION Installing DICE-NX
 
-There is no Installer script for DICE-NX - it runs from this unpacked archive
-with only a small addition to the system startup sequence. So your first step
-is to unpack the archive wherever you would like to keep it.
+DICE-nx is packaged with an installer using the widely-available Installer
+tool. You will need Installer available on your system. It can be obtained
+freely from Aminet at https://aminet.net/package/util/misc/Installer-43_3
 
-Next, edit the S:User-Startup file, and add these lines:
+You are also strongly advised to obtain the AmigaOS NDK3.2R4. It is freely
+available on Aminet at https://aminet.net/package/dev/misc/NDK3.2
 
-Assign DCC: <location of the unpacked archive>
-Execute DCC:Dice-Startup "-3.2 -//"
+Unpack both of the above archives to a location on your hard drive.
 
-Reboot so that these steps take effect (or, just run them now in a Shell
-window).
+Then, launch the "Install DICE-nx" icon in the DICE-nx distribution, and follow
+the on-screen prompts.
 
-You will now need to install the AmigaOS NDK (Native Developer Kit) 3.2.
-(Presently, 3.2 is the only version that DICE-NX supports.) NDK 3.2 is part of
-the AmigaOS 3.2 release - it can be found on the AmigaOS 3.2 CD, or on the
-Hyperion website downloads section if you have registered a purchase of
-AmigaOS 3.2.
+Once the installer completes, reboot so that the changes to User-Startup take
+effect.
 
-Unpack the NDK 3.2 archive to a temporary location (this is not necessary if
-installing from the CD). Then double-click the "Install NDK 3.2" icon in @{u}this@{uu}
-directory and follow the instructions.
-
-DICE will now be able to run and build Amiga executables.
+DICE-nx will now be able to run and build Amiga executables.
 
 @ENDNODE
 
