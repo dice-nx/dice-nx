@@ -63,6 +63,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *dcc* `-mr` option now links with the registered-args linker libraries instead
   of the stack-args version. The old behaviour would cause unexpected linker
   errors when `-mr` was used.
+- Some variable expansions in dmake did not work ([#13](https://github.com/dice-nx/dice-nx/issues/13)).
+  Thanks [@Hagbard-Celin](https://github.com/Hagbard-Celin) for this bugfix!
+- Bugs in the OS1.3 version of `system()` ([#21](https://github.com/dice-nx/dice-nx/issues/21)).
+  Thanks [@Hagbard-Celin](https://github.com/Hagbard-Celin) for this bugfix!
 
 
 ### Removed
