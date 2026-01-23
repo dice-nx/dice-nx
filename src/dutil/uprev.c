@@ -132,7 +132,7 @@ int main(int argc, char **argv)
    (void)tp->tm_year;
    (void)tp->tm_mon;
 
-   sprintf(buf, "%d.%d.%d", tp->tm_mday, tp->tm_mon+1, tp->tm_year);
+   sprintf(buf, "%d.%d.%d", tp->tm_mday, tp->tm_mon+1, 1900+tp->tm_year);
 
    /* Figure out what is the number to */
 
