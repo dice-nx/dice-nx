@@ -14,12 +14,65 @@
 
 //const static char version_string[] = VERSTAG;
 
+int parse_version_string(const char *verstr, int *parsed_version);
+
+/* Parse a version string of up to three parts (e.g. 3.20.1). Pass in a string
+ * and a pointer to an integer array of at least three elements. The elements
+ * will be filled in with the parsed version numbers. If fewer than three parts
+ * are present, the remaining elements will be set to -1.
+ * Returns a positive integer on success, or 0 on error.
+ */
+int parse_version_string(const char *verstr, int *parsed_version)
+{
+   int part = 0;
+   const char *p = verstr;
+   char *endptr;
+
+   for (part = 0; part < 3; part++)
+   {
+      while (*p == ' ' || *p == '\t') p++; // Skip whitespace
+      if (*p == '\0')
+      {
+         parsed_version[part] = -1; // No more parts
+         continue;
+      }
+
+      long val = strtol(p, &endptr, 10);
+      if (endptr == p)
+      {
+         return 0; // No digits found
+      }
+      parsed_version[part] = (int)val;
+      p = endptr;
+
+      while (*p == ' ' || *p == '\t') p++; // Skip whitespace
+      if (*p == '.')
+      {
+         p++; // Move past the dot
+      }
+      else
+      {
+         part++;
+         break; // No more parts
+      }
+   }
+
+   // Fill remaining parts with -1
+   for (; part < 3; part++)
+   {
+      parsed_version[part] = -1;
+   }
+
+   return 1; // Success
+}
+
 int main(int argc, char **argv)
 {
    FILE *fp;
    char *vertag;
    int version;
    int revision;
+   int patch;
    char fname[MAX_FNAME];
    char buf[80];
    time_t t;
@@ -34,6 +87,7 @@ int main(int argc, char **argv)
    vertag = "";
    version =  1;
    revision = 0;
+   patch = 0;
 
    /* Determine the name of the revision file */
    strncpy(fname, argv[1], MAX_FNAME-7);
@@ -88,8 +142,13 @@ int main(int argc, char **argv)
                   while((ln > 1) && (p[ln-1] >= '0') && (p[ln-1] <= '9')) ln--;
                   if ((ln > 1) && (p[ln-1] == '.'))
                   {
-                      ln--;
-                      while((ln > 1) && (p[ln-1] >= '0') && (p[ln-1] <= '9')) ln--;
+                     ln--;
+                     while((ln > 1) && (p[ln-1] >= '0') && (p[ln-1] <= '9')) ln--;
+                     if ((ln > 1) && (p[ln-1] == '.'))
+                     {
+                        ln--;
+                        while((ln > 1) && (p[ln-1] >= '0') && (p[ln-1] <= '9')) ln--;
+                     }
                   }
                   p[ln] = 0;
                   while (*p == ' ' || *p == '\t') p++;
@@ -100,22 +159,65 @@ int main(int argc, char **argv)
             {
                version = atoi(p+7);
             }
-            else if (!memcmp(p, "REVISION ", 9)) revision = atoi(p+8);
+            else if (!memcmp(p, "REVISION ", 9))
+            {
+               revision = atoi(p+9);
+            }
+            else if (!memcmp(p, "PATCH ", 6))
+            {
+               patch = atoi(p+6);
+            }
          }
       }
 
       fclose(fp);
    }
 
-   revision++;
-
    /* Figure out what version number we will be using */
    if (argc > 2)
    {
-      int oldver = version;
-      version = atoi(argv[2]);
-      if (version != oldver)
-         revision = 0;
+      int new_version[3];
+      if (!parse_version_string(argv[2], new_version)) {
+         printf("Invalid version string: %s\n", argv[2]);
+         return(10);
+      }
+
+      if (new_version[0] > version) {
+         version = new_version[0];
+         revision = new_version[1] != -1 ? new_version[1] : 0;
+         patch = new_version[2] != -1 ? new_version[2] : 0;
+      } else if (new_version[0] < version) {
+         printf("Cannot set version to %d as it is less than current version %d\n",
+                new_version[0], version);
+         return(10);
+      } else {
+         // Major version is the same, check minor
+         if (new_version[1] != -1) {
+            if (new_version[1] > revision) {
+               revision = new_version[1];
+               patch = new_version[2] != -1 ? new_version[2] : 0;
+            } else if (new_version[1] < revision) {
+               printf("Cannot set revision to %d as it is less than current revision %d\n",
+                      new_version[1], revision);
+               return(10);
+            } else {
+               // Minor version is the same, check patch
+               if (new_version[2] != -1) {
+                  if (new_version[2] > patch) {
+                     patch = new_version[2];
+                  } else {
+                     printf("Cannot set patch to %d as it is not higher than current patch %d\n",
+                            new_version[2], patch);
+                     return(10);
+                  }
+               }
+            }
+         }
+      }
+   } else {
+      /* No version specified, just increment the revision */
+      revision++;
+      patch = 0;
    }
 
    fp = fopen(fname, "w");
@@ -136,16 +238,19 @@ int main(int argc, char **argv)
 
    /* Figure out what is the number to */
 
+   fprintf(fp, "/* This file is automatically generated by uprev. Do not edit. */\n\n");
    fprintf(fp, "#define VERSION        %d\n",
                                        version);
    fprintf(fp, "#define REVISION       %3d\n",
                                        revision);
+   fprintf(fp, "#define PATCH       %3d\n",
+                                       patch);
    fprintf(fp, "#define DATE    \"%s\"\n",
                                   buf);
-   fprintf(fp, "#define VERS    \"%s %s%d.%d\"\n",
-                                 argv[1], vertag, version, revision);
-   fprintf(fp, "#define VSTRING \"%s %s%d.%d (%s)\"\n",
-                                 argv[1], vertag, version, revision, buf);
+   fprintf(fp, "#define VERS    \"%s %s%d.%d.%d\"\n",
+                                 argv[1], vertag, version, revision, patch);
+   fprintf(fp, "#define VSTRING \"%s %s%d.%d.%d (%s)\"\n",
+                                 argv[1], vertag, version, revision, patch, buf);
    fprintf(fp, "#define VERSTAG \"\\0$%s: %s %s%d.%d (%s)\"\n",
                                  "VER", argv[1], vertag, version, revision, buf);
    fclose(fp);
