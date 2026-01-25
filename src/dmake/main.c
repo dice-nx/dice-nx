@@ -33,6 +33,11 @@
  */
 #include "defs.h"
 
+#include "dmake_rev.h"
+
+static char *DCopyright =
+"Copyright (c) 2003-2011,2023 The DragonFly Project." VERSTAG;
+
 void help(int);
 void InitStuff(void);
 const char *SkipAss(const char *);
@@ -190,7 +195,8 @@ void
 help(code)
 int code;
 {
-    puts("DMAKE V2.12 (c)Copyright 1991-2003 Matthew Dillon, All Rights Reserved");
+    puts(VSTRING);
+    puts(DCopyright);
     puts("DMAKE [-f file] [-n] [-Dvariable] [-d] [-a] [-q] [-h] [-j n]");
     exit(code);
 }
