@@ -1,5 +1,10 @@
 /*
- * stdint.h
+ * $VER: stdint.h 3.20.0 (23.1.2026)
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 2023 onwards  Richard Downer and Open Source contributors.
  * 
  * Implements ISO C99 Standard: 7.18 Integer types <stdint.h> - at least in
  * part, as DICE does not support 64-bit integers.
