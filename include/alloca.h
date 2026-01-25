@@ -1,6 +1,6 @@
 
 /*
- * $VER: alloca.h 1.0 (17.4.93)
+ * $VER: alloca.h 3.20.0 (23.1.2026)
  *
  * (c)Copyright 1992 Obvious Implementations Corp, All Rights Reserved
  */

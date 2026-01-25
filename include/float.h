@@ -1,6 +1,6 @@
 
 /*
- * $VER: float.h 1.0 (17.4.93)
+ * $VER: float.h 3.20.0 (23.1.2026)
  *              XXX fixme IEEE-X.  Other bounds
  *              are somewhat loose (fp,dp)
  *

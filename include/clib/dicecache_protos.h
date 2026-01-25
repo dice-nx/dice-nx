@@ -1,4 +1,4 @@
-/* $VER: clib/dicecache_protos.h 1.0 (17.4.93) */
+/* $VER: clib/dicecache_protos.h 3.20.0 (23.1.2026) */
 #ifndef CLIB_DICECACHE_PROTOS_H
 #define CLIB_DICECACHE_PROTOS_H 1
 
