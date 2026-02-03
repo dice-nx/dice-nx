@@ -75,7 +75,7 @@ long segment;
     lib->lib_Node.ln_Name = LibName;
     lib->lib_Flags = LIBF_CHANGED|LIBF_SUMUSED;
     lib->lib_Version  = 37;
-    lib->lib_Revision = 5;
+    lib->lib_Revision = 6;
     lib->lib_IdString = (APTR)LibId;
     SegList = segment;
     AddLibrary(lib);
