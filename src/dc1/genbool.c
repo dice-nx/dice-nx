@@ -1,23 +1,14 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  GENBOOL.C   Boolean operators, compare
- *              and logic (!).
+ * GENBOOL.C   Boolean operators, compare and logic (!).
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
  *  You must be careful not to free storage if it will get overwritten
  *  before it is used.
- */
-
-/*
-**      $Filename: bool.c $
-**      $Author: dice $
-**      $Revision: 30.156 $
-**      $Date: 1995/01/11 05:04:46 $
-**      $Log: genbool.c,v $
+ *
  * Revision 30.156  1995/01/11  05:04:46  dice
  * added test for void compare against int constant in optimization
  *

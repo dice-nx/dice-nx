@@ -1,31 +1,22 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  PASSB.C
+ * PASSB.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
  *  Everything has been resolved into opcodes, properly placed in their
  *  section, and all EQU and REG directives have been figured out.  We
  *  can now scan the list and resolve the addressing modes.
  *
  *  XDEFd labels must be added to the appropriate section list
- */
-
-/*
-**      $Filename: passb.c $
-**      $Author: dillon $
-**      $Revision: 1.1.1.1 $
-**      $Date: 1998/10/10 06:23:22 $
-**      $Log: passb.c,v $
-**      Revision 1.1.1.1  1998/10/10 06:23:22  dillon
-**
-**
-**          Initial import of DICE into CVS repository.  Logs for the thousands of
-**          changes prior to this import have essentially been lost   -Matt.
-**
+ * 
+ * Revision 1.1.1.1  1998/10/10 06:23:22  dillon
+ *
+ * Initial import of DICE into CVS repository.  Logs for the thousands of
+ * changes prior to this import have essentially been lost   -Matt.
+ *
  * Revision 30.0  1994/06/10  18:07:45  dice
  * .
  *

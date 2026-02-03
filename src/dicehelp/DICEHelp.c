@@ -1,56 +1,54 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * DICEHELP.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
+ *      Dice help system.  Searches an index file for a given
+ *      keyword.  Returns either filename information, or the actual
+       clip to the console, clipboard, or Rexx RESULT.
+ *
+ *
+ *      BUGS
+ *              REXXSTARTUP should exit if already resident.  (No, kill old).
+ *
+ *              Looses $30 (48) bytes of memory when started from Workbench.
+ *
+ *              CLI/WB invocation should use resident index file
+ *
+ *              If memory is less than XX bytes free, flush self on exit.
+ *
+ *              DICEHelp from Workbench accounts for "reasonable" font
+ *              sizes.  Very large font sizes, however, blow it up.
+ *
+ *      !!!TODO
+ *              If cursor is on "console.doc" in
+ *              "work:doc/doc/console.doc/OpenDevice",
+ *              return the console doc in full.
+ *
+ *              (Return # of lines for editor to open window?
+ *              Useful for small clips).
+ *
+ *              Make search faster -- check case insensitive first.
+ *              (Actually this is obsolete -- new tokenized index file
+ *              is needed to deal with automatic multiple references).
+ *
+ *              Match plural mismatch with error index of -3? (See error
+ *              weighting system).
+ *
+ *              Workbench won't read full files directly.
+ *
+ *      New HELP Items:
+ *              Put Carolyn's 68000 cards on line.  She says this is OK,
+ *                      with credit.
+ *
+ *              Help on error messages.
+ *
+ *              Help on C keywords
+ *
  */
-/*
-**      $Id: DICEHelp.c,v 30.0 1994/06/10 18:05:48 dice Exp $
-**
-**      Dice help system.  Searches an index file for a given
-**      keyword.  Returns either filename information, or the actual
-**      clip to the console, clipboard, or Rexx RESULT.
-**
-*/
-/*
-**
-**      BUGS
-**              REXXSTARTUP should exit if already resident.  (No, kill old).
-**
-**              Looses $30 (48) bytes of memory when started from Workbench.
-**
-**              CLI/WB invocation should use resident index file
-**
-**              If memory is less than XX bytes free, flush self on exit.
-**
-**              DICEHelp from Workbench accounts for "reasonable" font
-**              sizes.  Very large font sizes, however, blow it up.
-**
-**      !!!TODO
-**              If cursor is on "console.doc" in
-**              "work:doc/doc/console.doc/OpenDevice",
-**              return the console doc in full.
-**
-**              (Return # of lines for editor to open window?
-**              Useful for small clips).
-**
-**              Make search faster -- check case insensitive first.
-**              (Actually this is obsolete -- new tokenized index file
-**              is needed to deal with automatic multiple references).
-**
-**              Match plural mismatch with error index of -3? (See error
-**              weighting system).
-**
-**              Workbench won't read full files directly.
-**
-**      New HELP Items:
-**              Put Carolyn's 68000 cards on line.  She says this is OK,
-**                      with credit.
-**
-**              Help on error messages.
-**
-**              Help on C keywords
-**
-*/
 #define D(x)    ;
 #define X(x)    ;
 #undef CLIPSUPPORT      /* Enable/disable clipboard.device code.

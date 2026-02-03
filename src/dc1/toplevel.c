@@ -1,19 +1,11 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  TOPLEVEL.C
- */
-
-/*
-**      $Filename: toplevel.c $
-**      $Author: dice $
-**      $Revision: 30.326 $
-**      $Date: 1995/12/24 06:09:50 $
-**      $Log: toplevel.c,v $
+ * TOPLEVEL.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
  * Revision 30.326  1995/12/24  06:09:50  dice
  * .
  *
@@ -67,8 +59,7 @@
  * Fixed BUG06045 - Enforcer hit for invalid structure definitions.
  * Added code to skip over current level of nesting when too many
  * initializers are given for a structure.
- *
-**/
+ */
 
 #include "defs.h"
 

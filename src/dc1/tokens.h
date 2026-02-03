@@ -1,18 +1,16 @@
-
 /*
- *  DC1/TOKENS.H
+ * DC1/TOKENS.H
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  The higher the precedence the closer the operator bonds.  Unary operators
- *  have higher precedence than binary operators.  postfix operators have higher
- *  precedence than unary operators.
- *
- *  only binary operators need be specified in the ExpPrec array.
- *
- *  NOTE!!  Update Greg the C++ guy if you change this!
+ * The higher the precedence the closer the operator bonds.  Unary operators
+ * have higher precedence than binary operators.  postfix operators have higher
+ * precedence than unary operators.
+ * only binary operators need be specified in the ExpPrec array.
+ * NOTE!!  Update Greg the C++ guy if you change this!
  */
 
 #define EXPPREC {   0,  0,  0,  90, 0,  0,  130,20, 80,  50, 20,  0,   0,  130, 20, 120,    \

@@ -1,35 +1,24 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  DIRECT.C
+ * DIRECT.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  Directives
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- */
-
-/*
-**      $Filename: direct.c $
-**      $Author: dillon $
-**      $Revision: 1.2 $
-**      $Date: 1999/02/08 21:47:52 $
-**      $Log: direct.c,v $
-**      Revision 1.2  1999/02/08 21:47:52  dillon
-**
-**
-**          Add double-quoted ( verses single-quoted ) strings for dc.b
-**
-**          Add DBRA, synonym for DBT.
-**
-**      Revision 1.1.1.1  1998/10/10 06:23:22  dillon
-**
-**
-**          Initial import of DICE into CVS repository.  Logs for the thousands of
-**          changes prior to this import have essentially been lost   -Matt.
-**
+ * Directives
+ *
+ *
+ * Revision 1.2  1999/02/08 21:47:52  dillon
+ *
+ * Add double-quoted ( verses single-quoted ) strings for dc.b
+ * Add DBRA, synonym for DBT.
+ *
+ * Revision 1.1.1.1  1998/10/10 06:23:22  dillon
+ *
+ * Initial import of DICE into CVS repository.  Logs for the thousands of
+ * changes prior to this import have essentially been lost   -Matt.
+ *
  * Revision 30.5  1994/06/13  18:41:08  dice
  * byte ordering portability
  * align opcode was broken
@@ -43,8 +32,7 @@
  *
  * Revision 1.1  1993/09/19  20:19:25  jtoebes
  * Initial revision
- *
-**/
+ */
 
 #include "defs.h"
 

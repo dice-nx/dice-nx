@@ -1,24 +1,16 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  GenArith.C
+ * GenArith.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
  *  Normal arithmatic functions like +, -, /, % ..
  *
  *  NOTE:  +=, -=, etc.. with lhs bit fields, CreateBinaryResult will
  *         bfext the lhs.  It is expected that the lhs is already freed.
- */
-
-/*
-**      $Filename: genarith.c $
-**      $Author: dice $
-**      $Revision: 30.157 $
-**      $Date: 1995/01/11 13:19:27 $
-**      $Log: genarith.c,v $
+ * 
  * Revision 30.157  1995/01/11  13:19:27  dice
  * .
  *

@@ -1,39 +1,29 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  DAS     Minimal assembler and peephole optimizer for DCC
+ * DAS     Minimal assembler and peephole optimizer for DCC
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
  *          -doesn't understand include or IF constructions
  *          -only understands decimal and $ hex
  *          -only understands +, -, and negate
  *
  *  DAS infile [-o outfile] -O[optlevel]
- */
-
-/*
-**      $Filename: main.c $
-**      $Author: dillon $
-**      $Revision: 1.2 $
-**      $Date: 1999/02/08 22:51:42 $
-**      $Log: main.c,v $
-**      Revision 1.2  1999/02/08 22:51:42  dillon
-**
-**
-**          Add INCLUDE directive.  INCLUDE "filename".  Filename is relative to
-**          source file doing the INCLUDE.
-**
-**          Add -I option to das to specify include directories.
-**
-**      Revision 1.1.1.1  1998/10/10 06:23:22  dillon
-**
-**
-**          Initial import of DICE into CVS repository.  Logs for the thousands of
-**          changes prior to this import have essentially been lost   -Matt.
-**
+ * 
+ * Revision 1.2  1999/02/08 22:51:42  dillon
+ *
+ * Add INCLUDE directive.  INCLUDE "filename".  Filename is relative to
+ * source file doing the INCLUDE.
+ *
+ * Add -I option to das to specify include directories.
+ *
+ * Revision 1.1.1.1  1998/10/10 06:23:22  dillon
+ *
+ * Initial import of DICE into CVS repository.  Logs for the thousands of
+ * changes prior to this import have essentially been lost   -Matt.
+ *
  * Revision 30.326  1995/12/24  06:12:49  dice
  * .
  *

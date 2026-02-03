@@ -1,38 +1,28 @@
-
 /*
- *  DC1/TYPES.H
+ * DC1/TYPES.H
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  note: low level type bits reflect token ids.
- *
- *  typequalmask : those qualifiers that should be propogated in types
- *  storqualmask : those qualifiers that should be propogated in var->Flags
- *
- *  Some qualifiers will propogate in both
- *
- *  TF_TYPEQUALMASK:    initial separation (in CompType()).  storage flags
- *                      and any related to flag propogation for procedures
- *                      are weeded out.
- *
- *                      note: these are the only items kept for proc-arg
- *                      declarators
- *
- *  TF_STORQUALMASK:    represents qualifiers that have nothing to do with
- *                      the type, but everything to do with the storage
- *                      class of the variable/procedure
- *
- *  TF_KEEPPROC:        when one procedure def overrides another, keep
- *
- *  TF_STORNOTLOCAL:    illegal within a procedure
- *
- *  TF_NOTINTYPE:       TF's that should not be placed in the type structure
- *
- *
- *  XXX things like __geta4 & __stkargs can be both storage qualifiers and
- *      type qualifiers.  Confusion!
+ * note: low level type bits reflect token ids.
+ * typequalmask : those qualifiers that should be propogated in types
+ * storqualmask : those qualifiers that should be propogated in var->Flags
+ * Some qualifiers will propogate in both
+ * TF_TYPEQUALMASK:    initial separation (in CompType()).  storage flags
+ * and any related to flag propogation for procedures
+ * are weeded out.
+ * note: these are the only items kept for proc-arg
+ * declarators
+ * TF_STORQUALMASK:    represents qualifiers that have nothing to do with
+ * the type, but everything to do with the storage
+ * class of the variable/procedure
+ * TF_KEEPPROC:        when one procedure def overrides another, keep
+ * TF_STORNOTLOCAL:    illegal within a procedure
+ * TF_NOTINTYPE:       TF's that should not be placed in the type structure
+ * XXX things like __geta4 & __stkargs can be both storage qualifiers and
+ * type qualifiers.  Confusion!
  */
 
 #define TF_TYPEQUALMASK (TF_SIGNED|TF_UNSIGNED|TF_CONST|TF_VOLATILE|TF_UNALIGNED)

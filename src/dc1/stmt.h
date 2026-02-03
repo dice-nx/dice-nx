@@ -1,18 +1,11 @@
-
 /*
- *  DC1/STMT.H
+ * DC1/STMT.H
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
-**      $Filename: stmt.h $
-**      $Author: dice $
-**      $Revision: 30.0 $
-**      $Date: 1994/06/10 18:04:57 $
-**      $Log: stmt.h,v $
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
  * Revision 30.0  1994/06/10  18:04:57  dice
  * .
  *
@@ -23,8 +16,7 @@
  * Revision 1.2  1993/09/11  16:11:53  jtoebes
  * Fixed BUG01010 - Code not allowed in switch statement before the first case.
  * Added place in statement structure to hold the orphaned code.
- *
-**/
+ */
 
 #define st_Func     Hdr.Func
 #define st_Tok      Hdr.Tok

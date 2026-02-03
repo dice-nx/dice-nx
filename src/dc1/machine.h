@@ -1,19 +1,17 @@
-
 /*
- *  DC1/MACHINE.H
+ * DC1/MACHINE.H
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  The more machine dependant stuff goes here
- *
- *  note that string constant is converted to label-relative by this pt.
- *
- *  REGISTERS:  There are 16 data and 16 address registers.  Only the lower
- *  8 of each is valid.  The upper 8 is used to detect when we run out of
- *  registers and precisely the number of registers we would otherwise have
- *  needed.
+ * The more machine dependant stuff goes here
+ * note that string constant is converted to label-relative by this pt.
+ * REGISTERS:  There are 16 data and 16 address registers.  Only the lower
+ * 8 of each is valid.  The upper 8 is used to detect when we run out of
+ * registers and precisely the number of registers we would otherwise have
+ * needed.
  */
 
 #if 0
