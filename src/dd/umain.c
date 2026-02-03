@@ -1,9 +1,11 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-/*
+ * UMAIN.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
  *  _MAIN.C
  *
  *  Note that to use this _main we must be a process.  The programmer
@@ -12,6 +14,7 @@
  *  Note that we open '*' with modes 1005 so if the filesystem is our stderr
  *  we don't create a file called '*'.
  */
+
 #include        <localdefs.h>
 
 extern int      wbmain(void *);

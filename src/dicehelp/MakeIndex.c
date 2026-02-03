@@ -1,34 +1,35 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * MAKEINDEX.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
+ *      Generate index file for use by DICEHelp.  Modified from the DME
+ *      program MakeIndex.
+ *
+ *              BUGS: Leaves LF at the end of last entry of some
+ *              document files (like exec.doc).
+ *
+ *              !!! TODO: If clip is within MAGIC_NUMBER of filesize,
+ *              just return the entire file.
+ *
+ *              !!! TODO: OpenDevice/CloseDevice/OpenLibrary/CMD_READ, etc
+ *              generally don't end up unique.  What to do, to do, to do.
+ *
+ *              !!! TODO: Scan for TAG_XXXXX
+ *
+ *              !!! TODO: Scan .fd files better
+ *
+ *              !!! TODO: On include files, scan backwards to nuke
+ *              include file header.
+ *
+ *              !!! TODO: Bug report on layers line
+ *
  */
-/*
-**      $Id: MakeIndex.c,v 30.5 1994/06/13 18:43:09 dillon Exp dice $
-**
-**      Generate index file for use by DICEHelp.  Modified from the DME
-**      program MakeIndex.
-**
-**              BUGS: Leaves LF at the end of last entry of some
-**              document files (like exec.doc).
-**
-**              !!! TODO: If clip is within MAGIC_NUMBER of filesize,
-**              just return the entire file.
-**
-**              !!! TODO: OpenDevice/CloseDevice/OpenLibrary/CMD_READ, etc
-**              generally don't end up unique.  What to do, to do, to do.
-**
-**              !!! TODO: Scan for TAG_XXXXX
-**
-**              !!! TODO: Scan .fd files better
-**
-**              !!! TODO: On include files, scan backwards to nuke
-**              include file header.
-**
-**              !!! TODO: Bug report on layers line
-**
-*/
-#define D(x)    ;
+
+ #define D(x)    ;
 
 /*
  *  MakeIndex output <pattern>

@@ -1,13 +1,9 @@
-
 /*
- *      FILE.C  - push/pop files, include directive support.
+ * FILE.C  - push/pop files, include directive support.
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *      $Filename: main.c $
- *      $Author: dillon $
- *      $Revision: 1.1.1.1 $
- *      $Date: 1998/10/10 06:23:22 $
- *      $Log: main.c,v $
- *      Revision 1.1.1.1  1998/10/10 06:23:22  dillon
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
  */
 
 #include "defs.h"

@@ -1,10 +1,11 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
+ * MAIN.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ * 
  *  DLINK files options
  *
  *  The first object module is considered to be what is run.  Remaining object
@@ -55,20 +56,13 @@
  *                  allowed.
  *
  *  -<option>       see switch below
- */
-
-/*
-**      $Filename: main.c $
-**      $Author: dillon $
-**      $Revision: 1.1.1.1 $
-**      $Date: 1998/10/10 06:23:15 $
-**      $Log: main.c,v $
-**      Revision 1.1.1.1  1998/10/10 06:23:15  dillon
-**
-**
-**          Initial import of DICE into CVS repository.  Logs for the thousands of
-**          changes prior to this import have essentially been lost   -Matt.
-**
+ * 
+ *      Revision 1.1.1.1  1998/10/10 06:23:15  dillon
+ *
+ *
+ *          Initial import of DICE into CVS repository.  Logs for the thousands of
+ *          changes prior to this import have essentially been lost   -Matt.
+ *
  * Revision 30.326  1995/12/24  06:10:39  dice
  * .
  *
@@ -80,8 +74,7 @@
  *
  * Revision 30.0  1994/06/10  18:05:39  dice
  * .
- *
-**/
+ */
 
 
 #include "defs.h"

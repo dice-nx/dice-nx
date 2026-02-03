@@ -1,26 +1,17 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  SUBS.C
+ * SUBS.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- */
-
-/*
-**      $Filename: subs.c $
-**      $Author: dillon $
-**      $Revision: 1.1.1.1 $
-**      $Date: 1998/10/10 06:23:15 $
-**      $Log: subs.c,v $
-**      Revision 1.1.1.1  1998/10/10 06:23:15  dillon
-**
-**
-**          Initial import of DICE into CVS repository.  Logs for the thousands of
-**          changes prior to this import have essentially been lost   -Matt.
-**
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ * 
+ *      Revision 1.1.1.1  1998/10/10 06:23:15  dillon
+ *
+ *
+ *          Initial import of DICE into CVS repository.  Logs for the thousands of
+ *          changes prior to this import have essentially been lost   -Matt.
+ *
  * Revision 30.326  1995/12/24  06:10:40  dice
  * .
  *
@@ -36,8 +27,7 @@
  *
  * Revision 1.2  1993/10/13  19:48:28  jtoebes
  * FIX BUG01046 - Dlink should look in DCC_CONFIG: for config files.
- *
-**/
+ */
 
 
 #include "defs.h"

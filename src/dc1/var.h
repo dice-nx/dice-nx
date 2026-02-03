@@ -1,19 +1,18 @@
-
 /*
- *  DC1/VAR.H
+ * DC1/VAR.H
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  Note that tracking of global variables within subroutines is accomplished
- *  by generating a dummy semantic variable at the top level of the subroutine.
- *  (VF_DUMMY).  At registerization time if the proper requirements are met
- *  and references satisfied the global is LEAd into an address register.
- *
- *  This, I believe, gives more flexibility than reserving A4 for a small-data
- *  model.  I would much rather have as many address registers available for
- *  register variables as possible.
+ * Note that tracking of global variables within subroutines is accomplished
+ * by generating a dummy semantic variable at the top level of the subroutine.
+ * (VF_DUMMY).  At registerization time if the proper requirements are met
+ * and references satisfied the global is LEAd into an address register.
+ * This, I believe, gives more flexibility than reserving A4 for a small-data
+ * model.  I would much rather have as many address registers available for
+ * register variables as possible.
  */
 
 #include <sys/types.h>

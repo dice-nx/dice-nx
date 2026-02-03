@@ -1,21 +1,13 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  STMT.C
+ * STMT.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
  *  Parse procedural junk: declarations, statements, etc...
- */
-
-/*
-**      $Filename: stmt.c $
-**      $Author: dice $
-**      $Revision: 30.152 $
-**      $Date: 1995/01/08 22:30:25 $
-**      $Log: stmt.c,v $
+ *
  * Revision 30.152  1995/01/08  22:30:25  dice
  *  test message
  *
@@ -47,8 +39,7 @@
  * Revision 1.3  1993/09/06  22:18:01  jtoebes
  * Fixed BUG06004 - DC1 fails to detect reuse of a register in a function parameter
  * list.
- *
-**/
+ */
 
 #include "defs.h"
 

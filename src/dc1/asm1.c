@@ -1,11 +1,10 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  ASM1.C
+ * ASM1.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
  *  Contains routine that actually generate assembly output.  Any given
  *  asm_ routine is only allow to allocate one data and one address register
@@ -13,14 +12,7 @@
  *  Note: avoid storing a temporary into the destination and then running an
  *  operation on the destination when one of the sources uses the destination.
  *  e.g.    ptr = *ptr + 2
- */
-
-/*
-**      $Filename: asm1.c $
-**      $Author: dice $
-**      $Revision: 30.326 $
-**      $Date: 1995/12/24 06:09:34 $
-**      $Log: asm1.c,v $
+ * 
  * Revision 30.326  1995/12/24  06:09:34  dice
  * .
  *

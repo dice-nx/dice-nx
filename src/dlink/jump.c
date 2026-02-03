@@ -1,15 +1,13 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  JUMP.C
+ * JUMP.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  Deal with making a jump table to handle PC-relative code >+/-32K rel offset.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ * Deal with making a jump table to handle PC-relative code >+/-32K rel offset.
  *
- *  Consider only HUNK_CODE lists
+ * Consider only HUNK_CODE lists
  */
 
 #include "defs.h"

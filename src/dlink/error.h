@@ -1,18 +1,11 @@
-
 /*
- *  ERROR.H
+ * ERROR.H
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
-**      $Filename: error.h $
-**      $Author: dice $
-**      $Revision: 30.156 $
-**      $Date: 1995/01/11 05:06:09 $
-**      $Log: error.h,v $
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
  * Revision 30.156  1995/01/11  05:06:09  dice
  * .
  *
@@ -21,8 +14,7 @@
  *
  * Revision 1.2  1993/10/13  19:47:37  jtoebes
  * Fix BUG06025 - Error when linking with Amiga.lib.
- *
-**/
+ */
 
 #define EMSG    1
 #define EWARN   2

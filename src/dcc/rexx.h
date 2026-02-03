@@ -1,8 +1,11 @@
-
 /*
- *  [LIBSRCPATH]REXX/REXX.H (PRIVATE)
+ * [LIBSRCPATH]REXX/REXX.H (PRIVATE)
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  only lib/rexx.h is public
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * only lib/rexx.h is public
  */
 
 #include <exec/types.h>

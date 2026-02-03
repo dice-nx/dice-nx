@@ -1,18 +1,11 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-/*
- *  TYPES.C
- */
-
-/*
-**      $Filename: types.c $
-**      $Author: dice $
-**      $Revision: 30.325 $
-**      $Date: 1995/12/24 05:38:17 $
-**      $Log: types.c,v $
+ * TYPES.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
  * Revision 30.325  1995/12/24  05:38:17  dice
  * .
  *
@@ -49,8 +42,7 @@
  * Revision 1.5  1993/09/06  21:39:04  jtoebes
  * Fix BUG01005 - Problems with typedef of a tentative volatile structure.
  * I am not 100% comfortable with this fix, but it does address the basic issue.
- *
-**/
+ */
 
 #include "defs.h"
 
