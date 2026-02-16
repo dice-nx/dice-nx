@@ -1,17 +1,10 @@
 /*
- * DICE-NX project - https://dice-nx.dev/
- *
- * Copyright 1992-1997 Obvious Implementations Corp.
- * Copyright 2023- DICE-NX project contributors
- *
- * Licensed under the BSD-3-Clause License, as written in the LICENSE file
- * at the root of this project.
- *
+ * SUPLIB/MEMORY.H
  * SPDX-License-Identifier: BSD-3-Clause
- */
-
-/*
- *      SUPLIB/MEMORY.H
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp.
  */
 
 #define setmem(ptr,len,c) memset(ptr,c,len)
