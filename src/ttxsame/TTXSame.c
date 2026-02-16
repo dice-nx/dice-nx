@@ -1,13 +1,12 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * TTXSame.c
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  */
-/***************************************************************************/
-/*  Copyright (c) 1992 Obvious Implementation Corp. All Rights Reserved.   */
-/*                     207 Livingstone Drive,                              */
-/*                     Cary N.C. 27513 - USA                               */
-/***************************************************************************/
+
 #include <stdio.h>
 #include <exec/types.h>
 #include <proto/exec.h>

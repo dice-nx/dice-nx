@@ -1,11 +1,11 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- */
-
-/*
- *  LIBTOS.C
+ * LIBTOS.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
  *
  *  This program takes two arguments, AMIGA.LIB, and an OUTPUT FILE,
  *  and systematically converts all references to the variables below

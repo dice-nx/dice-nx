@@ -1,16 +1,16 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * LOADFILE.C
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
+ *      Load a binary file into memory.  Report the address and hole
+ *      until CTRL-C is pressed.  Useful for looking at binary files
+ *      with a debugger.
+ *
  */
-/*
-**      $Id: loadfile.c,v 30.326 1995/12/24 06:13:05 dice Exp dice $
-**
-**      Load a binary file into memory.  Report the address and hole
-**      until CTRL-C is pressed.  Useful for looking at binary files
-**      with a debugger.
-**
-*/
 
 #include <stdint.h>
 #include <stdio.h>
