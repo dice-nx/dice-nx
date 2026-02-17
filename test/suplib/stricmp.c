@@ -1,8 +1,9 @@
-
 /*
- *  STRICMP.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  (C)Copyright 1990, Matthew Dillon, All Rights Reserved
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * (C)Copyright 1990, Matthew Dillon, All Rights Reserved
  */
 
 #include <string.h>

@@ -1,10 +1,11 @@
-
 /*
- *  Tests bugs in RunCommand() dealing with a RunCommand()'d program
- *  calling RunCommand() itself.
+ * SPDX-License-Identifier: BSD-3-Clause
  *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
  *
- *
+ * Tests bugs in RunCommand() dealing with a RunCommand()'d program
+ * calling RunCommand() itself.
  */
 
 #include <exec/types.h>

@@ -1,10 +1,15 @@
-;/* Sample use of CatComp
+/*
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * Sample use of CatComp
+ * CatComp helloworld.cd cfile helloworld_strings.h objfile helloworld_strings.o
+ * Quit
+ */
 
-CatComp helloworld.cd cfile helloworld_strings.h objfile helloworld_strings.o
-Quit
-*/
-
-#include <exec/types.h>
+ #include <exec/types.h>
 #include <libraries/locale.h>
 #include <stdio.h>
 

@@ -1,8 +1,10 @@
-
 /*
- *  BLKRET.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  test structural returns
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * test structural returns
  */
 
 #include <stdio.h>
