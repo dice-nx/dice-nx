@@ -1,3 +1,19 @@
+/*
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * printf("%ld / %ld = %ld\n", i, j, i / j);
+ * printf("%lu / %lu = %lu\n", (unsigned)i, (unsigned)j, (unsigned)i / (unsigned)j);
+ * printf("%ld %% %ld = %ld\n", i, j, i % j);
+ * printf("%lu %% %lu = %lu\n", (unsigned)i, (unsigned)j, (unsigned)i % (unsigned)j);
+ * time(&t1);
+ * for (n = 0; n < 100000; ++n)
+ * k = i / j;
+ * time(&t2);
+ * printf("time for 100000 divisions %d\n", t2 - t1);
+ */
 
 main(ac, av)
 char *av[];

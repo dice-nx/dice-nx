@@ -1,47 +1,44 @@
 /*
-
-    This program is an example that uses the capabilities of Multiple
-    Stream C.  It uses the 'nextinput' function and reads its asynchronous
-    events rather than using signals.
-
-    The program simulates a one channel Citizens Band Radio (CB).  When
-    someone logs-on, they are asked for a handle to identify themselves.
-    Then everyone signed-on the CB is told that a new user is on.  When
-    someone types a message, it is broadcast to everyone on the CB.  Each
-    message that is sent is proceeded with the users identification.  There
-    are several commands; each begins with a slash (/).  For a list of the
-    available commands, type "/HELP".  To log-off, you type the command
-    "/BYE".  If the processor is going to go down for maintenance, all the
-    users are asked to relogon.
-
-    This is basically the same program as in the Multi Stream C Document,
-    modified by Dan Leichtenschlag to increase efficiency and to
-    demonstrate GEnie specific routines used by Third party authors writing
-    Multi stream C applications.  Most obvious is the table of users and
-    using fileno(fp) to index into the table rather than searching for a
-    file pointer each time.  Other modifications recommended for GEnie
-    authors are setting the timeout for streams, and redirecting stdout and
-    stderr to files rather than the bit bucket (default for stdout in Multi
-    Stream mode).  It also uses the preferred style of having a simple
-    processing loop and calling functions for each event rather than
-    stuffing all the code into the switch statement like the example.
-
-    There are 3 routines provided by GEnie that must be called so GEnie can
-    keep track of who is in the game.  They are:
-
-    getuser(fp) - called for each user that is allowed in the game.
-    touser(fp)  - called to send user back to GEnie.
-    delrt()     - called just before game terminates, Game is 'down'.
-
-    The getuser and touser routines need the file pointer for that user
-    passed so the user can be identified.  getuser returns a character
-    pointer to the users U#.  This should be saved by the caller and
-    used to uniquely identify users for a database key id needed.
-
-    To Compile: cc +v l=game.lib o=cb
-
-    GAME.LIB is a library provided to GEnie Authors.
-*/
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * This program is an example that uses the capabilities of Multiple
+ * Stream C.  It uses the 'nextinput' function and reads its asynchronous
+ * events rather than using signals.
+ * The program simulates a one channel Citizens Band Radio (CB).  When
+ * someone logs-on, they are asked for a handle to identify themselves.
+ * Then everyone signed-on the CB is told that a new user is on.  When
+ * someone types a message, it is broadcast to everyone on the CB.  Each
+ * message that is sent is proceeded with the users identification.  There
+ * are several commands; each begins with a slash (/).  For a list of the
+ * available commands, type "/HELP".  To log-off, you type the command
+ * "/BYE".  If the processor is going to go down for maintenance, all the
+ * users are asked to relogon.
+ * This is basically the same program as in the Multi Stream C Document,
+ * modified by Dan Leichtenschlag to increase efficiency and to
+ * demonstrate GEnie specific routines used by Third party authors writing
+ * Multi stream C applications.  Most obvious is the table of users and
+ * using fileno(fp) to index into the table rather than searching for a
+ * file pointer each time.  Other modifications recommended for GEnie
+ * authors are setting the timeout for streams, and redirecting stdout and
+ * stderr to files rather than the bit bucket (default for stdout in Multi
+ * Stream mode).  It also uses the preferred style of having a simple
+ * processing loop and calling functions for each event rather than
+ * stuffing all the code into the switch statement like the example.
+ * There are 3 routines provided by GEnie that must be called so GEnie can
+ * keep track of who is in the game.  They are:
+ * getuser(fp) - called for each user that is allowed in the game.
+ * touser(fp)  - called to send user back to GEnie.
+ * delrt()     - called just before game terminates, Game is 'down'.
+ * The getuser and touser routines need the file pointer for that user
+ * passed so the user can be identified.  getuser returns a character
+ * pointer to the users U#.  This should be saved by the caller and
+ * used to uniquely identify users for a database key id needed.
+ * To Compile: cc +v l=game.lib o=cb
+ * GAME.LIB is a library provided to GEnie Authors.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

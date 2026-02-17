@@ -1,12 +1,14 @@
-
 /*
- *  RESIDENT.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  Create temporary 'resident' node that LoadSeg()s a program, runs it,
- *  and replies a message.  This node is uniquely named and can only be
- *  used in a non-reentrant fashion.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
  *
- *  You create the node, then Execute() the node's name... simple!
+ * Create temporary 'resident' node that LoadSeg()s a program, runs it,
+ * and replies a message.  This node is uniquely named and can only be
+ * used in a non-reentrant fashion.
+ * 
+ * You create the node, then Execute() the node's name... simple!
  */
 
 #include <exec/types.h>
