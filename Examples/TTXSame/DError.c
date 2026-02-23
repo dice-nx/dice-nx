@@ -1,9 +1,10 @@
-//***********************************************************************
-//*  Copyright (c) 1993, 1994 Obvious Implementation Corp.              *
-//*                           All Rights Reserved.                      *
-//*                     207 Livingstone Drive,                          *
-//*                     Cary N.C. 27513 - USA                           *
-//***********************************************************************
+/*
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1993, 1994 Obvious Implementations Corp
+ */
 
 #include <stdio.h>
 #include <exec/types.h>

@@ -1,8 +1,10 @@
-
 /*
- *  MAIN.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  MAIN FOR DOS HANDLER TEST PROGRAM FOR DICE
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * MAIN FOR DOS HANDLER TEST PROGRAM FOR DICE
  */
 
 #include <exec/types.h>

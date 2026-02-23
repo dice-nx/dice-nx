@@ -1,10 +1,12 @@
-
 /*
- *  X.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  If you do not have the 2.0 includes you will need to remove the
- *  #include <clib/#?> stuff and change IDCMP_* and WFLG_* to the
- *  1.3 names (refer intuition/intuition.h)
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ *
+ * If you do not have the 2.0 includes you will need to remove the
+ * #include <clib/#?> stuff and change IDCMP_* and WFLG_* to the
+ * 1.3 names (refer intuition/intuition.h)
  */
 
 #include <stdio.h>

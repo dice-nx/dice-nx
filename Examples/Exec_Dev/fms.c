@@ -1,10 +1,11 @@
-
 /*
- *  FMS.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  File Disk Device (fmsdisk.device)
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
  *
- *  Simulates a trackdisk by using a large file to hold the 'blocks'.
+ * File Disk Device (fmsdisk.device)
+ * Simulates a trackdisk by using a large file to hold the 'blocks'.
  */
 
 #include "defs.h"
