@@ -1,13 +1,14 @@
-
 /*
- *  MATH/SFMT.C     replace specific cases in sfmt
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  NOTE:   Can only deal with double's at this point since we do not
- *  know what format the float's are in (FFP or IEEESING)
+ * MATH/SFMT.C     replace specific cases in sfmt
+ * 
+ * NOTE:   Can only deal with double's at this point since we do not
+ * know what format the float's are in (FFP or IEEESING)
  */
 
 #ifndef MATH_SFMT

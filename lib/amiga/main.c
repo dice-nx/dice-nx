@@ -1,18 +1,15 @@
-
 /*
- *  _MAIN.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- *
- *
- *  Note that to use this _main we must be a process.  The programmer
- *  can overide our _main with his own if he wishes a task entry.
- *
- *  Note that we open '*' with modes 1005 so if the filesystem is our stderr
- *  we don't create a file called '*'.
+ * Note that to use this _main we must be a process.  The programmer
+ * can overide our _main with his own if he wishes a task entry.
+ * 
+ * Note that we open '*' with modes 1005 so if the filesystem is our stderr
+ * we don't create a file called '*'.
  */
 
 #define SysBase_DECLARED

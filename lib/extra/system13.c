@@ -1,33 +1,32 @@
-
 /*
- *  SYSTEM13.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  This routine will do the equivalent of system() for programs running
- *  under the 1.3 operating system.  system13() will work from either a
- *  CLI or workbench-run program and will properly return the exit code
- *  of the program.
- *
- *  Due to overhead, this call has not been integrated into system()
- *
- *  Under 1.3, NEWCLI, ENDCLI, and RUN must be in your path OR made
- *  resident.  Note that making these three programs resident will
- *  greatly increase system13()'s efficiency.  The dummy shell is left
- *  open for the duration of the program, so multiple system() calls
- *  will be efficient.
- *
- *      D0 - scratch
- *      D1 - scratch
- *
- *      A0 - scratch
- *      A1 - server is_Data pointer (scratch)
- *
- *      A5 - jump vector register (scratch)
- *      A6 - scratch
- *
+ * SYSTEM13.C
+ * This routine will do the equivalent of system() for programs running
+ * under the 1.3 operating system.  system13() will work from either a
+ * CLI or workbench-run program and will properly return the exit code
+ * of the program.
+ * 
+ * Due to overhead, this call has not been integrated into system()
+ * 
+ * Under 1.3, NEWCLI, ENDCLI, and RUN must be in your path OR made
+ * resident.  Note that making these three programs resident will
+ * greatly increase system13()'s efficiency.  The dummy shell is left
+ * open for the duration of the program, so multiple system() calls
+ * will be efficient.
+ * 
+ * D0 - scratch
+ * D1 - scratch
+ * 
+ * A0 - scratch
+ * A1 - server is_Data pointer (scratch)
+ * 
+ * A5 - jump vector register (scratch)
+ * A6 - scratch
  */
 
 #define DOSBase_DECLARED

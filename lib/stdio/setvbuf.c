@@ -1,16 +1,15 @@
-
 /*
- *  SETVBUF
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  SendPacket call written by Phil Lindsay, Carolyn Scheppner, and Andy
- *  Finkel and is freely redistributable.
- *
- *  Hacked because my stdio utilizes two buffers to support full
- *  duplex streams.
+ * SendPacket call written by Phil Lindsay, Carolyn Scheppner, and Andy
+ * Finkel and is freely redistributable.
+ * 
+ * Hacked because my stdio utilizes two buffers to support full
+ * duplex streams.
  */
 
 #include <clib/exec_protos.h>

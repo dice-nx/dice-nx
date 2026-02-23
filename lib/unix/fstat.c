@@ -1,10 +1,11 @@
-
 /*
- *  FSTAT call (only works properly under 2.0)
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
+ * FSTAT call (only works properly under 2.0)
  */
 
 #include <exec/types.h>

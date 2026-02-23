@@ -1,16 +1,15 @@
-
 /*
- *  SYSTEM_DCC.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  LoadSeg() and run a dcc program as this process.  ONLY DCC programs may
- *  be run with this call.  The resident list is searched properly.
- *
- *  uses cli_DefaultStack if we are a process and the cli exists, else uses
- *  a 4K stack.   Also modifies cli_CommandName and cli_Module temporarily.
+ * LoadSeg() and run a dcc program as this process.  ONLY DCC programs may
+ * be run with this call.  The resident list is searched properly.
+ * 
+ * uses cli_DefaultStack if we are a process and the cli exists, else uses
+ * a 4K stack.   Also modifies cli_CommandName and cli_Module temporarily.
  */
 
 #define SysBase_DECLARED

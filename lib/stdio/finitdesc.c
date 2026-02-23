@@ -1,12 +1,12 @@
-
 /*
- *  Initialize a zerod file pointer
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  if interactive set line buffering
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Initialize a zerod file pointer
+ * if interactive set line buffering
  */
 
 #include <fcntl.h>

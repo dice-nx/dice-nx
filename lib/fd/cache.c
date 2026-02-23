@@ -1,13 +1,11 @@
-
 /*
- *  CACHE.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *  Implement DICECACHE.LIBRARY access
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
- *
+ * Implement DICECACHE.LIBRARY access
  */
 
 #ifdef ENABLE_DICECACHE

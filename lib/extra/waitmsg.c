@@ -1,15 +1,14 @@
-
 /*
- *  WAITMSG.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  Wait for a message to be returned, suitable when another task is doing
- *  the ReplyMsg().  NOT suitable for when an interrupt is doing the
- *  ReplyMsg() (must use Disable()/Enable() pair instead of Forbid()/
- *  Permit() if used with interrupts)
+ * Wait for a message to be returned, suitable when another task is doing
+ * the ReplyMsg().  NOT suitable for when an interrupt is doing the
+ * ReplyMsg() (must use Disable()/Enable() pair instead of Forbid()/
+ * Permit() if used with interrupts)
  */
 
 #include <exec/types.h>

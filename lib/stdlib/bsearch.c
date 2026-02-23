@@ -1,16 +1,15 @@
-
 /*
- *  BSEARCH.C
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
  *
- *  BSearch() - binary search of an array
- *
- *  note that aryEnd is the number of elements in the array and therefore
- *  base[aryEnd * objSize] is an INVALID element and not included in the
- *  search (e.g. just past the end of the array).
+ * BSearch() - binary search of an array
+ * 
+ * note that aryEnd is the number of elements in the array and therefore
+ * base[aryEnd * objSize] is an INVALID element and not included in the
+ * search (e.g. just past the end of the array).
  */
 
 #include <stdlib.h>
