@@ -1,25 +1,31 @@
+;   CONFIG.A
+;
+;   DiceConfig
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1992-1997 Obvious Implementations Corp
 
-                ;   CONFIG.A
-                ;
-                ;   DiceConfig
-                ;
-                ;   When the __config keyword is used calls to DiceConfig
-                ;   are generated via autoinit code (specifically, the
-                ;   autoconfig section).  The sequence is as follows:
-                ;
-                ;   CALL autoinit0
-                ;   CALL autoconfig (calls DiceConfig routine many times)
-                ;                   args:  len,ptr,rpc,rpc,mode=1
-                ;                   -opens config file
-                ;   CALL autoinit1  (close open config file)
-                ;   __main
-                ;       <program runs>
-                ;   __exit
-                ;
-                ;   CALL autoconfig (calls DiceConfig routine many times)
-                ;                   args:  len,ptr,rpc,prc,mode=-1
-                ;   CALL autoexit1  (close open config file)
-                ;   CALL autoexit0
+;
+;   When the __config keyword is used calls to DiceConfig
+;   are generated via autoinit code (specifically, the
+;   autoconfig section).  The sequence is as follows:
+;
+;   CALL autoinit0
+;   CALL autoconfig (calls DiceConfig routine many times)
+;                   args:  len,ptr,rpc,rpc,mode=1
+;                   -opens config file
+;   CALL autoinit1  (close open config file)
+;   __main
+;       <program runs>
+;   __exit
+;
+;   CALL autoconfig (calls DiceConfig routine many times)
+;                   args:  len,ptr,rpc,prc,mode=-1
+;   CALL autoexit1  (close open config file)
+;   CALL autoexit0
 
 
                 xdef    __DiceConfig

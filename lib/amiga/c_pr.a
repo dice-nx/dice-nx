@@ -1,18 +1,22 @@
-
-                ;   C_PR.A  -pr option, no relocation info + resident
-                ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                ;
-                ;   Amiga startup code for resident programs contained in a
-                ;   single CODE hunk.  BSS space is NOT part of the CODE hunk,
-                ;   only the initialized data (which is read-only).  We must
-                ;   allocate the data space
-                ;
-                ;   DLINK:
-                ;
-                ;   __BSS_LEN   : # long wrds of bss (occurs after DATA)
-                ;   __DATA_LEN  : # long wrds of initialized data to copy (if resident)
-                ;   __DATA_BAS  : base of data - read-only, PC-REL for -pr
+;   C_PR.A  -pr option, no relocation info + resident
+;
+;
+;   Amiga startup code for resident programs contained in a
+;   single CODE hunk.  BSS space is NOT part of the CODE hunk,
+;   only the initialized data (which is read-only).  We must
+;   allocate the data space
+;
+;   DLINK:
+;
+;   __BSS_LEN   : # long wrds of bss (occurs after DATA)
+;   __DATA_LEN  : # long wrds of initialized data to copy (if resident)
+;   __DATA_BAS  : base of data - read-only, PC-REL for -pr
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 section text,code
 

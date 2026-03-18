@@ -1,13 +1,17 @@
-
-                        ;   autoinit if you ever reference LOCALE.LIBRARY
-                        ;
-                        ;(c)Copyright1992, Matthew Dillon, All Rights Reserved
-                        ;
-                        ;can't use pc-relative between different code sections
-                        ;   and cannot put string in autoinit section!
-                        ;
-                        ;   NOTE: If DICE is unable to open this library
-                        ;   the autoinit is NOT aborted!
+;   autoinit if you ever reference LOCALE.LIBRARY
+;
+;
+;can't use pc-relative between different code sections
+;   and cannot put string in autoinit section!
+;
+;   NOTE: If DICE is unable to open this library
+;   the autoinit is NOT aborted!
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1992 Matthew Dillon
 
                         xdef    _LocaleBase
                         xref    __AutoFail0

@@ -1,3 +1,8 @@
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 ;   FFPA_FIX.A
                 ;
@@ -8,7 +13,6 @@
                 ;   in LVOIEEEDPFix() (37.1), bug has not been tested for
                 ;   this function but I am not taking chances.
                 ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
 
                 section text,code
 

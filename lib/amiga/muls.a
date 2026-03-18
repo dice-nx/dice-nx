@@ -1,16 +1,20 @@
-
-                ;   MULS.A
-                ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                ;
-                ;   32x32->32 multiply
-                ;
-                ;   args on stack, return result on stack
-                ;
-                ;   CANNOT DESTROY ANY REGS
-                ;
-                ;       8sp     10sp
-                ;       4sp     6sp
+;   MULS.A
+;
+;
+;   32x32->32 multiply
+;
+;   args on stack, return result on stack
+;
+;   CANNOT DESTROY ANY REGS
+;
+;       8sp     10sp
+;       4sp     6sp
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 section text,code
                 xdef    __muls

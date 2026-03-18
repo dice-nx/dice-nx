@@ -1,9 +1,13 @@
-
-                        ;   autoinit if you ever reference TimerBase
-                        ;
-                        ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                        ;
-                        ;   (2.0 timer.device library routines)
+;   autoinit if you ever reference TimerBase
+;
+;
+;   (2.0 timer.device library routines)
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                         xdef    _TimerBase
                         xref    __AutoFail0

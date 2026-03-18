@@ -1,15 +1,19 @@
-
-                        ;   autoinit if you ever reference DiceCache.library
-                        ;
-                        ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                        ;
-                        ;   can't use pc-relative between different code sections
-                        ;   and cannot put string in autoinit section!
-                        ;
-                        ;   As with the ARexx support, this does not abort
-                        ;   if the library cannot be found.  Furthermore,
-                        ;   this routine only opens the library if it
-                        ;   already exists (i.e. cache explicitly turned on)
+;   autoinit if you ever reference DiceCache.library
+;
+;
+;   can't use pc-relative between different code sections
+;   and cannot put string in autoinit section!
+;
+;   As with the ARexx support, this does not abort
+;   if the library cannot be found.  Furthermore,
+;   this routine only opens the library if it
+;   already exists (i.e. cache explicitly turned on)
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                         xdef    _DiceCacheBase
                         xref    __AutoFail0

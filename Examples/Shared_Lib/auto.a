@@ -1,7 +1,12 @@
-
-                        ;   Part of TEST.LIB when linking programs that
-                        ;   use TEST.LIBRARY, provides an auto-open
-                        ;   capability to TEST.LIBRARY
+;   Part of TEST.LIB when linking programs that
+;   use TEST.LIBRARY, provides an auto-open
+;   capability to TEST.LIBRARY
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1992-1997 Obvious Implementations Corp
 
                         xdef    _TestBase
                         xref    __AutoFail0

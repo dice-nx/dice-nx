@@ -1,57 +1,62 @@
-        ;
-        ;   C.A
-        ;
-        ;   (C)Copyright 1990-1992, Matthew Dillon, All Rights Reserved
-        ;
-        ;   Amiga startup code for resident and non-resident DCC programs.
-        ;
-        ;   DLINK supplied variables:
-        ;
-        ;   * __BSS_LEN   : # long words of BSS (occurs after DATA)
-        ;   * __DATA_LEN  : # long words of initialized data to copy
-        ;                   (if resident)
-        ;   * __DATA_BAS  : Base of data (read only if resident)
-        ;   * __RESIDENT  : Is this code residentable?  If this variable
-        ;                   is set then there are no absolute data/bss
-        ;                   references except __DATA_BAS and there is
-        ;                   NO BSS MEMORY ALLOCATED AFTER THE DATA
-        ;                   SECTION.
-        ;
-        ;                   If this variable is not set then absolute
-        ;                   references refer to the same storage as
-        ;                   A4 relative accesses and uninitialized
-        ;                   BSS space exists just after the data section.
-        ;
-        ;                   Note that in the large-data model + fragmented
-        ;                   sections, there are usually real BSS hunks
-        ;                   floating about that have been zerod by
-        ;                   LoadSeg() (in this case __BSS_LEN could be 0)
-        ;
-        ;   COMPILER:
-        ;
-        ;   * If -r option specified when compiling then the compiler
-        ;     will generate autoinit code to handle data initialization
-        ;     that would otherwise require a reloc32 hunk.
-        ;
-        ;   * If -r or -md specified compiler references all data items
-        ;     using A4-Relative addressing.
-        ;
-        ;   C LIB CODE:
-        ;
-        ;   * Resident:         Allocate (__DATA_LEN+__BSS_LEN)*4
-        ;     Not Resident:     Zero out preallocated BSS.
-        ;
-        ;   * Generate A4 ref ptr to bss base + 32766 (uses Aztec's
-        ;     conventions).
-        ;
-        ;   * All library code uses the SMALL-DATA with alternate
-        ;     BSS and DATA section names (based in this source
-        ;     file) so the linker puts library related data/bss
-        ;     first.  BUT, BSS always comes after DATA unless
-        ;     you -frag the link (can't resident a frag'd link),
-        ;     so if there is more than 64KBytes of *initialized*
-        ;     data you must -frag the link.
-        ;
+;
+;   C.A
+;
+;
+;   Amiga startup code for resident and non-resident DCC programs.
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990-92 Matthew Dillon
+
+;   DLINK supplied variables:
+;
+;   * __BSS_LEN   : # long words of BSS (occurs after DATA)
+;   * __DATA_LEN  : # long words of initialized data to copy
+;                   (if resident)
+;   * __DATA_BAS  : Base of data (read only if resident)
+;   * __RESIDENT  : Is this code residentable?  If this variable
+;                   is set then there are no absolute data/bss
+;                   references except __DATA_BAS and there is
+;                   NO BSS MEMORY ALLOCATED AFTER THE DATA
+;                   SECTION.
+;
+;                   If this variable is not set then absolute
+;                   references refer to the same storage as
+;                   A4 relative accesses and uninitialized
+;                   BSS space exists just after the data section.
+;
+;                   Note that in the large-data model + fragmented
+;                   sections, there are usually real BSS hunks
+;                   floating about that have been zerod by
+;                   LoadSeg() (in this case __BSS_LEN could be 0)
+;
+;   COMPILER:
+;
+;   * If -r option specified when compiling then the compiler
+;     will generate autoinit code to handle data initialization
+;     that would otherwise require a reloc32 hunk.
+;
+;   * If -r or -md specified compiler references all data items
+;     using A4-Relative addressing.
+;
+;   C LIB CODE:
+;
+;   * Resident:         Allocate (__DATA_LEN+__BSS_LEN)*4
+;     Not Resident:     Zero out preallocated BSS.
+;
+;   * Generate A4 ref ptr to bss base + 32766 (uses Aztec's
+;     conventions).
+;
+;   * All library code uses the SMALL-DATA with alternate
+;     BSS and DATA section names (based in this source
+;     file) so the linker puts library related data/bss
+;     first.  BUT, BSS always comes after DATA unless
+;     you -frag the link (can't resident a frag'd link),
+;     so if there is more than 64KBytes of *initialized*
+;     data you must -frag the link.
+;
                 section text,code
 
                 xref    __RESIDENT      ; (dlink), executable is residentable

@@ -1,12 +1,16 @@
-
-                ;   MODS.A
-                ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                ;
-                ;   D0/D1 -> D0 signed divide
-                ;   32/32 -> 32 signed divide
-                ;
-                ;   HYPER function, cannot use PC-rel addressing
+;   MODS.A
+;
+;
+;   D0/D1 -> D0 signed divide
+;   32/32 -> 32 signed divide
+;
+;   HYPER function, cannot use PC-rel addressing
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 section text,code
 

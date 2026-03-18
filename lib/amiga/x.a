@@ -1,12 +1,15 @@
-
-                    ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                    ;
-                    ;   There are two levels of init.   Level 0 is standalone
-                    ;   init that requires NO external references and is used
-                    ;   to open libraries and such.
-                    ;
-                    ;   Level 1 contains init routines that require libraries
-                    ;   to already be open.
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
+;
+;   There are two levels of init.   Level 0 is standalone
+;   init that requires NO external references and is used
+;   to open libraries and such.
+;
+;   Level 1 contains init routines that require libraries
+;   to already be open.
 
                     section autoinit0,code
 

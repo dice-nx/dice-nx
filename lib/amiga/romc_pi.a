@@ -1,17 +1,21 @@
-
-                ;   C_PI.A
-                ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                ;
-                ;   Amiga startup code for PI (position independant)
-                ;   programs.
-                ;
-                ;   REFER TO C.A, THE ONLY DIFFERENCE IS THAT __DATA_BAS
-                ;   IS A (PC) RELATIVE ACCESS.  NOTE THAT -pi PROGRAMS
-                ;   MAY NOT BE RESIDENT
-                ;
-                ;   this startup code is used by DCC when the -pi option is
-                ;   used to link
+;   C_PI.A
+;
+;
+;   Amiga startup code for PI (position independant)
+;   programs.
+;
+;   REFER TO C.A, THE ONLY DIFFERENCE IS THAT __DATA_BAS
+;   IS A (PC) RELATIVE ACCESS.  NOTE THAT -pi PROGRAMS
+;   MAY NOT BE RESIDENT
+;
+;   this startup code is used by DCC when the -pi option is
+;   used to link
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 section text,code
 

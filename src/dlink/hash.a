@@ -1,11 +1,16 @@
-
-                        ;   hash.a handles the hash() function which takes
-                        ;   a huge chunk of cpu, thus it is optimized here.
-                        ;
-                        ;   hash(str,len) return value & 1023
-                        ;
-                        ;   NOTE, this is a different function than that
-                        ;   in SYM.C
+; hash.a handles the hash() function which takes
+; a huge chunk of cpu, thus it is optimized here.
+;
+; hash(str,len) return value & 1023
+;
+; NOTE, this is a different function than that
+; in SYM.C
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1992-1997 Obvious Implementations Corp
 
                         section text,code
 

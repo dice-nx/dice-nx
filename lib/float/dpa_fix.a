@@ -1,3 +1,8 @@
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 ;   DPA_FIX.A
                 ;
@@ -7,7 +12,6 @@
                 ;   NOTE: we save D2/D3 due to a bug in IEEEDPFix that may
                 ;         trash D3 (D2 also saved for good measure)
                 ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
 
                 section text,code
 

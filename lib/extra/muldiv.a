@@ -1,14 +1,17 @@
-
-            ;   MULDIV.A
-            ;
-            ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-            ;
-            ;   r = MulDiv(a,b,c)   long a,b,c;
-            ;   r = MulDivU(a,b,c)  unsigned long a,b,c;
-            ;
-            ;   result.32 = a.32 * b.32 / c.32
-            ;
-            ;   32x32->64 64/32->32 multiply-divide combination
+;   MULDIV.A
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
+;
+;   r = MulDiv(a,b,c)   long a,b,c;
+;   r = MulDivU(a,b,c)  unsigned long a,b,c;
+;
+;   result.32 = a.32 * b.32 / c.32
+;
+;   32x32->64 64/32->32 multiply-divide combination
 
             section text,CODE
 

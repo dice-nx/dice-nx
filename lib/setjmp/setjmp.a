@@ -1,9 +1,12 @@
-
-                ;   SETJMP.A
-                ;
-                ;   (c)Copyright 1990-91, Matthew Dillon, All Rights Reserved
-                ;
-                ;   revised to add current __stk_base
+;   SETJMP.A
+;
+;   revised to add current __stk_base
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990-91 Matthew Dillon
 
                 section text,code
 

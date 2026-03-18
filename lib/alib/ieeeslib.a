@@ -1,10 +1,14 @@
-
-                        ;   autoinit if you ever reference MathIeeeSingBasBase
-                        ;
-                        ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                        ;
-                        ;   can't use pc-relative between different code sections
-                        ;   and cannot put string in autoinit section!
+;   autoinit if you ever reference MathIeeeSingBasBase
+;
+;
+;   can't use pc-relative between different code sections
+;   and cannot put string in autoinit section!
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                         xdef    _MathIeeeSingBasBase
                         xref    __AutoFail0

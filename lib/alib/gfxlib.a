@@ -1,10 +1,14 @@
-
-                        ;   autoinit if you ever reference GRAPHICS
-                        ;
-                        ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                        ;
-                        ;   Note:   das automatically pads code sections with
-                        ;           NOPs.
+;   autoinit if you ever reference GRAPHICS
+;
+;
+;   Note:   das automatically pads code sections with
+;           NOPs.
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                         xdef    _GfxBase
                         xref    __AutoFail0

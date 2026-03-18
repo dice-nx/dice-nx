@@ -1,11 +1,15 @@
-
-                ;   STACK.A
-                ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
-                ;
-                ;   STACK CHECKING CODE.  This code is guarenteed to not
-                ;   destroy any registers other then munging A5 and A7
-                ;   as appropriate.
+;   STACK.A
+;
+;
+;   STACK CHECKING CODE.  This code is guarenteed to not
+;   destroy any registers other then munging A5 and A7
+;   as appropriate.
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 section text,code
 

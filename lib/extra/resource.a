@@ -1,18 +1,22 @@
-
- ;  EXEC resource support
- ;                             4(sp)  8(sp)
- ;      AutoAllocMiscResource(resno, value)
- ;          resno:  MR_SERIALPORT, SERIALBITS, PARALLELPORT, PARALLELBITS
- ;          value:  -1 to allocate, 0 to check
- ;
- ;          returns 0 on success
- ;
- ;      AutoFreeMiscResource(resno)
- ;                            4(sp)
- ;          Free a misc resource you allocated
- ;
- ;      No need to open the misc.resource
-
+;  EXEC resource support
+;                             4(sp)  8(sp)
+;      AutoAllocMiscResource(resno, value)
+;          resno:  MR_SERIALPORT, SERIALBITS, PARALLELPORT, PARALLELBITS
+;          value:  -1 to allocate, 0 to check
+;
+;          returns 0 on success
+;
+;      AutoFreeMiscResource(resno)
+;                            4(sp)
+;          Free a misc resource you allocated
+;
+;      No need to open the misc.resource
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1992-1997 Obvious Implementations Corp
 
             section text,CODE
 

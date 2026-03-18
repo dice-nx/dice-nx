@@ -1,12 +1,17 @@
-
-                    ;   AutoInit0 brought in if the normal _main entry
-                    ;   point is used (due to _main making a dummy
-                    ;   reference to __waitwbmsg)
-                    ;
-                    ;   Since this is the first module in AUTO.LIB and
-                    ;   always referenced on the first pass, it will occur
-                    ;   before ANY library is openned, which is what we
-                    ;   want.
+;   AutoInit0 brought in if the normal _main entry
+;   point is used (due to _main making a dummy
+;   reference to __waitwbmsg)
+;
+;   Since this is the first module in AUTO.LIB and
+;   always referenced on the first pass, it will occur
+;   before ANY library is openned, which is what we
+;   want.
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1992-1997 Obvious Implementations Corp
 
                     section autoinit0,code
 

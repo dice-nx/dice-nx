@@ -1,8 +1,11 @@
-
-                ;
-                ;   _ExecSeg(seg, arg, arglen, stack)
-                ;
-                ;   (c)Copyright 1990, Matthew Dillon, All Rights Reserved
+;
+;   _ExecSeg(seg, arg, arglen, stack)
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+; Licensed to you under the terms of the 3-clause BSD license.
+; See the LICENSE file at the root of this project for details.
+; Copyright 1990 Matthew Dillon
 
                 section text,code
 
