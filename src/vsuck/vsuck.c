@@ -1,56 +1,56 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
+ *              See what can be done with WIDEEXAMPLE
+ *
+ *              Start processing [$Marker] references
+ *
+ *      BUGS:
+ *              Huge AslBase... line blows MAJOR_HEADING
+ *
+ *              strftime man page
+ *              Notice <R> in tables
+ *              Notice <197> 
+ *              
+ *
+ *              !!!!!!!!!!!!!!!!!!!!!!!!!End-of-line blanks
+ *
+ *              Table mismatch in chap01.txt
+ *
+ *
+ *              Flubs on:
+ *                      Spaces at end of line
+ *
+ *              Flubs on:
+ *                      @NAME = <TAB>KEYWORD<R>
+ *                      <TAB>SUBTITUTION
+ *
+ *              Flubs on:
+ *                      @OPTION = <TAB>-S0<R>
+ *                      <TAB>-S1
+ *
+ *              Does not handle <TAB> in @INPUT, @OUTPUT, etc.
+ *
+ *              atexit example has NULL in it.
+ *
+ *      FEATURES:
+ *              The final line of paragrah terminated with <R> will have
+ *              leading spaces stripped:
+ *                              #include <<stdio.h>><R>
+ *                              #include <<cats.h>>
+ *              This will not be fixed; VReturn puts a final <R> on the
+ *              last line.
+ *
+ *      TODO:
+ *              Tab optimize
+ *              Check exact length of MAJOR_HEADING wrap.
+ *
  */
-/*
-**      $Id: vsuck.c,v 30.0 1994/06/10 18:09:35 dice Exp $
-**
-**              See what can be done with WIDEEXAMPLE
-**
-**              Start processing [$Marker] references
-**
-**      BUGS:
-**              Huge AslBase... line blows MAJOR_HEADING
-**
-**              strftime man page
-**              Notice <R> in tables
-**              Notice <197> 
-**              
-**
-**              !!!!!!!!!!!!!!!!!!!!!!!!!End-of-line blanks
-**
-**              Table mismatch in chap01.txt
-**
-**
-**              Flubs on:
-**                      Spaces at end of line
-**
-**              Flubs on:
-**                      @NAME = <TAB>KEYWORD<R>
-**                      <TAB>SUBTITUTION
-**
-**              Flubs on:
-**                      @OPTION = <TAB>-S0<R>
-**                      <TAB>-S1
-**
-**              Does not handle <TAB> in @INPUT, @OUTPUT, etc.
-**
-**              atexit example has NULL in it.
-**
-**      FEATURES:
-**              The final line of paragrah terminated with <R> will have
-**              leading spaces stripped:
-**                              #include <<stdio.h>><R>
-**                              #include <<cats.h>>
-**              This will not be fixed; VReturn puts a final <R> on the
-**              last line.
-**
-**      TODO:
-**              Tab optimize
-**              Check exact length of MAJOR_HEADING wrap.
-**
-*/
+
 #define D(x)    
 #define D0(x)   
 #define D1(x)

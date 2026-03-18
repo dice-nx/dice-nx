@@ -1,14 +1,13 @@
 /*
- *    (c)Copyright 1992-1997 Obvious Implementations Corp.  Redistribution and
- *    use is allowed under the terms of the DICE-LICENSE FILE,
- *    DICE-LICENSE.TXT.
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Licensed to you under the terms of the 3-clause BSD license.
+ * See the LICENSE file at the root of this project for details.
+ * Copyright 1992-1997 Obvious Implementations Corp
+ *
+ * Convert a directory of examples into a directory of ventura
+ * @EXAMPLE lines.
  */
-/*
-**      $Id: VReturn.c,v 30.0 1994/06/10 18:09:35 dice Exp $
-**
-**      Convert a directory of examples into a directory of ventura
-**      @EXAMPLE lines.
-*/
 
 #include <stdio.h>
 #include <string.h>
