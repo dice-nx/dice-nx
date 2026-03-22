@@ -19,11 +19,15 @@
 #include <exec/lists.h>
 #include <clib/exec_protos.h>
 #include <clib/alib_protos.h>
-#include <lib/version.h>
 #else
 #include <suplib/lists.h>
-#include <include/lib/version.h>
 #endif
+
+#include "makeproto_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
+
 
 typedef struct List List;
 typedef struct Node Node;
@@ -33,13 +37,6 @@ void help(int);
 void xprintf(const char *, ...);
 void DumpNodeList(void);
 int EndsWithSlash(const char *);
-
-#ifdef AMIGA
-#ifdef _DCC
-IDENT("makeproto",".4");
-DCOPYRIGHT;
-#endif
-#endif
 
 char    *Field = "Prototype";
 char    *OutFile;

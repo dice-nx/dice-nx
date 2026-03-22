@@ -20,14 +20,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
 
-IDENT("libtos",".4");
-DCOPYRIGHT;
+#include <lib/version.h>  /* for MsbOrder conversion functions only */
+
+#include "libtos_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 short SymLens[64];
 
@@ -113,7 +112,7 @@ main(int ac, char **av)
 
     InitSyms();
     if (ac < 3) {
-        puts(Ident);
+        puts(VERS);
         puts(DCopyright);
         puts("libtos amiga.lib dlib:amigas.lib");
         exit(1);

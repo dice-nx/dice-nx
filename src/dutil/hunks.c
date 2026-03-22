@@ -14,10 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
+#ifndef AMIGA
 #include <suplib/all.h>
 #ifdef __aligned
 #undef __aligned
@@ -25,8 +22,12 @@
 #define __aligned
 #endif
 
-IDENT("hunks",".3");
-DCOPYRIGHT;
+#include <lib/version.h>  /* for MsbOrder conversion functions only */
+
+#include "hunks_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 typedef unsigned char ubyte;
 typedef unsigned short uword;
@@ -48,7 +49,7 @@ main(int ac, char **av)
 #endif
 
     if (ac == 1) {
-        printf("%s\n%s\n", Ident, DCopyright);
+        printf("%s\n%s\n", VERS, DCopyright);
         puts("hunks [-all] executeable/object_module");
         exit(0);
     }

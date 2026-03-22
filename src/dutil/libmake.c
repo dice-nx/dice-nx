@@ -29,7 +29,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <lib/misc.h>
-#include <lib/version.h>
+
+#include "libmake_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 #define EF_OOD      0x01
 #define EF_COMP     0x02

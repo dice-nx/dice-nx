@@ -13,14 +13,10 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
-
-IDENT("touch",".2");
-DCOPYRIGHT;
+#include "touch_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 main(ac, av)
 int ac;
@@ -29,7 +25,7 @@ char *av[];
     int i;
 
     if (ac == 1) {
-        puts(Ident);
+        puts(VERS);
         puts(DCopyright);
         printf("touch files/dirs (wildcards ok)\n");
         return(0);

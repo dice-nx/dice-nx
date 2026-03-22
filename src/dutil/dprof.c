@@ -17,13 +17,16 @@
 
 #ifdef AMIGA
 #include <lib/profile.h>
-#include <lib/version.h>
 #include <lib/muldiv.h>
 #else
 #include <include/lib/profile.h>
-#include <include/lib/version.h>
 #include <include/lib/muldiv.h>
 #endif
+
+#include "dprof_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 ProfSym **ProfAry;
 ProfSym *ProfList;
@@ -42,9 +45,6 @@ uint32_t TimeBase;
 short MaxSymLen;
 short CallTreeOpt;
 char    FileName[256];
-
-IDENT("dprof", ".1");
-DCOPYRIGHT;
 
 main(ac, av)
 char *av[];
@@ -134,7 +134,7 @@ char *av[];
         }
     }
 
-    printf("\n%s\t\t%s\n\n", Ident, FileName);
+    printf("\n%s\t\t%s\n\n", VERS, FileName);
 
     DumpProfInfo();
     return(0);
@@ -143,7 +143,7 @@ char *av[];
 void
 help(code)
 {
-    printf("%s\n%s\n", Ident, DCopyright);
+    printf("%s\n%s\n", VERS, DCopyright);
     exit(code);
 }
 

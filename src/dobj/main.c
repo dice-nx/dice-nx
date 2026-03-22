@@ -13,11 +13,10 @@
 
 #include "defs.h"
 
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
+#include "dprof_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 Prototype short DDebug;
 Prototype short OutAsm;
@@ -32,9 +31,6 @@ void help(void);
 int32_t ScanObjectFile(FILE *fi, int32_t endPos);
 void UnAssembleObjectFile(FILE *fi);
 void ResetHashTables(void);
-
-IDENT("DOBJ",".3");
-DCOPYRIGHT;
 
 short DDebug;
 short OutAsm;
@@ -146,7 +142,7 @@ main(int ac, char **av)
 void
 help(void)
 {
-    printf("%s\n%s\n", Ident, DCopyright);
+    printf("%s\n%s\n", VERS, DCopyright);
     puts("DISOBJ objfile(s) [-o outfile] [-d[#]]");
     exit(1);
 }

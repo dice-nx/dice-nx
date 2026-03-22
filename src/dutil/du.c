@@ -17,7 +17,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <setjmp.h>
-#include <lib/version.h>
+
+#include "du_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 #define push_jmp(jbuf,jptr) ((jptr = JmpBase), (JmpBase = jbuf), setjmp(jbuf))
 #define forget_jmp(jptr)    { JmpBase = jptr; }
@@ -38,11 +42,6 @@ long GetBlockSize(char *);
 
 int mybrk(void);
 void ScanDir(Accum *, char *, int);
-
-#ifdef _DCC
-IDENT("du",".03");
-DCOPYRIGHT;
-#endif
 
 long BlockSize;
 jmp_buf *JmpBase;

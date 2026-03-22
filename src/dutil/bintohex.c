@@ -19,10 +19,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <include/lib/version.h>
-
-IDENT("bintohex",".2");
-DCOPYRIGHT;
+#include "bintohex_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 #ifdef IBM
 typedef char ubyte;
@@ -55,7 +55,7 @@ main(int ac, char **av)
 
     _fmode = 0x8000;
     if (ac == 1 || ( ac == 2  &&  *av[1]=='?' ) ) {
-        puts(Ident);
+        puts(VERS);
         puts(DCopyright);
         puts("bintohex <infile> -o [outfile] -s[1,2,3] [-i] [-O offset]");
         puts("; Convert <infile> to Motorola or Intel Hex format");

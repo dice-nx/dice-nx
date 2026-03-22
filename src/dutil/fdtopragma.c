@@ -27,12 +27,10 @@
 #include <clib/dos_protos.h>
 #include <clib/alib_protos.h>
 #include <lib/profile.h>
-#include <lib/version.h>
 #include <lists.h>
 #else
 #include <suplib/all.h>
 #include <include/lib/profile.h>
-#include <include/lib/version.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,8 +43,10 @@
 #include <sys/dir.h>
 #include <time.h>
 
-IDENT("FDTOPRAGMA", ".9");
-DCOPYRIGHT;
+#include "fdtopragma_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 typedef unsigned char  ubyte;
 typedef unsigned short uword;
@@ -194,7 +194,7 @@ exiterr(const char *ctl, ...)
 void
 help(short code)
 {
-    puts(Ident);
+    puts(VERS);
     puts(DCopyright);
     puts("FDTOPRAGMA fdfile [-o outfile]");
     puts("FDTOPRAGMA fddir/ [-o outdir/]");

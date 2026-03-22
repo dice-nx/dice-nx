@@ -17,14 +17,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
 
-IDENT("wc",".2");
-DCOPYRIGHT;
+#include "wc_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 int32_t t_chars, t_words, t_lines;
 
@@ -37,7 +34,6 @@ char **av;
     int   i;
     int   maxlen = 10;
 
-    Ident;
     DCopyright;
 
 #ifndef unix

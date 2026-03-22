@@ -17,19 +17,14 @@
 #include <exec/memory.h>
 #include <dos/dos.h>
 #include <clib/exec_protos.h>
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
+
+#include "loadfile_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 #define GUARD   100     /* Padding on either side of allocation */
 #define FILL    0xaa    /* Character used to fill guard area */
-
-#ifdef _DCC
-IDENT("loadfile",".2");
-DCOPYRIGHT;
-#endif
 
 void    onbreak((*fptr)());
 void    exit(int);

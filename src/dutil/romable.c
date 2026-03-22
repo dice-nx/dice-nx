@@ -15,13 +15,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef AMIGA
-#include <lib/version.h>
-#else
+#ifndef AMIGA
 #include <suplib/memory.h>
-#include <include/lib/version.h>
 #include <unistd.h>
 #endif
+
+#include <lib/version.h>  /* for MsbOrder conversion functions only */
+
+#include "romable_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 #define D(x)    ;       /* Debugging Disabled */
 /* #define D(x)    x;      // Debugging Enabled */

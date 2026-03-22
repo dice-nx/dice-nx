@@ -10,10 +10,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <lib/version.h>
-
-IDENT("cat",".2");
-DCOPYRIGHT;
+#include "cat_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 int _DiceCacheEnable = 1;
 
@@ -24,8 +24,7 @@ char **av;
     int   i;
     char buf[256];
 
-    Ident;              /* references so GNU-C does not complain */
-    DCopyright;
+    DCopyright;         /* references so GNU-C does not complain */
 
 #ifdef AMIGA
     expand_args(ac, av, &ac, &av);

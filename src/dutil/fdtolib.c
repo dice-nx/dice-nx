@@ -23,10 +23,8 @@
 #include <clib/dos_protos.h>
 #include <clib/alib_protos.h>
 #include <lib/profile.h>
-#include <lib/version.h>
 #else
 #include <include/lib/profile.h>
-#include <include/lib/version.h>
 #endif
 
 #include <stdio.h>
@@ -38,6 +36,11 @@
 #include <suplib/all.h>
 #endif
 
+#include "fdtolib_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
+
 #ifndef L_tmpnam
 #define L_tmpnam    64
 #endif
@@ -45,9 +48,6 @@
 #define RF_SCRATCH  0x0303
 #define RB_BP       (8+6)
 #define RF_BP       (1 << RB_BP)
-
-IDENT("fdtolib", ".5");
-DCOPYRIGHT;
 
 typedef unsigned short uword;
 typedef struct List     List;
@@ -283,7 +283,7 @@ main(int ac, char **av)
 void
 help(int code)
 {
-    puts(Ident);
+    puts(VERS);
     puts(DCopyright);
     puts("FDTOLIB files/wildcard [-h hdrfile] -o libname [-mr] [-mD]");
     puts("  -mr :   generate registered library from header & fd file");

@@ -19,12 +19,16 @@
 #include <clib/dos_protos.h>
 #include <clib/exec_protos.h>
 #include <clib/alib_protos.h>
-#include <lib/version.h>
 
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "dupdate_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 typedef struct MinList  MLIST;
 typedef struct List     LIST;
@@ -39,11 +43,6 @@ char    Force;
 char    Quiet;
 char    NoDel;
 char    Broke;
-
-#ifdef _DCC
-IDENT("dupdate",".3");
-DCOPYRIGHT;
-#endif
 
 typedef struct {
     NODE    Node;       /*  link node       */

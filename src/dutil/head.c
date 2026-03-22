@@ -12,14 +12,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
 
-IDENT("head",".3");
-DCOPYRIGHT;
+#include "head_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 void head(FILE *);
 

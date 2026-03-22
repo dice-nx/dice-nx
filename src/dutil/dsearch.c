@@ -11,12 +11,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <lib/version.h>
 
-#ifdef _DCC
-IDENT("DSEARCH", ".03");
-DCOPYRIGHT;
-#endif
+#include "dsearch_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 static char Tmp[256];
 static long LastLine = -1;      /*  offset of base of last printed line */
@@ -33,7 +32,7 @@ char **av;
     int i;
 
     if (ac == 1) {
-        puts(Ident);
+        puts(VERS);
         puts("DSEARCH srch-string files");
         puts("can use AmigaDOS wildcards for files");
         exit(1);

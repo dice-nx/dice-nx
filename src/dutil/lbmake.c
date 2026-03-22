@@ -25,11 +25,14 @@
 #include <clib/dos_protos.h>
 #include <clib/exec_protos.h>
 #include <clib/alib_protos.h>
-#include <lib/version.h>
 #else
 #include <suplib/all.h>
-#include <include/lib/version.h>
 #endif
+
+#include "lbmake_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 #define arysize(ary)    (sizeof(ary)/sizeof((ary)[0]))
 
@@ -116,11 +119,6 @@ char    LastPath[256];
 short   DoNotExecute;
 
 int _DiceCacheEnable = 1;
-
-#ifdef _DCC
-IDENT("lbmake",".3");
-DCOPYRIGHT;
-#endif
 
 int
 main(int ac, char **av)

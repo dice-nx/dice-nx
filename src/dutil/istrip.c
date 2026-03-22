@@ -14,14 +14,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef AMIGA
-#include <lib/version.h>
-#else
-#include <include/lib/version.h>
-#endif
 
-IDENT("istrip",".3");
-DCOPYRIGHT;
+#include "istrip_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 void StripFile(char *, char *);
 
@@ -31,8 +28,8 @@ main(int ac, char **av)
     int   i;
 
     if (ac == 1) {
-        puts(Ident);
-        puts(DCopyright);
+    puts(VERS);
+    puts(DCopyright);
         puts("istrip destprefix wildcards");
         exit(1);
     }

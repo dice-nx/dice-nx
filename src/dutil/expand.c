@@ -12,13 +12,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <lib/version.h>
-
-#ifdef _DCC
-IDENT("expand",".2");
-DCOPYRIGHT;
-#endif
-
+#include "expand_rev.h"
+static const char *DCopyright = \
+    "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
+    VERSTAG;
 
 main(ac, av)
 int   ac;
