@@ -116,7 +116,11 @@ Execute_Command(char *cmd, short ignore)
        return((ignore) ? 0 : err);
     } else
 #endif
+#ifdef unix
     if (ptr - cmd == 2 && strncasecmp(cmd, "cd", 2) == 0) {
+#else
+    if (ptr - cmd == 2 && strnicmp(cmd, "cd", 2) == 0) {
+#endif
 #ifdef AMIGA
         long lock;
 #endif

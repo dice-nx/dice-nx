@@ -124,7 +124,7 @@ int main(int argc, char **argv)
                   char c;
                   c = p[ln];
                   p[ln] = 0;
-                  if (strcasecmp(p, argv[1]))
+                  if (stricmp(p, argv[1]))
                   {
                      /* We don't have a match, we need to go for the */
                      /* space which separates the name               */

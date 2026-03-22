@@ -36,7 +36,11 @@ typedef struct DateStamp      DATESTAMP;
 typedef struct FileLock       LOCK;
 typedef struct Message        MSG;
 
+#if INCLUDE_VERSION > 40
 LONG SetFileDate( CONST_STRPTR file, CONST struct DateStamp *date )
+#else
+LONG SetFileDate( STRPTR file, struct DateStamp *date )
+#endif
 {
     STDPKT *packet;
     char   *buf;

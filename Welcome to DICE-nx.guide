@@ -33,6 +33,7 @@ fully supporting AmigaOS 3.2 and native development on real Amiga hardware.
 @{"  Installation           " link "INSTALLATION"} - how to install DICE-nx.
 @{"  Quick Start            " link "QUICKSTART"} - a quick introduction to running
                              DICE-nx and compiling a program.
+@{"  Build from source      " link "BUILD"} - how to install DICE-nx.
 @{"  License and Copyright  " link "LICENSE"}
 
 Further documentation can be found in the "doc" directory. Note that this
@@ -229,6 +230,151 @@ dcc file1.o file2.o -o myproject
 At this point you'll probably want to use a "make" tool to manage your project
 and build it. DICE-nx comes with a tool called "dmake" that can be used for
 this purpose.
+
+@ENDNODE
+
+@NODE BUILD Building from source
+
+DICE-nx is a C compiler written in C, so to compile it, you will need a C
+compiler, such as DICE-nx. That's the bootstrap problem.
+
+Slightly less flippantly, you will need a C compiler in order to build DICE-nx
+from source. There are a few options for this:
+
+@{"  Use a previous version of DICE " link "BOOTSTRAP-DICE"}
+@{"  Use another build of DICE-nx   " link "BOOTSTRAP-DICENX"}
+@{"  Use Linux on a PC              " link "BOOTSTRAP-LINUX"}
+
+Follow one of the instructions above to get your "stage 1 build". Then, return
+here to continue to the full build.
+
+Welcome back. You should now have a DICE-nx directory containing the full
+source distribution, now with added `bin1` and `dlib1` directories containing
+the stage 1 build.
+
+Building stages 2 and 3 is very simple, as this is automated into a script.
+You must first assign `DCC:` to your DICE-nx folder (this may or may not have
+been done as part of your bootstrap process). For example:
+
+Assign DCC: DH2:dice-nx-main
+
+Then run these commands:
+
+CD DCC:
+Execute Build/MakeAmiga-Sequence
+
+This build will take anything from several minutes (on a fast emulated Amiga
+or on a PiStorm-equipped physical Amiga) to several hours (on period-accurate
+original Amiga hardware).
+
+When it says `Build completed!` with no error messages, you have a working
+DICE-nx build! Now would be a good time to edit your S:User-Startup file to
+activate this new version. First, locate any setup for previous versions of
+DICE or DICE-nx and comment them out. Then add the commands below, altering
+the first DCC: assign to reflect the correct location where you placed
+DICE-NX:
+
+Assign DCC: DH2:dice-nx-main
+Assign DINCLUDE: DCC:include
+Assign DLIB: DCC:dlib
+Path DCC:bin ADD
+SetEnv DCCOPTS "-3.2 -//"
+
+Reboot, and you should now have a working DICE-nx system.
+
+@ENDNODE
+
+@NODE BOOTSTRAP-DICE Building the DICE-nx bootstrap using a previous version of DICE
+
+For this walkthrough, we are using DICE 3.16 that is on Aminet. DICE-3.16 is a
+binary build of the DICE-3.15 source-code-only release. You can find this at
+https://aminet.net/package/dev/c/dice-3.16.
+
+Download the LhA file and unpack it to your preferred location. Note that this
+archive does not contain a "parent" folder, so create a new folder @{i}first@{ui}
+and unpack the archive into the folder.
+
+Follow the instructions in the Installation section of ReadMe.1st to set up
+the required assigns and path addition, and the AmigaOS Includes section to
+get the required headers. By this point you should have a DCC: assign which
+points to a working DICE-3.16 installation.
+
+Open a Shell window, and create a "DNX:" assign which points to the folder
+containing the DICE-nx source code. For example:
+
+Assign DNX: DH2:dice-nx-main
+
+Firstly, the version of dmake in use needs to be upgraded to a newer version -
+the version in DICE 3.16 doesn't understand many of the constructs now used in
+DICE-nx.
+
+Run these commands:
+
+cd DNX:src/dmake
+dmake -f DMakefile.legacy
+rename DCC:abin/dmake DCC:abin/dmake.old
+copy dmake DCC:abin
+
+Run `dmake -v` and ensure it comes back with version 2.4 or later.
+
+DICE-3.16 also needs a header file updated with the DICE-nx version. Run this
+command:
+
+Rename DCC:include/stdarg.h DCC:include/stdarg.h.old
+XCopy DNX:include/stdarg.h DCC:include
+
+We also need to install the headers from the NDK 3.2 into the DICE-nx
+distribution. Make a directory `amiga32` inside the `include` directory in the
+DICE-nx directory. Copy into this directory the contents of the `Include_h`
+directory in NDK 3.2.
+
+Now we're ready to do the first-stage build. Run these commands:
+
+cd DNX:
+MakeDir T:dtmp
+Assign DTMP: T:dtmp
+Set OD=DTMP:obj1-bootstrap/
+Set BIN=DNX:bin1-bootstrap/
+MakeDir bin1-bootstrap
+dmake bin-core install-bin-core
+
+This will produce a build of the core DICE-nx binaries in the
+DNX:bin1-bootstrap directory. Next we build our first version of dlib. To
+start this, we will need the `amiga.lib` file from NDK 3.2. Create a directory
+called `dlib1` in the DICE-nx distribution, locate the NDK 3.2 `amiga.lib`
+file, and copy into `dlib1` with the name `amiga32l.lib`.
+
+Now we can proceed to build the stage-1 dlib:
+
+SetEnv DCCOPTS "-3.2 -//"
+Set OD=DTMP:obj1/
+Assign DLIB: DNX:dlib1
+Set DINCLUDE=DNX:include/
+Path ADD DNX:bin1-bootstrap HEAD
+CD DNX:lib
+
+Next, we are going to build the stage 1 binaries, using the stage 1-bootstrap
+binaries and the stage 1 dlib.
+
+CD DNX:
+Set BIN=DNX:bin1/
+Assign DINCLUDE: DNX:include
+dmake bin-core install-bin-core
+
+At this point you should have a populated `bin1` and `dlib1` directories,
+which means you have a complete stage 1 build and are no longer dependent on
+DICE-3.16. Now return to the previous page and proceed with the stage 2 and 3
+builds.
+
+@ENDNODE
+
+@NODE BOOTSTRAP-DICENX Building the DICE-nx bootstrap using another build of DICE-nx
+
+
+@ENDNODE
+
+@NODE BOOTSTRAP-LINUX Building the DICE-nx bootstrap using a Linux PC
+
 
 @ENDNODE
 

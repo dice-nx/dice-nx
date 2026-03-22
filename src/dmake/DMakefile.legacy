@@ -1,0 +1,24 @@
+
+SRCS= buffer.c cmdlist.c cond.c convert.c depend.c lists.c main.c parse.c run.c subs.c var.c
+OBJS= $(SRCS:"*.c":"*.o")
+CFLAGS= -//
+
+EXE= dmake
+
+PROTOS= dmake-protos.h
+
+all: $(PROTOS) $(EXE)
+
+$(EXE) : $(OBJS)
+        dcc $(CFLAGS) $(OBJS) -o $(EXE)
+
+$(OBJS) : $(SRCS)
+        dcc $(CFLAGS) %(right) -o %(left) -c
+
+$(PROTOS) : $(SRCS)
+        -Delete $(PROTOS) $(PROTOS).new
+        makeproto $(SRCS) >$(PROTOS)
+
+clean:
+        -Delete $(PROTOS) $(OBJS) $(EXE)
+

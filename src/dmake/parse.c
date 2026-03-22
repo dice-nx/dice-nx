@@ -249,10 +249,10 @@ char *fileName;
                             error(FATAL, "Expected a symbol for .ifos!");
 #ifdef unix
                         const char *osName = ccmd(2, "uname", "-s");
-#else
-                        const char *osName = "AmigaOS";
-#endif
                         if (strcasecmp(SymBuf, osName) == 0) {
+#else
+                        if (stricmp(SymBuf, "AmigaOS") == 0) {
+#endif
                             ifTrue = pushIf(&ifBase, 1);
                         } else {
                             ifTrue = pushIf(&ifBase, 0);
@@ -267,10 +267,10 @@ char *fileName;
                             error(FATAL, "Expected a symbol for .ifarch!");
 #ifdef unix
                         const char *arch = ccmd(2, "uname", "-m");
-#else
-                        const char *arch = "m68k";
-#endif
                         if (strcasecmp(SymBuf, arch) == 0) {
+#else
+                        if (stricmp(SymBuf, "m68k") == 0) {
+#endif
                             ifTrue = pushIf(&ifBase, 1);
                         } else {
                             ifTrue = pushIf(&ifBase, 0);
