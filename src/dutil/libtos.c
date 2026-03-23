@@ -281,9 +281,9 @@ int32_t dlen;
 char *name;
 int len;
 {
-
-    printf("Relocation: %2d relocations for symbol %-20.*s",
-           entries, len, name);
+    if (DDebug)
+        printf("Relocation: %2d relocations for symbol %-20.*s",
+            entries, len, name);
 
     {
         short i;
@@ -297,11 +297,13 @@ int len;
                 break;
         }
         if (SymLens[i] == 0) {
-            printf("(%s %zd not modified)\n", Buf, strlen(Buf));
+            if (DDebug)
+                printf("(%s %zd not modified)\n", Buf, strlen(Buf));
             return(0);
         }
     }
-    puts("(modifying)");
+    if (DDebug)
+        puts("(modifying)");
 
     while (entries) {
         int32_t index = ToMsbOrder(*scan);
@@ -315,7 +317,8 @@ int len;
         tscan = (uword *)(data + index - 2);
 
         opcode = ToMsbOrderShort(*tscan);
-        printf("\topcode %04x\n", opcode);
+        if (DDebug)
+            printf("\topcode %04x\n", opcode);
 
         /*
          *  convert abs to off(A4)  0010 0000 0110 1100
