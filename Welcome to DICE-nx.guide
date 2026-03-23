@@ -290,6 +290,8 @@ For this walkthrough, we are using DICE 3.16 that is on Aminet. DICE-3.16 is a
 binary build of the DICE-3.15 source-code-only release. You can find this at
 https://aminet.net/package/dev/c/dice-3.16.
 
+@{b}Set up DICE 3.16@{ub}
+
 Download the LhA file and unpack it to your preferred location. Note that this
 archive does not contain a "parent" folder, so create a new folder @{i}first@{ui}
 and unpack the archive into the folder.
@@ -299,10 +301,19 @@ the required assigns and path addition, and the AmigaOS Includes section to
 get the required headers. By this point you should have a DCC: assign which
 points to a working DICE-3.16 installation.
 
+@{b}Set up DICE-nx@{ub}
+
 Open a Shell window, and create a "DNX:" assign which points to the folder
 containing the DICE-nx source code. For example:
 
 Assign DNX: DH2:dice-nx-main
+
+We also need to install the headers from the NDK 3.2 into the DICE-nx
+distribution. Make a directory `amiga32` inside the `include` directory in the
+DICE-nx directory. Copy into this directory the contents of the `Include_h`
+directory in NDK 3.2.
+
+@{b}Update DICE-3.16 with some essential files@{ub}
 
 Firstly, the version of dmake in use needs to be upgraded to a newer version -
 the version in DICE 3.16 doesn't understand many of the constructs now used in
@@ -310,27 +321,25 @@ DICE-nx.
 
 Run these commands:
 
-cd DNX:src/dmake
+CD DNX:src/dmake
 dmake -f DMakefile.legacy
-rename DCC:abin/dmake DCC:abin/dmake.old
-copy dmake DCC:abin
+Rename DCC:abin/dmake DCC:abin/dmake.old
+XCopy dmake DCC:abin
 
 Run `dmake -v` and ensure it comes back with version 2.4 or later.
 
-DICE-3.16 also needs a header file updated with the DICE-nx version. Run this
-command:
+DICE-3.16 also needs some newer header files from the DICE-nx version. Run
+this command:
 
 Rename DCC:include/stdarg.h DCC:include/stdarg.h.old
 XCopy DNX:include/stdarg.h DCC:include
+XCopy DNX:include/stdint.h DCC:include
 
-We also need to install the headers from the NDK 3.2 into the DICE-nx
-distribution. Make a directory `amiga32` inside the `include` directory in the
-DICE-nx directory. Copy into this directory the contents of the `Include_h`
-directory in NDK 3.2.
+@{b}Start building@{ub}
 
 Now we're ready to do the first-stage build. Run these commands:
 
-cd DNX:
+CD DNX:
 MakeDir T:dtmp
 Assign DTMP: T:dtmp
 Set OD=DTMP:obj1-bootstrap/
@@ -349,17 +358,23 @@ Now we can proceed to build the stage-1 dlib:
 SetEnv DCCOPTS "-3.2 -//"
 Set OD=DTMP:obj1/
 Assign DLIB: DNX:dlib1
-Set DINCLUDE=DNX:include/
-Path ADD DNX:bin1-bootstrap HEAD
+Assign DINCLUDE: DNX:include
+Path DCC:abin REMOVE
+Path DNX:bin1-bootstrap ADD HEAD
 CD DNX:lib
+dmake core
 
 Next, we are going to build the stage 1 binaries, using the stage 1-bootstrap
 binaries and the stage 1 dlib.
 
 CD DNX:
 Set BIN=DNX:bin1/
-Assign DINCLUDE: DNX:include
+MakeDir bin1
 dmake bin-core install-bin-core
+
+Finally for this stage, a little bit of cleanup:
+
+Path bin1-bootstrap REMOVE
 
 At this point you should have a populated `bin1` and `dlib1` directories,
 which means you have a complete stage 1 build and are no longer dependent on
