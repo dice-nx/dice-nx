@@ -30,10 +30,23 @@ typedef unsigned short  uint_least16_t;
 typedef signed long     int_least32_t;
 typedef unsigned long   uint_least32_t;
 
-typedef signed char     int_fast8_t;
-typedef unsigned char   uint_fast8_t;
+/*
+ * On 68020+, the 32-bit bus makes long loads no more expensive than short
+ * loads, and using long avoids sign-extension overhead in arithmetic.
+ * On 68000, the 16-bit bus means a long load costs two bus cycles, so short
+ * is preferred for fast8/fast16 to minimise memory bandwidth.
+ */
+#if defined(__MC68K__) && __MC68K__ >= 68020
+typedef signed long     int_fast8_t;
+typedef unsigned long   uint_fast8_t;
+typedef signed long     int_fast16_t;
+typedef unsigned long   uint_fast16_t;
+#else
+typedef signed short    int_fast8_t;
+typedef unsigned short  uint_fast8_t;
 typedef signed short    int_fast16_t;
 typedef unsigned short  uint_fast16_t;
+#endif
 typedef signed long     int_fast32_t;
 typedef unsigned long   uint_fast32_t;
 
@@ -51,34 +64,43 @@ typedef unsigned long   uintmax_t;
 #define UINT16_MAX      65535
 #define INT32_MIN       (-2147483648)
 #define INT32_MAX       2147483647
-#define UINT32_MAX      4294967295
+#define UINT32_MAX      4294967295UL
 
 #define INT_LEAST8_MIN        (-128)
 #define INT_LEAST8_MAX        127
 #define UINT_LEAST8_MAX       255
 #define INT_LEAST16_MIN       (-32768)
 #define INT_LEAST16_MAX       32767
-#define UIN_LEASTT16_MAX      65535
+#define UINT_LEAST16_MAX      65535
 #define INT_LEAST32_MIN       (-2147483648)
-#define IN_LEASTT32_MAX       2147483647
-#define UINT_LEAST32_MAX      4294967295
+#define INT_LEAST32_MAX       2147483647
+#define UINT_LEAST32_MAX      4294967295UL
 
-#define INT_FAST8_MIN        (-128)
-#define INT_FAST8_MAX        127
-#define UINT_FAST8_MAX       255
+#if defined(__MC68K__) && __MC68K__ >= 68020
+#define INT_FAST8_MIN        (-2147483648)
+#define INT_FAST8_MAX        2147483647
+#define UINT_FAST8_MAX       4294967295UL
+#define INT_FAST16_MIN       (-2147483648)
+#define INT_FAST16_MAX       2147483647
+#define UINT_FAST16_MAX      4294967295UL
+#else
+#define INT_FAST8_MIN        (-32768)
+#define INT_FAST8_MAX        32767
+#define UINT_FAST8_MAX       65535U
 #define INT_FAST16_MIN       (-32768)
 #define INT_FAST16_MAX       32767
-#define UINT_FAST16_MAX      65535
+#define UINT_FAST16_MAX      65535U
+#endif
 #define INT_FAST32_MIN       (-2147483648)
 #define INT_FAST32_MAX       2147483647
-#define UINT_FAST32_MAX      4294967295
+#define UINT_FAST32_MAX      4294967295UL
 
 #define INTPTR_MIN       (-2147483648)
 #define INTPTR_MAX       2147483647
-#define UINTPTR_MAX      4294967295
+#define UINTPTR_MAX      4294967295UL
 
 #define INTMAX_MIN       (-2147483648)
 #define INTMAX_MAX       2147483647
-#define UINTMAX_MAX      4294967295
+#define UINTMAX_MAX      4294967295UL
 
 #endif /* _STDINT_H */
