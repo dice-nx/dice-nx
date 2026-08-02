@@ -9,6 +9,7 @@
  * by Matthew Dillon <dillon@backplane.com>
  */
 
+#include <stdint.h>
 #include "defs.h"
 
 Prototype void InitParser(void);
@@ -620,7 +621,7 @@ swi:
     switch(t) {
     case TokSym:
         {
-            WORD pos = strlen(SymBuf) - 1;
+            int16_t pos = strlen(SymBuf) - 1;
 
             if (SymBuf[pos] == '$') {
                 SymBuf[pos] = 0;

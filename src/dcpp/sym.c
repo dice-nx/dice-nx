@@ -47,7 +47,7 @@ Sym *
 FindSymbol(char *name, short len)
 {
     Sym *sym;
-    short hv = hash(name, len);
+    short hv = hash((ubyte *)name, len);
 
     for (sym = SymHash[hv & HMASK]; sym; sym = sym->Next) {
         if (sym->Hv == hv && sym->SymLen == len && cmpmem(name, sym->SymName, len) == 0) {
@@ -66,7 +66,7 @@ UndefSymbol(char *name, short len)
 {
     Sym **psym;
     Sym *sym;
-    short hv = hash(name, len);
+    short hv = hash((ubyte *)name, len);
 
     for (psym = &SymHash[hv & HMASK]; (sym = *psym) != NULL; psym = &sym->Next) {
         if (sym->Hv == hv && sym->SymLen == len && cmpmem(name, sym->SymName, len) == 0)
@@ -121,7 +121,7 @@ DefineSymbol(
     short allocText,
     int32_t textSize
 ) {
-    short hv = hash(name, len);
+    short hv = hash((ubyte *)name, len);
     Sym **psym = &SymHash[hv & HMASK];
     Sym *sym;
 

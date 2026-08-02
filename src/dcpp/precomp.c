@@ -71,7 +71,7 @@ InitPrecomp()
     TokenNode **tp;
 
     for (tn = TokenAry; tn < &TokenAry[arysize(TokenAry)]; ++tn) {
-        tp = &TokenHash[hash(tn->tn_Name, tn->tn_Len) & THASHMASK];
+        tp = &TokenHash[hash((ubyte *)tn->tn_Name, tn->tn_Len) & THASHMASK];
         tn->tn_Next = *tp;
         *tp = tn;
     }
@@ -82,7 +82,7 @@ PreCompSymbol(char *ptr, short len)
 {
     TokenNode *tn;
 
-    for (tn = TokenHash[hash(ptr, len) & THASHMASK]; tn; tn = tn->tn_Next) {
+    for (tn = TokenHash[hash((ubyte *)ptr, len) & THASHMASK]; tn; tn = tn->tn_Next) {
         /*fprintf(stderr, "%d %d %.*s %.*s\n", len, tn->tn_Len, len, ptr, tn->tn_Len, tn->tn_Name);*/
         if (len == tn->tn_Len && cmpmem(tn->tn_Name, ptr, len) == 0) {
             return(tn->tn_Token);

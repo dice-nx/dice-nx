@@ -30,7 +30,7 @@
 #endif
 
 #include "lbmake_rev.h"
-static const char *DCopyright = \
+const char *DCopyright = \
     "Copyright (c) 1992-2023 Obvious Implementations Corp., 2023- Open Source contributors. Redistribution & Use under BSD License." \
     VERSTAG;
 

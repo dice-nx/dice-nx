@@ -13,6 +13,11 @@
 #include <time.h>
 #include "uprev_rev.h"
 
+#ifdef CROSS_COMPILE
+#include <strings.h>
+#define stricmp strcasecmp
+#endif
+
 #define MAX_FNAME 256
 
 //const static char version_string[] = VERSTAG;

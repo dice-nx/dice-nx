@@ -21,7 +21,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <lib/version.h>  /* for MsbOrder conversion functions only */
+#ifdef CROSS_COMPILE
+#include "../../include/lib/version.h"  /* for MsbOrder conversion functions only */
+#else
+#include <lib/version.h>
+#endif
 
 #include "libtos_rev.h"
 static const char *DCopyright = \

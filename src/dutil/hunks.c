@@ -22,7 +22,11 @@
 #define __aligned
 #endif
 
-#include <lib/version.h>  /* for MsbOrder conversion functions only */
+#ifdef CROSS_COMPILE
+#include "../../include/lib/version.h"
+#else
+#include <lib/version.h>
+#endif
 
 #include "hunks_rev.h"
 static const char *DCopyright = \
