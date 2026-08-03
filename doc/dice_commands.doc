@@ -2265,6 +2265,12 @@
             in the current directory can be excluded.  Any file/dir not
             explicitly unincluded using the 'no' keyword will be copied.
 
+            The file_or_dir_path preceding the 'no' keyword may be an
+            AmigaDOS wildcard pattern (eg. #?.o, ~(#?.info)); every existing
+            entry in that directory matching the pattern is excluded.
+            Entries without 'no' (extra files pulled in from elsewhere) must
+            still be exact paths.
+
             file_or_dir_path
             file_or_dir_path
             file_or_dir_path

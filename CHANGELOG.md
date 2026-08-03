@@ -29,6 +29,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New scripts and tools for generating a binary release (effectively the same as
   the source release, plus the final-stage binaries, minus the propriatory Amiga
   NDK files).
+- *dupdate*'s `.DistFiles` control file now accepts AmigaDOS wildcard patterns
+  (eg. `#?.o no`) on the `no` (exclude) lines, matching every entry in that
+  directory that fits the pattern instead of only an exact name.
 
 
 ### Changed

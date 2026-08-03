@@ -231,9 +231,12 @@ int ignoreNoMatch;
                     continue;
                 if (ptr = strtok(NULL, " \t\n")) {  /*  NO keyword */
                     if (stricmp(ptr, "NO") == 0) {
-                        NODE *node = malloc(sizeof(NODE) + strlen(Buf) + 1);
+                        NODE *node;
+                        long patlen = strlen(Buf) * 2 + 2;   /*  worst case per ParsePattern()   */
+
+                        node = malloc(sizeof(NODE) + patlen);
                         node->ln_Name = (char *)(node + 1);
-                        strcpy(node->ln_Name, Buf);
+                        ParsePatternNoCase(Buf, (UBYTE *)node->ln_Name, patlen);
                         AddTail((LIST *)&nolist, node);
                         continue;
                     }
@@ -680,7 +683,7 @@ char *name;
     NODE *node;
 
     for (node = GetHead(list); node; node = GetSucc(node)) {
-        if (stricmp(node->ln_Name, name) == 0)
+        if (MatchPatternNoCase((UBYTE *)node->ln_Name, name))
             return(node);
     }
     return(NULL);
