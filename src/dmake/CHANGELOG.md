@@ -28,7 +28,12 @@ as of the next released version.
 
 - The `-n` switch would still touch out-of-date targets that have a command
   list, even though no commands were actually run. Thanks to GitHub user
-  Hagbard-Celin for the fix.
+  @Hagbard-Celin for the fix.
+- A backslash-continued variable assignment lost the separating whitespace
+  between lines when the continuation line was indented with a space rather
+  than a tab, e.g. `VAR = value1\` followed by ` value2` produced
+  `value1value2` instead of `value1 value2`. Thanks to GitHub user
+  @Hagbard-Celin for the fix.
 
 
 ## 2.13

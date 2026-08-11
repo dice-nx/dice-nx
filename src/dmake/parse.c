@@ -386,6 +386,10 @@ ParseAssignment(char *varName, token_t t, int cond, char type)
     long len;
     short done;
     short eol = 1;
+    short append = 0;
+    short endspace = 0;
+    short addspace = 0;
+
     List tmpList;
 
     if (cond == 0 || FindVar(varName, type) == NULL) {
@@ -407,7 +411,13 @@ ParseAssignment(char *varName, token_t t, int cond, char type)
             if (len && AltBuf[len-1] == '\\') {
                 --len;
                 done = 0;
-            } 
+                if (len && AltBuf[len-1] == ' ')
+                    endspace = 1;
+                else
+                    endspace = 0;
+                while (len && AltBuf[len-1] == ' ')
+                    --len;
+            }
             else {
                 done = 1;
             }
@@ -424,12 +434,20 @@ ParseAssignment(char *varName, token_t t, int cond, char type)
 
             for (i = 0; i < len && (AltBuf[i] == ' ' || AltBuf[i] == '\t'); ++i)
                 ;
-            if(i && ((AltBuf[i-1] == '\t') || (AltBuf[i] == ' ')))--i;
+            if (append == 1 && (i || addspace == 1))
+                PutCmdListChar(&tmpList, ' ');
             for (     ; i < len; ++i)
                 PutCmdListChar(&tmpList, AltBuf[i]);
 
         }
         if (done > 0)break;
+        else if (eol > 0) {
+            append = 1;
+            if (endspace > 0)
+                addspace = 1;
+            else
+                addspace = 0;
+        }
     }
 
     /*
