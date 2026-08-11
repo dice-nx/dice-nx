@@ -366,7 +366,7 @@ ExecuteDependency(DepNode *parent, DepRef *lhs, int how)
      * quite possible that no changes were made and the commands explicitly
      * did not rewrite the left hand side file because of that.
      */
-    if (runCmds && lhsStRes == 0 && lhsDep->dn_Result == DN_CHANGED) {
+    if (NoRunOpt == 0 && runCmds && lhsStRes == 0 && lhsDep->dn_Result == DN_CHANGED) {
         struct stat newSt;
 
         if (stat(lhsDep->dn_Node.ln_Name, &newSt) == 0
