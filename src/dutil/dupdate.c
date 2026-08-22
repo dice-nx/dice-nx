@@ -223,6 +223,9 @@ int ignoreNoMatch;
             printf("BUF: %s\n", Buf);
 #endif
 
+            if (Buf[0] == ';')          /*  comment line    */
+                continue;
+
             if (CheckBroke())
                 break;
             {

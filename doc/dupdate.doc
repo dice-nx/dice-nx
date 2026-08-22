@@ -38,6 +38,9 @@ util/dupdate                                                    util/dupdate
     different names) to create the three floppies in the registered
     distribution.
 
+    Any line in the DISTFILE whose first character is ';' is treated as a
+    comment and ignored.
+
     In the first format, if the ONLY keyword is specified after the first
     file name only these files / sub-directories will be included from this
     directory.  No other files will be copied
