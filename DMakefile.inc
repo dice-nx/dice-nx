@@ -14,7 +14,7 @@ INCLUDE= $(TOPDIR)include/
 .ifdef CROSS_COMPILE
 
 CC=cc
-CFLAGS = -Wall -Wno-unused-result -Wstrict-prototypes -Werror
+CFLAGS = -Wall -Wno-unused-result -Wno-old-style-definition -Wstrict-prototypes -Werror
 CFLAGS = $(CFLAGS) -g
 CFLAGS = $(CFLAGS) -DNO_ASM -DINTELBYTEORDER -D__STDC_WANT_LIB_EXT2__ -D_INSTDIR=$(INSTDIR)
 CFLAGS = $(CFLAGS) -I$(TOPDIR)
