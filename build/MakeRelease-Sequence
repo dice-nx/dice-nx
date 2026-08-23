@@ -1,15 +1,47 @@
+.key VERSION/A
+.bra [
+.ket ]
+
 ; Build a release archive of DICE-nx
 
-if exists T:dice-nx-dist
-    delete T:dice-nx-dist FORCE ALL
-endif
-makedir T:dice-nx-dist
-makedir T:dice-nx-dist/DICE-nx
-copy DCC:build/drawer-icon-for-release.info T:dice-nx-dist/DICE-nx.info
-dupdate DCC: T:dice-nx-dist/DICE-nx FORCE DISTFILE .DistFile
-cd T:dice-nx-dist
-if exists DCC:DICE-nx.lha
-    delete DCC:DICE-nx.lha
-endif
-lha -r a DCC:DICE-nx.lha DICE-nx DICE-nx.info
-cd DCC:
+If Exists T:dice-nx-dist
+    Delete T:dice-nx-dist FORCE ALL
+EndIf
+If Exists DCC:DICE-nx-[VERSION].lha
+    Delete DCC:DICE-nx-[VERSION].lha
+EndIf
+
+CD DCC:
+
+MakeDir T:dice-nx-dist
+MakeDir T:dice-nx-dist/DICE-nx-[VERSION]
+XCopy build/drawer-icon-for-release.info T:dice-nx-dist/DICE-nx-[VERSION].info
+
+; Copy directories - sucks having to do them by hand, but if I include them on
+; one command line, it doesn't create the directories and all the contents end
+; up splatted in the same place.
+XCopy   bin         T:dice-nx-dist/DICE-nx-[VERSION]/bin      ALL
+XCopy   build       T:dice-nx-dist/DICE-nx-[VERSION]/build    ALL
+XCopy   config      T:dice-nx-dist/DICE-nx-[VERSION]/config   ALL
+XCopy   dlib        T:dice-nx-dist/DICE-nx-[VERSION]/dlib     ALL
+XCopy   doc         T:dice-nx-dist/DICE-nx-[VERSION]/doc      ALL
+XCopy   Examples    T:dice-nx-dist/DICE-nx-[VERSION]/Examples ALL
+XCopy   include     T:dice-nx-dist/DICE-nx-[VERSION]/include  ALL
+XCopy   lib         T:dice-nx-dist/DICE-nx-[VERSION]/lib      ALL
+XCopy   Rexx        T:dice-nx-dist/DICE-nx-[VERSION]/Rexx     ALL
+XCopy   src         T:dice-nx-dist/DICE-nx-[VERSION]/src      ALL
+XCopy   suplib      T:dice-nx-dist/DICE-nx-[VERSION]/suplib   ALL
+XCopy   test        T:dice-nx-dist/DICE-nx-[VERSION]/test     ALL
+
+; Now the files
+XCopy doc.info Examples.info Rexx.info BUILDING.md CHANGELOG.md CONTRIBUTING.md Dice-Startup DMakefile#? Install#? LICENSE Makefile README.md Welcome#? T:dice-nx-dist/DICE-nx-[VERSION]
+
+; Clean up the Amiga NDK files
+Delete T:dice-nx-dist/DICE-nx-[VERSION]/include/amiga?? T:dice-nx-dist/DICE-nx-[VERSION]/dlib/amiga#?.lib FORCE ALL
+
+; Fix some protection bits that Git doesn't know exist
+Protect T:dice-nx-dist/DICE-nx-[VERSION]/build/#?-Sequence SRWD
+
+PCD T:dice-nx-dist
+LhA -r a DCC:DICE-nx-[VERSION].lha DICE-nx-[VERSION] DICE-nx-[VERSION].info
+PCD

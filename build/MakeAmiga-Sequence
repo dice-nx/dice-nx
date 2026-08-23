@@ -42,7 +42,7 @@ Echo "Stage 2 bootstrap build"
 Assign DLIB: DCC:dlib1
 Set OD DTMP:obj2-bootstrap/
 Set BIN DCC:bin2-bootstrap/
-Path DCC:bin1 ADD HEAD
+Path DCC:bin1 ADD
 CD DCC:
 dmake bin-core
 dmake install-bin-core
@@ -50,7 +50,7 @@ Path DCC:bin1 REMOVE
 
 Echo "Stage 2 libraries build"
 Assign DLIB: DCC:dlib2
-Path DCC:bin2-bootstrap ADD HEAD
+Path DCC:bin2-bootstrap ADD
 Copy DCC:dlib1/amiga32l.lib DCC:dlib2/amiga32l.lib
 cd lib
 dmake core
@@ -60,14 +60,14 @@ Path DCC:bin2-bootstrap REMOVE
 Echo "Stage 2 compiler/tools build"
 Set OD DTMP:obj2/
 Set BIN DCC:bin2/
-Path DCC:bin2-bootstrap ADD HEAD
+Path DCC:bin2-bootstrap ADD
 dmake bin-core
 dmake install-bin-core
 Path DCC:bin2-bootstrap REMOVE
 
 Echo "Stage 3 libraries build"
 Assign DLIB: DCC:dlib
-Path DCC:bin2 ADD HEAD
+Path DCC:bin2 ADD
 Copy DCC:dlib2/amiga32l.lib DCC:dlib/amiga32l.lib
 cd lib
 dmake all
@@ -77,7 +77,7 @@ Path DCC:bin2 REMOVE
 Echo "Stage 3 compiler/tools build"
 Set OD DTMP:obj3/
 Set BIN DCC:bin/
-Path DCC:bin2 ADD HEAD
+Path DCC:bin2 ADD
 cd src
 dmake bin-all
 dmake install-bin-all
