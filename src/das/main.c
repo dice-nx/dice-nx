@@ -67,6 +67,7 @@ Prototype char    *AsmFileName;
 Prototype int   main(int, char **);
 Prototype void  DebugPass(char);
 Prototype void  *zalloc(int32_t);
+Prototype char  *zstrdup(const char *);
 Prototype void  help(void);
 Prototype short CToSize(char);
 
@@ -162,6 +163,8 @@ main(int ac, char **av)
     if (outFile == NULL) {
         i = strlen(inFile);
         outFile = malloc(i + 5);
+        if (outFile == NULL)
+            NoMemory();
         strcpy(outFile, inFile);
         for (--i; i >= 0 && outFile[i] != '.'; --i);
         if (outFile[i] == '.')
@@ -252,6 +255,20 @@ zalloc(int32_t bytes)
     Buf += bytes;
     Bytes -= bytes;
     return(Buf - bytes);
+}
+
+/*
+ *  strdup() out of the zalloc pool, so the caller need not test for
+ *  failure.  Like everything else from the pool the copy is never freed.
+ */
+
+char *
+zstrdup(const char *str)
+{
+    char *copy = zalloc(strlen(str) + 1);
+
+    strcpy(copy, str);
+    return(copy);
 }
 
 void

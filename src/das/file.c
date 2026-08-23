@@ -122,6 +122,8 @@ ParseFileName(const char *str)
             ;
         if (str[e] == '\"') {
             r = malloc(e - s + 1);
+            if (r == NULL)
+                NoMemory();
             memcpy(r, str + s, e - s);
             r[e - s] = 0;
         }

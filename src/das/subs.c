@@ -387,7 +387,8 @@ ObtainErrorString(short errNum)
 
     if (ErrorAry == NULL) {
         int fd;
-        short siz;
+        long siz;
+        int bytes_read;
 
         if ((fd = open(ErrorFileName, O_RDONLY|O_BINARY)) < 0) {
             sprintf(ErrBuf, "(can't open %s!)", ErrorFileName);
@@ -395,16 +396,28 @@ ObtainErrorString(short errNum)
         }
         siz = lseek(fd, 0L, 2);
         lseek(fd, 0L, 0);
-        ErrorAry = malloc(siz + 1);
-        read(fd, ErrorAry, siz);
+        if (siz < 0) {
+            close(fd);
+            sprintf(ErrBuf, "(can't size %s!)", ErrorFileName);
+            return(ErrBuf);
+        }
+        if ((ErrorAry = malloc(siz + 1)) == NULL) {
+            /* out of memory error while handling error! */
+            close(fd);
+            sprintf(ErrBuf, "(out of memory reading %s!)", ErrorFileName);
+            return(ErrBuf);
+        }
+        bytes_read = read(fd, ErrorAry, siz);
         close(fd);
+        if (bytes_read < 0)
+            bytes_read = 0;
+        ErrorAry[bytes_read] = 0;
         {
             char *ptr;
             for (ptr = strchr(ErrorAry, '\n'); ptr; ptr = strchr(ptr + 1, '\n'))
                 *ptr = 0;
         }
-        ErrorAry[siz] = 0;
-        ErrorArySize = siz;
+        ErrorArySize = bytes_read;
     }
     for (i = 0; i < ErrorArySize; i += strlen(ErrorAry + i) + 1) {
         char *ptr;

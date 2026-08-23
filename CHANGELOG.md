@@ -76,6 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *das* silently overflowed its 256-byte object-emission scratch buffer, and
   produced a corrupt object file, when a section name, symbol name or source
   filename was longer than 247 characters. It now reports this as a fatal error.
+- Fixed a number of memory allocations in *das* that did not check the allocation succeeded
 
 
 ### Removed

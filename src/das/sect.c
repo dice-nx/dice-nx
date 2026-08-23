@@ -51,7 +51,7 @@ void
 InitSect()
 {
     LastSect = &SectBase;
-    NewSection(strdup("____DUMMY____,code"));
+    NewSection(zstrdup("____DUMMY____,code"));
     Hunks = 0;
     CurSection->Type = SECT_DUMMY;
     DebugLineNo = 0;
@@ -267,7 +267,7 @@ char *ops;
         ++ptr;
     if (*ptr != ',') {
         cerror(EERROR_BAD_SECTION_DIRECT);
-        NewSection(strdup("code,code"));    /*  to prevent program crash */
+        NewSection(zstrdup("code,code"));    /*  to prevent program crash */
         return;
     }
     *ptr++ = 0;
