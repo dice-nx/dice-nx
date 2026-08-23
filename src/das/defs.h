@@ -50,6 +50,7 @@ typedef unsigned short  uword;
 #define AllocStructure(type)    zalloc(sizeof(type))
 
 #define ZALLOCSIZ   4096
+#define ZALLOCALIGN ((int32_t)sizeof(void *))
 
 typedef struct EffAddr {
     Label   *Label1;

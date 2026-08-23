@@ -70,6 +70,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Thanks [@Hagbard-Celin](https://github.com/Hagbard-Celin) for this bugfix!
 - Bugs in the OS1.3 version of `system()` ([#21](https://github.com/dice-nx/dice-nx/issues/21)).
   Thanks [@Hagbard-Celin](https://github.com/Hagbard-Celin) for this bugfix!
+- *das* crashed with an address error (guru 80000003) on 68000 and 68010
+  machines due to an internal allocator bug that would hand out pointers to
+  non-word-aligned addresses.
 
 
 ### Removed

@@ -215,11 +215,13 @@ char c;
 #endif
 
 void *
-zalloc(bytes)
-int32_t bytes;
+zalloc(int32_t bytes)
 {
     static char *Buf;
     static int32_t Bytes;
+
+    /* round up to pointer boundary - prevents unaligned pointers */
+    bytes = (bytes + ZALLOCALIGN - 1) & ~(ZALLOCALIGN - 1);
 
     if (bytes <= Bytes) {
         void *ptr;
