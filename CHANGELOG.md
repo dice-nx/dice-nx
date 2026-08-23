@@ -29,9 +29,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New scripts and tools for generating a binary release (effectively the same as
   the source release, plus the final-stage binaries, minus the propriatory Amiga
   NDK files).
-- *dupdate*'s `.DistFiles` control file now accepts AmigaDOS wildcard patterns
+- *dupdate*'s `.DistFile` control file now accepts AmigaDOS wildcard patterns
   (eg. `#?.o no`) on the `no` (exclude) lines, matching every entry in that
   directory that fits the pattern instead of only an exact name.
+- *dupdate*'s `.DistFile` control file also accepts comments: any line whose
+  first character is `;` is ignored.
+- `asprintf()` in the C library, allocating the result buffer to fit rather than
+  writing into a caller-supplied one.
+- *uprev* accepts three-part version numbers, and the full version number can be
+  overridden with a command line argument.
+- A "Welcome to DICE-nx" AmigaGuide document, which is now the top-level entry
+  point for users. All of the instructions for building DICE-nx have been moved
+  into it.
+- *dme*, *vmake*/*vopts* and *dd* build and ship again, having been left out of
+  or broken in the build.
+- The Amiga-side stages can be bootstrapped with an existing DICE 3.16 install,
+  as an alternative to cross-building stage 1 on a PC.
 
 
 ### Changed
@@ -51,12 +64,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the `DLIB:` assign used on Amigas.
 - *dsearch* and *du* are now in the `dutil` directory.
 - Revised the code and macros which embedded version data into executables.
+- This fork of DICE is now known as DICE-nx, and the tools, documentation and
+  distribution have been renamed to match.
+- *libtos* only prints errors now. Its progress and diagnostic output is behind
+  a debug gate.
 
 
 ### Fixed
 
-- Compiles on Linux, specifically Ubuntu 20.04 and gcc 9.4.0 - also still
-  compiles on DragonFly BSD.
+- Compiles on Linux, specifically Ubuntu 26.04 and gcc 15.2.0.
 - Adds .gitignore files.
 - Endian-nes bugs in libtos, enabling the tool to work on little-endian Linux
   hosts.
@@ -77,6 +93,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   produced a corrupt object file, when a section name, symbol name or source
   filename was longer than 247 characters. It now reports this as a fatal error.
 - Fixed a number of memory allocations in *das* that did not check the allocation succeeded
+- *dcc* was built without ARexx support, because of incorrect preprocessor
+  directives.
+- *das* would occasionally fail with errors about a `LEXIDX` keyword in its
+  input. A debugging `printf` in *dc1* was writing to stdout, which *dc1*
+  redirects to the assembly file it passes on to *das*.
+- *Dice-Startup* did not set `DCCOPTS` on AmigaOS 2.04, which rejected the `/M`
+  in the script's `.key`. It now uses `/A`.
+- *uprev* wrote two-digit years as, for example, "126". It now writes a correct
+  four-digit year.
 
 
 ### Removed
@@ -102,13 +127,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `src/alib`, which appears to duplicate files in `lib`;
   - duplicates of the tools in the `src/dutil` directory;
   - `src/shared_lib` is moved to Examples where it replaces the slightly-earlier
-    version of the same example.
+    version of the same example;
+  - the `Visual` and `UpRev` examples, which duplicate the versions in `src`.
 - *fsovl*, a filesystem compression layer which provided the `ARCH:` virtual
   filesystem, has been removed. DICE used this to support running off floppy
   disk, which is no longer supported by DICE-nx.
 - *fmsdisk*, a virtual disk device, is removed. DICE used this in its release
   process to build the floppy disk distribution, which is no longer supported by
   DICE-nx.
+- *patch* and *wbrun*. Comments in the *patch* source suggest it came from
+  Emacs, which would make it GPL and incompatible with this project's license,
+  and *wbrun* is copyright The Software Distillery, which Matt was part of but
+  is not named as an author of. Neither is part of the core project, so removing
+  them to be safe has little impact.
+- The sample printer driver in Examples, which is derived from the Commodore
+  Amiga NDK 1.3 and is marked there as copyrighted and proprietary.
+- `About_Dice`, superseded by the newer documents.
 - Third-party contributions, such as DME macros and supplementary utilities. I
   cannot be certain that their authors are happy for their contributions to be
   relicensed as BSD, so to be safe they have been removed.

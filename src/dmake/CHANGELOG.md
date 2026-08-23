@@ -26,6 +26,10 @@ as of the next released version.
 
 ### Fixed
 
+- Variable expansion did not happen in some places, so that
+  `.include somedir/$(somefile)` and `target : prefix$(somevariable)` expanded
+  to `.include somedir/$` and `target : prefix$`. Thanks to GitHub user
+  @Hagbard-Celin for the fix.
 - The `-n` switch would still touch out-of-date targets that have a command
   list, even though no commands were actually run. Thanks to GitHub user
   @Hagbard-Celin for the fix.
