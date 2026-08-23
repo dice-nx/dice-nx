@@ -73,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *das* crashed with an address error (guru 80000003) on 68000 and 68010
   machines due to an internal allocator bug that would hand out pointers to
   non-word-aligned addresses.
+- *das* silently overflowed its 256-byte object-emission scratch buffer, and
+  produced a corrupt object file, when a section name, symbol name or source
+  filename was longer than 247 characters. It now reports this as a fatal error.
 
 
 ### Removed

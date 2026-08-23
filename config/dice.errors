@@ -215,6 +215,7 @@ AS:048:offset out of range: %d (0-15 only)
 AS:049:short branch to next instruction illegal
 AS:050:byte branch is out of range
 AS:051:internal instruction id error: %d
+AS:052:name too long for object file output (max %d chars): %s
 
 ##  DLINK error mesages
 

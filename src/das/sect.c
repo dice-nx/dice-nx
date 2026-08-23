@@ -28,11 +28,24 @@ Prototype void  CreateExportSDU(FILE *, ubyte, Label *);
 Prototype void  CreateSymbols(FILE *, Label *);
 Prototype void  zwrite(FILE *, int32_t);
 
+Local void CheckAryFit(int32_t, const char *);
+
 Sect    *CurSection;
 Sect    *SectBase;
 Sect    **LastSect;
 short   Hunks;
-static int32_t Ary[64];
+#define ARYSIZE 64      /* longwords in the object-emission scratch buffer */
+
+static int32_t Ary[ARYSIZE];
+
+/* Names are emitted into Ary as longword-padded strings.  longs is the
+ * total number of longwords the caller is about to write, including the
+ * header and any trailing count.  Refuse to run off the end of Ary. */
+Local void CheckAryFit(int32_t longs, const char *name)
+{
+    if (longs > ARYSIZE)
+        cerror(EFATAL_NAME_TOO_LONG, (ARYSIZE - 2) * 4 - 1, name);
+}
 
 void
 InitSect()
@@ -346,6 +359,7 @@ char *unitName;
         }
 
         len = (strlen(unitName) + 3) >> 2;
+        CheckAryFit(len + 2, unitName);
 
         Ary[0] = ToMsbOrder(0x3E7);
         Ary[1] = ToMsbOrder(len);
@@ -366,6 +380,7 @@ char *unitName;
          */
         {
             int len = (strlen(sect->Name) + 3) >> 2;
+            CheckAryFit(len + 2, sect->Name);
             Ary[0] = ToMsbOrder(0x3E8);
             Ary[1] = ToMsbOrder(len);
             setmem(Ary + 2, len*4, 0);
@@ -457,18 +472,20 @@ char *unitName;
          */
 
         if (sect->DebugAry && sect->DebugIdx) {
-            Ary[0] = ToMsbOrder(0x3F1);
+            int len = (strlen(SrcFileName) + 3) >> 2;
 
+            CheckAryFit(len + 5, SrcFileName);
+
+            Ary[0] = ToMsbOrder(0x3F1);
+            Ary[1] = ToMsbOrder(sect->DebugIdx * 2 + 3 + len);
             Ary[2] = ToMsbOrder(0);
             Ary[3] = ToMsbOrder(0x4C494E45);  /* 'LINE'; */
-            Ary[4] = ToMsbOrder((strlen(SrcFileName) + 3) >> 2);
+            Ary[4] = ToMsbOrder(len);
 
-            setmem(Ary + 5, ToMsbOrder(Ary[4]) * 4, 0);
+            setmem(Ary + 5, len * 4, 0);
             strcpy((char *)(Ary + 5), SrcFileName);
 
-            Ary[1] = ToMsbOrder(sect->DebugIdx * 2 + 3 + FromMsbOrder(Ary[4]));
-
-            fwrite((char *)Ary, sizeof(int32_t), 5 + FromMsbOrder(Ary[4]), fo);
+            fwrite((char *)Ary, sizeof(int32_t), 5 + len, fo);
             fwrite(sect->DebugAry, sizeof(DebugNode), sect->DebugIdx, fo);
         }
 
@@ -579,6 +596,8 @@ int32_t type;
 {
     int len = (strlen(label->Name) + 3) >> 2;
 
+    CheckAryFit(len + 2, label->Name);
+
     Ary[0] = ToMsbOrder((type << 24) | len);
     setmem(Ary + 1, len*4, 0);
     strcpy((char *)(Ary + 1), label->Name);
@@ -604,6 +623,8 @@ CreateExportSDU(FILE *fo, ubyte type, Label *label)
     {
         int len = (strlen(label->Name) + 3) >> 2;
 
+        CheckAryFit(len + 2, label->Name);
+
         if (label->l_Type == LT_INT)
             Ary[0] = ToMsbOrder((2 << 24) | len);
         else
@@ -628,6 +649,8 @@ CreateSymbols(FILE *fo, Label *label)
 
         if (label->l_Type != LT_INT)
         {
+            CheckAryFit(len + 2, label->Name);
+
             if (header == 0)
             {
                 Ary[0] = ToMsbOrder(0x3F0);

@@ -79,6 +79,7 @@
 #define EERROR_SHORT_BRANCH             (EF_ERROR|49)
 #define EERROR_BYTE_BRANCH_OFFSET       (EF_ERROR|50)
 #define ESOFT_BAD_SRCAB                 ( EF_SOFT|51)
+#define EFATAL_NAME_TOO_LONG            (EF_FATAL|52)
 
 
 
