@@ -1,6 +1,6 @@
 .bra {
 .ket }
-.key DCCOPTS/M
+.key DCCOPTS/A
 
 ASSIGN DTMP: T:
 ASSIGN DINCLUDE: DCC:include
