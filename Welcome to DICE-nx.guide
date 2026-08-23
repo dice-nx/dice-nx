@@ -31,10 +31,10 @@ Amiga hardware.
 @{b}Where to go from here@{ub}
 
 @{"  Status                 " link "STATUS"} - read about the current
-                             status of DICE-nx, including its limitations.
+                            status of DICE-nx, including its limitations.
 @{"  Installation           " link "INSTALLATION"} - how to install DICE-nx
 @{"  Quick Start            " link "QUICKSTART"} - a quick introduction to
-                             running DICE-nx and compiling a program.
+                            running DICE-nx and compiling a program.
 @{"  Build from source      " link "BUILD"} - how to install DICE-nx.
 @{"  License and Copyright  " link "LICENSE"}
 
@@ -251,6 +251,11 @@ DICE-nx from source. There are a few options for this:
 Follow one of the instructions above to get your "stage 1 build". Then,
 return here to continue to the full build.
 
+NOTE: full builds of the DICE-nx system can be memory hungry as they store
+their intermediate builds on the RAM Disk by default. You can edit
+build/MakeAmiga-Sequence and change the assign of DTMP: to a hard disk to
+use less memory, at the cost of slower compiles.
+
 Welcome back. You should now have a DICE-nx directory containing the full
 source distribution, now with added `bin1` and `dlib1` directories
 containing the stage 1 build.
@@ -269,6 +274,28 @@ Execute Build/MakeAmiga-Sequence
 This build will take anything from several minutes (on a fast emulated
 Amiga or on a PiStorm-equipped physical Amiga) to several hours (on
 period-accurate original Amiga hardware).
+
+This script will do the following:
+
+1. Build a feature-complete compiler (i.e. with floating point support) and
+   core tools, using the compiler and tools produced in stage 1.
+
+2. Build a feature-complete set of the core libraries (i.e. with floating
+   point support) using that newly-built compiler and tools.
+
+3. Re-build the compiler and tools again, using the newly-built libraries,
+   so that we have a set of feature-complete libraries, and a
+   feature-complete compiler and core tools built against those libraries.
+   That will be the stage 2 build completed.
+
+4. Build the libraries again using the stage 2 artifacts, this time
+   building the comprehensive set of libraries: small and large data
+   models, stack-based and register-based OS calls, with and without
+   profiling, and OS libraries for all available and recognised NDKs.
+
+5. Build the compiler and tools again, but this time build all the
+   supported tools instead of just the core set. This will be stage 3
+   complete, and a fully supported compiler, tools and libraries.
 
 When it says `Build completed!` with no error messages, you have a working
 DICE-nx build! Now would be a good time to edit your S:User-Startup file to
@@ -319,7 +346,7 @@ the DICE-nx directory. Copy into this directory the contents of the
 @{b}Update DICE-3.16 with some essential files@{ub}
 
 Firstly, the version of dmake in use needs to be upgraded to a newer
-version - the version in DICE 3.16 doesn't understand many of the
+version - the version in DICE 3.16 doesn't understand some of the
 constructs now used in DICE-nx.
 
 Run these commands:
@@ -405,6 +432,43 @@ instructions.
 
 @NODE BOOTSTRAP-LINUX Building the DICE-nx bootstrap using a Linux PC
 
+@{b}Prerequisites@{ub}
+
+* An IA32 or IA64 PC
+* Linux or BSD
+* A working C compiler - tested with GNU C Compiler but clang may work too
+* GNU make
+* AmigaOS NDK 3.2
+
+
+@{b}Install essential files from the NDK@{ub}
+
+Execute this command:
+
+./build/install-ndk32.sh <LOCATION OF NDK3.2 FILES>
+
+
+@{b}Build procedure@{ub}
+
+Execute this command:
+
+make stage1
+
+
+@{b}Transfer to the Amiga@{ub}
+
+Use whatever mechanism you prefer to transfer the DICE-nx distribution with
+new `bin1` and `dlib1` folders to a real Amiga for the next stages of the
+build. There are many options here, many of them depending on the specifics
+of your Amiga, so we won't cover that here.
+
+You may find the script `./build/export-to-amiga.sh` helpful - it will
+bundle up the contents of the DICE-nx distribution, with the `bin1` and
+`dlib1` directories, into an LhA file (the de facto standard archive format
+for the Amiga) which can be transferred and unpacked on a real Amiga.
+
+Note that at this stage, the `bin1-bootstrap` and `dlib1-bootstrap` folders
+are no longer required and can be deleted.
 
 @ENDNODE
 
