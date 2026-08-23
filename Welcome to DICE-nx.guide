@@ -1,9 +1,9 @@
 @DATABASE Welcome
 ; $VER: DICE-nx 3.20
 
-@NODE MAIN Welcome to DICE-NX
+@NODE MAIN Welcome to DICE-nx
 
-@{b}Welcome to DICE-NX@{ub}
+@{b}Welcome to DICE-nx@{ub}
 
 This is DICE-nx - a C compiler for Commodore Amiga computers and embedded
 68k systems. DICE-nx includes all the tools needed to build Amiga
@@ -54,9 +54,9 @@ DICE-nx at https://github.com/dice-nx/dice-nx.
 
 @ENDNODE
 
-@NODE STATUS Current status of DICE-NX
+@NODE STATUS Current status of DICE-nx
 
-@{b}Current status of DICE-NX@{ub}
+@{b}Current status of DICE-nx@{ub}
 
 This page summarises the current development status of the DICE-nx project
 - what things are working, what is not working, and what is planned.
@@ -159,7 +159,7 @@ be tracked using GitHub issues rather than being documented here.
 
 @ENDNODE
 
-@NODE INSTALLATION Installing DICE-NX
+@NODE INSTALLATION Installing DICE-nx
 
 DICE-nx is packaged with an installer using the widely-available Installer
 tool. You will need Installer available on your system. It can be obtained
@@ -302,7 +302,7 @@ DICE-nx build! Now would be a good time to edit your S:User-Startup file to
 activate this new version. First, locate any setup for previous versions of
 DICE or DICE-nx and comment them out. Then add the commands below, altering
 the first DCC: assign to reflect the correct location where you placed
-DICE-NX:
+DICE-nx:
 
 Assign DCC: DH2:dice-nx-main
 Assign DINCLUDE: DCC:include
