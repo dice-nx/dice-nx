@@ -388,6 +388,18 @@ and 3 builds.
 
 @NODE BOOTSTRAP-DICENX Building the DICE-nx bootstrap using another build of DICE-nx
 
+Building DICE-nx if you already have DICE-nx is fortunately very easy. Here
+are the commands you need:
+
+CD DCC:
+Path bin REMOVE
+Assign DLIB: REMOVE
+Rename bin bin1
+Rename dlib dlib1
+
+This turns your current DICE-nx installation into a stage 1 bootstrap. Now
+you can go back to the building page and resume the stage 2 and 3 build
+instructions.
 
 @ENDNODE
 
