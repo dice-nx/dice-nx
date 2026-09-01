@@ -2,8 +2,8 @@
 
 #define VERSION        3
 #define REVISION        20
-#define PATCH         0
-#define DATE    "23.1.2026"
-#define VERS    "DC1 3.20.0"
-#define VSTRING "DC1 3.20.0 (23.1.2026)"
-#define VERSTAG "\0$VER: DC1 3.20 (23.1.2026)"
+#define PATCH         1
+#define DATE    "1.9.2026"
+#define VERS    "DC1 3.20.1"
+#define VSTRING "DC1 3.20.1 (1.9.2026)"
+#define VERSTAG "\0$VER: DC1 3.20 (1.9.2026)"

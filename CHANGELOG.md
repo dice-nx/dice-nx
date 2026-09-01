@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix unterminated string buffer in dc1 error handling routine (#28)
+
 ### Removed
 
 
