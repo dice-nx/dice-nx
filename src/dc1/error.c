@@ -214,12 +214,12 @@ ObtainErrorString(short errNum)
         ErrorAry = malloc(siz + 1);
         read(fd, ErrorAry, siz);
         close(fd);
+        ErrorAry[siz] = 0;
         {
             char *ptr;
             for (ptr = strchr(ErrorAry, '\n'); ptr; ptr = strchr(ptr + 1, '\n'))
                 *ptr = 0;
         }
-        ErrorAry[siz] = 0;
         ErrorArySize = siz;
     }
     for (i = 0; i < ErrorArySize; i += strlen(ErrorAry + i) + 1) {
