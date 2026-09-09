@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - [unity](https://www.throwtheswitch.org/unity) unit test framework
+- `<stdint.h>` now defines the limits of other integer types (`PTRDIFF_MIN`,
+  `SIZE_MAX`, `WCHAR_MAX`, ...) and the integer constant macros (`INT32_C`,
+  `UINTMAX_C`, ...) from C99 7.18.3 and 7.18.4.
+- Unit tests for `<stdint.h>`, `<limits.h>` and `#if` arithmetic in *dcpp*,
+  under `tests/`.
 
 ### Changed
 
@@ -17,6 +22,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix unterminated string buffer in dc1 error handling routine (#28)
 - dupdate change to support wildcards broke Kickstart 1.3 compatibility
+- *dcpp* evaluated every `#if` constant as a signed 32-bit value: a constant
+  of 2147483648 or more became negative, whatever its suffix, and unsigned
+  division, remainder, shift and comparison were done signed. Constants now
+  follow the C90 rules (`long`, then `unsigned long`), and a constant that does
+  not fit in 32 bits gives a warning. The `##` operator in a macro used in an
+  `#if` expression was a syntax error; it now pastes the tokens.
+- The signed minimum macros in `<stdint.h>` and `<limits.h>` were written as
+  `-2147483648`, which is a positive unsigned value in C. They are now
+  `(-2147483647L - 1)`, and every minimum in `<limits.h>` is parenthesised.
+- `<stdint.h>` chose 32-bit `int_fast8_t` and `int_fast16_t` under a
+  `__MC68K__` test that the compiler never defines. The fast types are now
+  always `short`.
 
 ### Removed
 
