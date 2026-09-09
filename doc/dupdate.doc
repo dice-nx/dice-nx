@@ -65,6 +65,11 @@ util/dupdate                                                    util/dupdate
     directory matching the pattern is excluded.  Entries without 'no' (extra
     files pulled in from elsewhere) must still be exact paths.
 
+    Wildcard patterns require dos.library V37 (Kickstart 2.04) or higher;
+    DUPDATE will report an error and stop if a wildcard 'no' pattern is
+    used on an older system.  A file_or_dir_path with no pattern characters
+    is matched as a plain name and works on any Kickstart version.
+
     --- DISTFILE FORMAT #2 (this line not included) ---
     file_or_dir_path
     file_or_dir_path

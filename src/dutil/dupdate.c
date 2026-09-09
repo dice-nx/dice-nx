@@ -16,6 +16,7 @@
 #include <exec/lists.h>
 #include <exec/memory.h>
 #include <libraries/dos.h>
+#include <dos/dosextens.h>
 #include <clib/dos_protos.h>
 #include <clib/exec_protos.h>
 #include <clib/alib_protos.h>
@@ -50,6 +51,15 @@ typedef struct {
     FIB     *Fib[2];    /*  file/dir info   */
 } SNODE;
 
+/*
+ *  NODE.ln_Type on the exclude ("NO") list records whether ln_Name holds
+ *  a plain filename (compared with stricmp()) or a tokenized AmigaDOS
+ *  pattern produced by ParsePatternNoCase() (compared with
+ *  MatchPatternNoCase()).  Only patterns need dos.library V37.
+ */
+#define MATCH_LITERAL   0
+#define MATCH_PATTERN   1
+
 int brk(void);
 int main(short, char **);
 void Scan(int32_t, MLIST *, int, int);
@@ -60,9 +70,11 @@ int getyn(char *, char *);
 int CopyFile(int32_t, int32_t, char *, char *, FIB *);
 int DeleteDir(char *);
 NODE *FindNode(LIST *, char *);
+int HasPatternChars(char *);
 
 extern void *GetHead(void *);       /*   cr.lib funcs are registered */
 extern void *GetSucc(void *);
+extern struct DosLibrary *DOSBase;
 
 int
 brk()
@@ -235,11 +247,24 @@ int ignoreNoMatch;
                 if (ptr = strtok(NULL, " \t\n")) {  /*  NO keyword */
                     if (stricmp(ptr, "NO") == 0) {
                         NODE *node;
-                        long patlen = strlen(Buf) * 2 + 2;   /*  worst case per ParsePattern()   */
 
-                        node = malloc(sizeof(NODE) + patlen);
-                        node->ln_Name = (char *)(node + 1);
-                        ParsePatternNoCase(Buf, (UBYTE *)node->ln_Name, patlen);
+                        if (HasPatternChars(Buf)) {
+                            long patlen = strlen(Buf) * 2 + 2;   /*  worst case per ParsePattern()   */
+
+                            if (DOSBase->dl_lib.lib_Version < 37) {
+                                printf("exclude pattern '%s' needs dos.library V37 or higher (wildcards not supported on this system)\n", Buf);
+                                exit(1);
+                            }
+                            node = malloc(sizeof(NODE) + patlen);
+                            node->ln_Name = (char *)(node + 1);
+                            ParsePatternNoCase(Buf, (UBYTE *)node->ln_Name, patlen);
+                            node->ln_Type = MATCH_PATTERN;
+                        } else {
+                            node = malloc(sizeof(NODE) + strlen(Buf) + 1);
+                            node->ln_Name = (char *)(node + 1);
+                            strcpy(node->ln_Name, Buf);
+                            node->ln_Type = MATCH_LITERAL;
+                        }
                         AddTail((LIST *)&nolist, node);
                         continue;
                     }
@@ -678,16 +703,32 @@ char *name;
     free(fib);
 }
 
+/*
+ *  Does str contain any of the AmigaDOS pattern-matching special
+ *  characters recognised by ParsePattern()?  '*' is deliberately not
+ *  included: it is only a wildcard synonym for "#?" when the caller
+ *  turns that option on, which we don't, so ParsePattern() treats it
+ *  as a literal character.
+ */
+int
+HasPatternChars(char *str)
+{
+    return(strpbrk(str, "?#()|~[]%") != NULL);
+}
+
 NODE *
-FindNode(list, name)
-LIST *list;
-char *name;
+FindNode(LIST *list, char *name)
 {
     NODE *node;
 
     for (node = GetHead(list); node; node = GetSucc(node)) {
-        if (MatchPatternNoCase((UBYTE *)node->ln_Name, name))
-            return(node);
+        if (node->ln_Type == MATCH_PATTERN) {
+            if (MatchPatternNoCase((UBYTE *)node->ln_Name, name))
+                return(node);
+        } else {
+            if (stricmp(node->ln_Name, name) == 0)
+                return(node);
+        }
     }
     return(NULL);
 }
