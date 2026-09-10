@@ -699,7 +699,7 @@ int32_t *pv;
  *
  *  A constant is unsigned if it carries a U suffix or does not fit in a
  *  signed 32-bit long, the same rule dc1 applies (C90 int, long, unsigned
- *  long).
+ *  long).  A constant that does not fit in 32 bits at all is saturated.
  */
 
 int
@@ -707,6 +707,7 @@ ParseInt(char *buf, int32_t i, int32_t max, int32_t *pv, short *punsigned)
 {
     char c;
     uint32_t v = 0;
+    short overflow = 0;
     short isUnsigned = 0;
 
     if (i < max && buf[i] == '0') {
@@ -715,12 +716,16 @@ ParseInt(char *buf, int32_t i, int32_t max, int32_t *pv, short *punsigned)
             short n;
             ++i;
             while (i < max && (n = HexDig(buf[i])) >= 0) {
+                if (v & 0xF0000000UL)
+                    overflow = 1;
                 v = (v << 4) + n;
                 ++i;
             }
         } else {                                             /*  oct */
             short n;
             while (i < max && (n = OctDig(buf[i])) >= 0) {
+                if (v & 0xE0000000UL)
+                    overflow = 1;
                 v = (v << 3) + n;
                 ++i;
             }
@@ -729,6 +734,8 @@ ParseInt(char *buf, int32_t i, int32_t max, int32_t *pv, short *punsigned)
         while (i < max && (c = buf[i]) >= '0' && c <= '9') { /*  dec */
             uint32_t d = c - '0';
 
+            if (v > (0xFFFFFFFFUL - d) / 10)
+                overflow = 1;
             v = v * 10 + d;
             ++i;
         }
@@ -737,6 +744,10 @@ ParseInt(char *buf, int32_t i, int32_t max, int32_t *pv, short *punsigned)
         if (c == 'U' || c == 'u')
             isUnsigned = 1;
         ++i;
+    }
+    if (overflow) {
+        cerror(EWARN_INT_CONST_TOO_LARGE);
+        v = 0xFFFFFFFFUL;
     }
     if (v & 0x80000000UL)
         isUnsigned = 1;

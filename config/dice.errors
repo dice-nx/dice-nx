@@ -161,6 +161,7 @@ CP:045:Expected comma or close paren
 CP:046:Expected close paren for macro %s
 CP:047:Can't open file %.*s
 CP:048:Possible nested comment, disallowed under ANSI
+CP:050:Integer constant too large
 
 ##  DAS error mesages
 
