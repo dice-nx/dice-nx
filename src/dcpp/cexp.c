@@ -484,7 +484,10 @@ CombineOp()
             ar.Value = (isUnsigned) ? (ul < ur) : (a2->Value < a1->Value);
             break;
         case CLTLT:
-            ar.Value = a2->Value << a1->Value;
+            if (ur >= 32)
+                ar.Value = 0;
+            else
+                ar.Value = (int32_t)(ul << ur);
             ar.Unsigned = a2->Unsigned;
             break;
         case CLTEQ:
@@ -501,9 +504,11 @@ CombineOp()
             break;
         case CGTGT:
             if (a2->Unsigned)
-                ar.Value = (int32_t)(ul >> ur);
+                ar.Value = (ur >= 32) ? 0 : (int32_t)(ul >> ur);
+            else if (ur >= 32)
+                ar.Value = (a2->Value < 0) ? -1 : 0;
             else
-                ar.Value = a2->Value >> a1->Value;
+                ar.Value = a2->Value >> ur;
             ar.Unsigned = a2->Unsigned;
             break;
         case CGTEQ:
