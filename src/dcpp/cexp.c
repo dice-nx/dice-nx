@@ -19,7 +19,7 @@ Local int32_t ParseIfExp2(char *, short *, short *, int32_t, short);
 Local int CombineOp(void);
 Local int GetAtomStack(short *, int32_t *);
 Local int ParseCharConst(char *, int32_t, int32_t, int32_t *);
-Local int ParseInt(char *, int32_t, int32_t, int32_t *);
+Local int ParseInt(char *, int32_t, int32_t, int32_t *, short *);
 Local int HexDig(char);
 Local int OctDig(char);
 
@@ -114,9 +114,10 @@ ParseIfExp2(char *buf, short *pundef, short *punsigned, int32_t max, short subsy
             default:
                 if (c >= '0' && c <= '9') {
                     int32_t v;
+                    short isUnsigned;
 
-                    i = ParseInt(buf, i - 1, max, &v);
-                    PushAtom(v, 0, 0);
+                    i = ParseInt(buf, i - 1, max, &v, &isUnsigned);
+                    PushAtom(v, 0, isUnsigned);
                     unary = 0;
 
                     break;
@@ -423,6 +424,10 @@ CombineOp()
     }
 
     if (op->Type & QBIN) {
+        uint32_t ul = (uint32_t)a2->Value;  /*  left operand    */
+        uint32_t ur = (uint32_t)a1->Value;  /*  right operand   */
+        short isUnsigned = a2->Unsigned | a1->Unsigned;
+
         /*
          * arguments treated as 0 if undefined.  Result is defined
          */
@@ -464,13 +469,13 @@ CombineOp()
             ar.Value = a2->Value ^ a1->Value;
             break;
         case '<':
-            ar.Value = a2->Value < a1->Value;
+            ar.Value = (isUnsigned) ? (ul < ur) : (a2->Value < a1->Value);
             break;
         case CLTLT:
             ar.Value = a2->Value << a1->Value;
             break;
         case CLTEQ:
-            ar.Value = a2->Value <= a1->Value;
+            ar.Value = (isUnsigned) ? (ul <= ur) : (a2->Value <= a1->Value);
             break;
         case CEQEQ:
             ar.Value = a2->Value == a1->Value;
@@ -479,13 +484,13 @@ CombineOp()
             ar.Value = a2->Value != a1->Value;
             break;
         case '>':
-            ar.Value = a2->Value > a1->Value;
+            ar.Value = (isUnsigned) ? (ul > ur) : (a2->Value > a1->Value);
             break;
         case CGTGT:
             ar.Value = a2->Value >> a1->Value;
             break;
         case CGTEQ:
-            ar.Value = a2->Value >= a1->Value;
+            ar.Value = (isUnsigned) ? (ul >= ur) : (a2->Value >= a1->Value);
             break;
         case CANDAND:
             if (a2->Value && a1->Value)
@@ -667,17 +672,18 @@ int32_t *pv;
  *  0xhex
  *  0octal
  *  1-9decimal
+ *
+ *  A constant is unsigned if it carries a U suffix or does not fit in a
+ *  signed 32-bit long, the same rule dc1 applies (C90 int, long, unsigned
+ *  long).
  */
 
 int
-ParseInt(buf, i, max, pv)
-char *buf;
-int32_t i;
-int32_t max;
-int32_t *pv;
+ParseInt(char *buf, int32_t i, int32_t max, int32_t *pv, short *punsigned)
 {
     char c;
-    int32_t v = 0;
+    uint32_t v = 0;
+    short isUnsigned = 0;
 
     if (i < max && buf[i] == '0') {
         ++i;
@@ -697,13 +703,21 @@ int32_t *pv;
         }
     } else {
         while (i < max && (c = buf[i]) >= '0' && c <= '9') { /*  dec */
-            v = v * 10 + c - '0';
+            uint32_t d = c - '0';
+
+            v = v * 10 + d;
             ++i;
         }
     }
-    while ((c = buf[i]) == 'L' || c == 'l' || c == 'U' || c == 'u')
+    while (i < max && ((c = buf[i]) == 'L' || c == 'l' || c == 'U' || c == 'u')) {
+        if (c == 'U' || c == 'u')
+            isUnsigned = 1;
         ++i;
-    *pv = v;
+    }
+    if (v & 0x80000000UL)
+        isUnsigned = 1;
+    *pv = (int32_t)v;
+    *punsigned = isUnsigned;
     return(i);
 }
 
