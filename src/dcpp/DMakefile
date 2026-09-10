@@ -18,20 +18,42 @@ ASM_SRCS=
 ASM_SRCS=asubs.a
 .endif
 
-SRCS= main.c cexp.c cpp.c define.c direct.c include.c \
+# Everything except main.c, so that unit tests can supply their own main()
+CORE_SRCS= globals.c options.c cexp.c cpp.c define.c direct.c include.c \
         precomp.c subs.c sym.c $(ASM_SRCS)
 
-OBJS= $(SRCS:"*.c":"$(OD)dcpp_*.o") $(SRCS:"*.a":"$(OD)dcpp_*.o")
+SRCS= main.c $(CORE_SRCS)
+
+CORE_OBJS= $(CORE_SRCS:"*.c":"$(OD)dcpp_*.o") $(CORE_SRCS:"*.a":"$(OD)dcpp_*.o")
+OBJS= $(OD)dcpp_main.o $(CORE_OBJS)
 
 EXE= $(OD)dcpp
 EXED= $(BIN)dcpp
 
 PROTOS= dcpp-protos.h
 
+TESTS= $(OD)test_cexp
+
+# Tests in tests/ include "defs.h" from here.  DCC looks up quoted includes
+# from the current directory; a host cc needs to be told.  DCPP has no
+# floating point, and leaving it out of Unity lets the stage 1 cross dcc,
+# which cannot emit float constants, build the tests too.
+.ifos AmigaOS
+TEST_CFLAGS= $(CFLAGS) -I$(UNITY) -DUNITY_EXCLUDE_FLOAT -DUNITY_EXCLUDE_DOUBLE
+.else
+TEST_CFLAGS= $(CFLAGS) -I$(UNITY) -I. -DUNITY_EXCLUDE_FLOAT -DUNITY_EXCLUDE_DOUBLE
+.endif
+
 all: $(PROTOS) $(EXE)
 
 $(EXE) : $(OBJS)
         $(CC) $(CFLAGS) $(OBJS) $(SUPLIB) -o $(EXE)
+
+test: $(PROTOS) $(TESTS)
+        $(OD)test_cexp
+
+$(OD)test_cexp : tests/test_cexp.c $(CORE_OBJS)
+        $(CC) $(TEST_CFLAGS) tests/test_cexp.c $(CORE_OBJS) $(UNITY)unity.c $(SUPLIB) -o %(left)
 
 $(OBJS) : $(SRCS)
         $(CC) $(CFLAGS) %(right) -o %(left) -c
@@ -44,5 +66,5 @@ install:
         $(INSTALL) $(EXE) $(EXED)
 
 clean:
-        -$(RM) $(PROTOS) $(OBJS) $(EXE)
+        -$(RM) $(PROTOS) $(OBJS) $(EXE) $(TESTS)
 

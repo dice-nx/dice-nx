@@ -9,6 +9,7 @@ BIN= $(TOPDIR)bin/
 .endif
 ULIB= $(TOPDIR)ulib/
 INCLUDE= $(TOPDIR)include/
+UNITY= $(TOPDIR)unity/
 
 
 .ifdef CROSS_COMPILE
