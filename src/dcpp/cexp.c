@@ -451,16 +451,22 @@ CombineOp()
             ar.Unsigned = isUnsigned;
             break;
         case '/':
-            if (a1->Value)
-                ar.Value = a2->Value / a1->Value;
-            else
+            if (a1->Value == 0)
                 ar.Undef = 1;
+            else if (isUnsigned)
+                ar.Value = (int32_t)(ul / ur);
+            else
+                ar.Value = a2->Value / a1->Value;
+            ar.Unsigned = isUnsigned;
             break;
         case '%':
-            if (a1->Value)
-                ar.Value = a2->Value % a1->Value;
-            else
+            if (a1->Value == 0)
                 ar.Undef = 1;
+            else if (isUnsigned)
+                ar.Value = (int32_t)(ul % ur);
+            else
+                ar.Value = a2->Value % a1->Value;
+            ar.Unsigned = isUnsigned;
             break;
         case '&':
             ar.Value = a2->Value & a1->Value;
@@ -479,6 +485,7 @@ CombineOp()
             break;
         case CLTLT:
             ar.Value = a2->Value << a1->Value;
+            ar.Unsigned = a2->Unsigned;
             break;
         case CLTEQ:
             ar.Value = (isUnsigned) ? (ul <= ur) : (a2->Value <= a1->Value);
@@ -493,7 +500,11 @@ CombineOp()
             ar.Value = (isUnsigned) ? (ul > ur) : (a2->Value > a1->Value);
             break;
         case CGTGT:
-            ar.Value = a2->Value >> a1->Value;
+            if (a2->Unsigned)
+                ar.Value = (int32_t)(ul >> ur);
+            else
+                ar.Value = a2->Value >> a1->Value;
+            ar.Unsigned = a2->Unsigned;
             break;
         case CGTEQ:
             ar.Value = (isUnsigned) ? (ul >= ur) : (a2->Value >= a1->Value);
