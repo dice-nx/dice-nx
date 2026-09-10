@@ -439,13 +439,16 @@ CombineOp()
 
         switch(op->Token) {
         case '+':
-            ar.Value = a2->Value + a1->Value;
+            ar.Value = (int32_t)(ul + ur);
+            ar.Unsigned = isUnsigned;
             break;
         case '-':
-            ar.Value = a2->Value - a1->Value;
+            ar.Value = (int32_t)(ul - ur);
+            ar.Unsigned = isUnsigned;
             break;
         case '*':
-            ar.Value = a2->Value * a1->Value;
+            ar.Value = (int32_t)(ul * ur);
+            ar.Unsigned = isUnsigned;
             break;
         case '/':
             if (a1->Value)
@@ -461,12 +464,15 @@ CombineOp()
             break;
         case '&':
             ar.Value = a2->Value & a1->Value;
+            ar.Unsigned = isUnsigned;
             break;
         case '|':
             ar.Value = a2->Value | a1->Value;
+            ar.Unsigned = isUnsigned;
             break;
         case '^':
             ar.Value = a2->Value ^ a1->Value;
+            ar.Unsigned = isUnsigned;
             break;
         case '<':
             ar.Value = (isUnsigned) ? (ul < ur) : (a2->Value < a1->Value);
@@ -529,9 +535,11 @@ CombineOp()
             break;
         case '~':
             ar.Value = ~a1->Value;
+            ar.Unsigned = a1->Unsigned;
             break;
         case CUMI:
-            ar.Value = -a1->Value;
+            ar.Value = (int32_t)(0 - (uint32_t)a1->Value);
+            ar.Unsigned = a1->Unsigned;
             break;
         case '(':
             ar.Value = a1->Value;
