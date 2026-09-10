@@ -16,6 +16,7 @@ Prototype int SecondOffOpStack(void);
 Prototype void PushAtom(int32_t, short, short);
 
 Local int32_t ParseIfExp2(char *, short *, short *, int32_t, short);
+Local char *PasteMacroText(Sym *, int32_t *);
 Local int CombineOp(void);
 Local int GetAtomStack(short *, int32_t *);
 Local int ParseCharConst(char *, int32_t, int32_t, int32_t *);
@@ -181,7 +182,15 @@ ParseIfExp2(char *buf, short *pundef, short *punsigned, int32_t max, short subsy
                                     sym->Creator->Type &= ~SF_RECURSE;
                                 }
 
-                                v = ParseIfExp2(sym->Text, &xundef, &xunsigned, sym->TextLen, 1);
+                                {
+                                    int32_t textLen = sym->TextLen;
+                                    char *pasted = PasteMacroText(sym, &textLen);
+
+                                    v = ParseIfExp2((pasted) ? pasted : sym->Text,
+                                                    &xundef, &xunsigned, textLen, 1);
+                                    if (pasted)
+                                        free(pasted);
+                                }
 
                                 if (sym->Type & SF_MACROARG)
                                     sym->Creator->Type = creType;
@@ -339,6 +348,91 @@ syntax2:
         dbprintf(("RESULT %ld %d %d\n", v, *pundef, *punsigned));
         return(v);
     }
+}
+
+/*
+ *  Apply the ## operator to a macro body before it is evaluated in #if.
+ *  cpp() pastes tokens in the output stream, which the #if evaluator never
+ *  sees, so the body is copied with each ## removed and the argument names
+ *  next to it replaced by the argument text.  Returns NULL when the body
+ *  has no ## operator; otherwise the caller frees the result.
+ */
+
+char *
+PasteMacroText(Sym *sym, int32_t *plen)
+{
+    char *text = sym->Text;
+    int32_t len = sym->TextLen;
+    int32_t argMax = 0;
+    int32_t pastes = 0;
+    int32_t i, w, o;
+    char *out;
+    short j;
+
+    for (i = 0; i + 1 < len; ++i) {
+        if (text[i] == '#' && text[i+1] == '#')
+            ++pastes;
+    }
+    if (pastes == 0)
+        return(NULL);
+    for (j = 0; j < sym->NumArgs; ++j) {
+        Sym *arg = FindSymbol(sym->Args[j], sym->ArgsLen[j]);
+
+        if (arg && arg->TextLen > argMax)
+            argMax = arg->TextLen;
+    }
+    out = malloc(len + pastes * 2 * argMax + 1);
+    if (out == NULL)
+        cerror(EFATAL_NO_MEMORY);
+
+    o = 0;
+    w = 0;      /*  start of text not yet copied    */
+    for (i = 0; i + 1 < len; ++i) {
+        int32_t s, e;
+        Sym *arg;
+
+        if (text[i] != '#' || text[i+1] != '#')
+            continue;
+
+        /*  token before the ##, unless a previous paste already copied it  */
+        e = i;
+        while (e > w && WhiteSpace[(ubyte)text[e-1]])
+            --e;
+        s = e;
+        while (s > w && SymbolChar[(ubyte)text[s-1]])
+            --s;
+        memcpy(out + o, text + w, s - w);
+        o += s - w;
+        arg = (s < e) ? FindSymbol(text + s, e - s) : NULL;
+        if (arg && (arg->Type & SF_MACROARG)) {
+            memcpy(out + o, arg->Text, arg->TextLen);
+            o += arg->TextLen;
+        } else {
+            memcpy(out + o, text + s, e - s);
+            o += e - s;
+        }
+
+        /*  token after the ##  */
+        s = i + 2;
+        while (s < len && WhiteSpace[(ubyte)text[s]])
+            ++s;
+        e = s;
+        while (e < len && SymbolChar[(ubyte)text[e]])
+            ++e;
+        arg = (s < e) ? FindSymbol(text + s, e - s) : NULL;
+        if (arg && (arg->Type & SF_MACROARG)) {
+            memcpy(out + o, arg->Text, arg->TextLen);
+            o += arg->TextLen;
+            w = e;
+        } else {
+            w = s;
+        }
+        i = w - 1;
+    }
+    memcpy(out + o, text + w, len - w);
+    o += len - w;
+    *plen = o;
+    return(out);
 }
 
 void
