@@ -13,8 +13,9 @@ Prototype int32_t ParseIfExp(char *, short *, int32_t, short);
 Prototype void PushOp(short, short, short);
 Prototype int TopOfOpStack(void);
 Prototype int SecondOffOpStack(void);
-Prototype void PushAtom(int32_t, short);
+Prototype void PushAtom(int32_t, short, short);
 
+Local int32_t ParseIfExp2(char *, short *, short *, int32_t, short);
 Local int CombineOp(void);
 Local int GetAtomStack(short *, int32_t *);
 Local int ParseCharConst(char *, int32_t, int32_t, int32_t *);
@@ -45,10 +46,15 @@ Local int OctDig(char);
 #define BRL     (RL|QBIN)
 #define XX      0
 
+/*
+ * #if arithmetic follows C90: constants are long or unsigned long (both
+ * 32 bits here), and an operation with an unsigned operand is unsigned.
+ */
+
 typedef struct Atom {
-    int32_t    Value;
+    int32_t Value;
     short   Undef;
-    short   Reserved;
+    short   Unsigned;
 } Atom;
 
 typedef struct Oper {
@@ -67,6 +73,14 @@ static short BaseOperIdx;
 
 int32_t
 ParseIfExp(char *buf, short *pundef, int32_t max, short subsym)
+{
+    short isUnsigned;
+
+    return(ParseIfExp2(buf, pundef, &isUnsigned, max, subsym));
+}
+
+int32_t
+ParseIfExp2(char *buf, short *pundef, short *punsigned, int32_t max, short subsym)
 {
     short unary = 1;
     short i = 0;
@@ -100,14 +114,9 @@ ParseIfExp(char *buf, short *pundef, int32_t max, short subsym)
             default:
                 if (c >= '0' && c <= '9') {
                     int32_t v;
-                    /*
-                    printf("%d(%c) ", i - 1, buf[i-1]);
-                    */
+
                     i = ParseInt(buf, i - 1, max, &v);
-                    /*
-                    printf("%d INT %d\n", i, v);
-                    */
-                    PushAtom(v, 0);
+                    PushAtom(v, 0, 0);
                     unary = 0;
 
                     break;
@@ -126,15 +135,16 @@ ParseIfExp(char *buf, short *pundef, int32_t max, short subsym)
                     } else if (TopOfOpStack() == CDEFINED || SecondOffOpStack() == CDEFINED) {
                         Sym *sym = FindSymbol(buf + i, ni - i);
                         if (sym)
-                            PushAtom(1, 0);
+                            PushAtom(1, 0, 0);
                         else
-                            PushAtom(0, 1);
+                            PushAtom(0, 1, 0);
                         unary = 0;
                     } else {
                         Sym *sym = FindSymbol(buf + i, ni - i);
 
                         if (sym) {
                             short xundef;
+                            short xunsigned = 0;
                             int32_t v;
                             if (subsym == 0) {
                                 v = 0;
@@ -170,7 +180,7 @@ ParseIfExp(char *buf, short *pundef, int32_t max, short subsym)
                                     sym->Creator->Type &= ~SF_RECURSE;
                                 }
 
-                                v = ParseIfExp(sym->Text, &xundef, sym->TextLen, 1);
+                                v = ParseIfExp2(sym->Text, &xundef, &xunsigned, sym->TextLen, 1);
 
                                 if (sym->Type & SF_MACROARG)
                                     sym->Creator->Type = creType;
@@ -190,9 +200,9 @@ ParseIfExp(char *buf, short *pundef, int32_t max, short subsym)
                                 BaseOperIdx = baseOperIdx;
                                 BaseAtomIdx = baseAtomIdx;
                             }
-                            PushAtom(v, xundef);
+                            PushAtom(v, xundef, xunsigned);
                         } else {
-                            PushAtom(0, 1);
+                            PushAtom(0, 1, 0);
                         }
                         unary = 0;
                     }
@@ -202,7 +212,7 @@ ParseIfExp(char *buf, short *pundef, int32_t max, short subsym)
                 if (c == '\'') {
                     int32_t v;
                     i = ParseCharConst(buf, i - 1, max, &v);
-                    PushAtom(v, 0);
+                    PushAtom(v, 0, 0);
                     unary = 0;
                     break;
                 }
@@ -316,13 +326,16 @@ syntax2:
     {
         int32_t v;
 
+        if (AtomIdx <= BaseAtomIdx)
+            goto syntax;
+        *punsigned = AtomStack[AtomIdx - 1].Unsigned;
         if (GetAtomStack(pundef, &v) < 0)
             goto syntax;
         if (GetAtomStack(NULL, NULL) >= 0)  /*  shouldn't be anything left */
             goto syntax;
         AtomIdx = baseAtomIdx;
         OperIdx = baseOperIdx;
-        dbprintf(("RESULT %ld %d\n", v, *pundef));
+        dbprintf(("RESULT %ld %d %d\n", v, *pundef, *punsigned));
         return(v);
     }
 }
@@ -374,7 +387,7 @@ SecondOffOpStack()
 
 
 void
-PushAtom(int32_t val, short isundef)
+PushAtom(int32_t val, short isundef, short isunsigned)
 {
     Atom *atom;
 
@@ -385,6 +398,7 @@ PushAtom(int32_t val, short isundef)
     atom = AtomStack + AtomIdx++;
     atom->Value = val;
     atom->Undef = isundef;
+    atom->Unsigned = isunsigned;
 }
 
 int
@@ -416,6 +430,7 @@ CombineOp()
         ar.Undef = a1->Undef | a2->Undef;
 #endif
         ar.Undef = 0;
+        ar.Unsigned = 0;
 
         switch(op->Token) {
         case '+':
@@ -501,6 +516,7 @@ CombineOp()
         ar.Undef = a1->Undef;
 #endif
         ar.Undef = 0;
+        ar.Unsigned = 0;
 
         switch(op->Token) {
         case '!':
@@ -515,6 +531,7 @@ CombineOp()
         case '(':
             ar.Value = a1->Value;
             ar.Undef = a1->Undef;
+            ar.Unsigned = a1->Unsigned;
             break;
         case CDEFINED:
             ar.Undef = 0;
