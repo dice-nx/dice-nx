@@ -1,0 +1,22 @@
+#
+# DMakefile for stdint.h unit tests
+#
+# Paths are relative to this directory (tests/stdint/) using AmigaDOS
+# conventions:  /  = parent directory (one level up)
+#               // = two levels up (project root)
+#
+
+CC     = dcc
+UNITY  = //unity
+CFLAGS = -I$(UNITY) -I//include -DUNITY_INCLUDE_CONFIG_H
+
+all: test_stdint
+
+test_stdint: test_stdint.c $(UNITY)/unity.c
+    $(CC) $(CFLAGS) -o test_stdint test_stdint.c $(UNITY)/unity.c
+
+test: all
+    test_stdint
+
+clean:
+    -Delete test_stdint
